@@ -1,0 +1,1106 @@
+
+
+```{r setup, message=FALSE,warning=FALSE}
+knitr::opts_chunk$set(
+	echo = TRUE,
+	message = FALSE,
+	warning = FALSE
+)
+library(tidycensus)
+library(tidyverse)
+
+census_api_key("97af98b509aba3ed68aa855dafc64224127cfa33")
+```
+
+# Daniel and Eden - Anna Alba
+
+
+## Original graphs
+```{r}
+cohort_names <- c("2 Person", "3 Person", "4 Person", "5 Person",
+                  "6 Person", "7 or more")
+
+family_house <- 3:8 %>%
+  sprintf("B11016_%03d", .) %>%
+  set_names(cohort_names)
+
+non_family_home <- 11:16 %>%
+  sprintf("B11016_%03d", .) %>%
+  set_names(cohort_names)
+
+single_home <- "B11016_010"
+
+
+family_cinci <- get_acs(
+  geography = "county",
+  variables = family_house,
+  state = "OH",
+  county = "Hamilton",
+  year = 2021
+) %>% 
+  mutate(Status = "Family")
+
+non_family_cinci <- get_acs(
+  geography = "county",
+  variables = non_family_home,
+  state = "OH",
+  county = "Hamilton",
+  year = 2021
+) %>% 
+  mutate(Status = "Not Family")
+
+single_cinci <- get_acs(
+  geography = "county",
+  variables = single_home,
+  state = "OH",
+  county = "Hamilton",
+  year = 2021
+) %>% 
+  mutate(Status = "Not Family")
+
+housing_data <- bind_rows(family_cinci, non_family_cinci, single_cinci)
+
+
+ggplot(data = housing_data, aes(x = variable, y = estimate, fill = Status)) +
+  geom_col() +
+  scale_x_discrete(labels = c("2 Person", "3 Person", "4 Person", "5 Person", "6 Person", "7 or More", "1 Person")) +
+  labs(x = "House Size", 
+       y = "Count", 
+       title = "Cincinnati Household Sizes",
+       fill = "House Type")
+```
+
+
+## Basic ideas
+
+The point you are trying to illustrate here is that Cincinnati is a "family city".  
+
+* One thing jumping out at me is the fact that the ``1 person'' bar is out on the right.  Shouldn't it be on the left? 
+* Also "Count" is almost never a great label.
+* Last thing I have here is that maybe I'm not convinced Cincinnati really is a "family city." It seems there are lot of people alone, not with family.  What would convince me?  Maybe the same graphic for Columbus, Louisville, Cleveland,.. ?  Showing me that Cincinnati is in fact more "family-oriented" than peer cities.
+
+```{r}
+cohort_names <- c("2 Person", "3 Person", "4 Person", "5 Person",
+                  "6 Person", "7 or more")
+
+family_house <- 3:8 %>%
+  sprintf("B11016_%03d", .) %>%
+  set_names(cohort_names)
+
+non_family_home <- 11:16 %>%
+  sprintf("B11016_%03d", .) %>%
+  set_names(cohort_names)
+
+single_home <- "B11016_010" %>% 
+  set_names("1 Person")
+
+family_cinci <- get_acs(
+  geography = "county",
+  variables = family_house,
+  state = "OH",
+  county = "Hamilton",
+  year = 2021
+) %>% 
+  mutate(Status = "Family")
+
+non_family_cinci <- get_acs(
+  geography = "county",
+  variables = non_family_home,
+  state = "OH",
+  county = "Hamilton",
+  year = 2021
+) %>% 
+  mutate(Status = "Not Family")
+
+single_cinci <- get_acs(
+  geography = "county",
+  variables = single_home,
+  state = "OH",
+  county = "Hamilton",
+  year = 2021
+) %>% 
+  mutate(Status = "Not Family")
+
+housing_data <- bind_rows(family_cinci, non_family_cinci, single_cinci)
+
+
+ggplot(data = housing_data, aes(x = variable, y = estimate, fill = Status)) +
+  geom_col() +
+  scale_x_discrete(labels = c("1 Person","2 Person", "3 Person", "4 Person", "5 Person", "6 Person", "7 or More")) +
+  labs(x = "House Size", 
+       y = "", 
+       title = "Cincinnati Household Sizes",
+       fill = "House Type")
+```
+
+# Doyinsola, Olivia and Jack - Reggie Harris
+
+Graphs to show occupations of residents of Cincinnati.  Not sure how occupations in particular tie in directly with Reggie Harris' campaign.  Also, I am concerned about the numbers in this graph.  "Protective Law" in particular has 1.2 million individuals in it. I don't think 1.2 million people live in Cincinnati overall.
+
+## Original graphic
+```{r}
+occupation_data <- get_acs(
+geography = "county subdivision",
+variables = c(
+service = "B24011_018",
+healthcare = "B24011_019",
+protective_fire = "B24011_021",
+protective_law = "B24011_022",
+food_prep = "B24011_023",
+building_maintenance = "B24011_024",
+personal_care = "B24011_025"
+),
+state = "Ohio",
+county = "Hamilton",
+year = 2021
+)
+
+occupation_colors <- c("#FF9999", "#66CCCC", "#FFCC99", "#99CC66", "#FF9966", "#CC99CC", "#99CC99")
+
+ggplot(occupation_data, aes(x = reorder(variable, estimate), y = estimate, fill = variable)) +
+geom_col() +
+scale_fill_manual(values = occupation_colors)+
+coord_flip() +
+labs(
+x = "Occupation",
+y = "Number of Individuals",
+title = "Service Occupations in Cincinnati",
+fill = "",
+caption = "Data source: 2021 ACS & tidycensus R package"
+) +
+theme_bw()
+```
+## Graph changes
+
+Two things jump out at me:
+
+* the labels in the legend are a bit redundant since the bars are labeled.
+* I don't think we want underscores in our presentation graphics.
+
+```{r}
+occupation_data <- get_acs(
+geography = "county subdivision",
+variables = c(
+service = "B24011_018",
+healthcare = "B24011_019",
+`protective fire` = "B24011_021",
+`protective law` = "B24011_022",
+`food prep` = "B24011_023",
+`building maintenance` = "B24011_024",
+`personal care` = "B24011_025"
+),
+state = "Ohio",
+county = "Hamilton",
+year = 2021
+)
+
+occupation_colors <- c("#FF9999", "#66CCCC", "#FFCC99", "#99CC66", "#FF9966", "#CC99CC", "#99CC99")
+
+ggplot(occupation_data, aes(x = variable, y = estimate, fill = variable)) +
+geom_col() +
+#scale_fill_manual(values = occupation_colors)+
+coord_flip() +
+labs(
+x = "Occupation",
+y = "Number of Individuals",
+title = "Service Occupations in Cincinnati",
+#fill = "",
+caption = "Data source: 2021 ACS & tidycensus R package"
+) +
+theme_bw()+
+  theme(legend.position="none")
+```
+
+
+# Aiden and Matt - Liz Keating
+
+Graphs to show the rise in rent cost in Cincinnati.
+
+## Original graphs
+```{r }
+price_names <- c("Housing < $100",
+                 "Housing $100 - $199",
+                 "Housing $200 - $299",
+                 "Housing $300 - $399",
+                 "Housing $400 - $499",
+                 "Housing $500 - $599",
+                 "Housing $600 - $699",
+                 "Housing $700 - $799",
+                 "Housing $800 - $899",
+                 "Housing $900 - $999",
+                 "Housing $1000 - $1499",
+                 "Housing $1500 - $1999",
+                 "Housing $2000 - $2499",
+                 "Housing $2500 - $2999",
+                 "Housing > $3000")
+
+poo2021 <- get_acs(geography = "county",
+               state = "OH",
+               county = "Hamilton",
+               variables = c("Housing < $100" = "B25104_002",
+                             "Housing $100 - $199" = "B25104_003",
+                             "Housing $200 - $299" = "B25104_004",
+                             "Housing $300 - $399" = "B25104_005",
+                             "Housing $400 - $499" = "B25104_006",
+                             "Housing $500 - $599" = "B25104_007",
+                             "Housing $600 - $699" = "B25104_008",
+                             "Housing $700 - $799" = "B25104_009",
+                             "Housing $800 - $899" = "B25104_010",
+                             "Housing $900 - $999" = "B25104_011",
+                             "Housing $1000 - $1499" = "B25104_012",
+                             "Housing $1500 - $1999" = "B25104_013",
+                             "Housing $2000 - $2499" = "B25104_014",
+                             "Housing $2500 - $2999" = "B25104_015",
+                             "Housing > $3000" = "B25104_016"
+               ),
+               year = 2021,
+               sumfile = "acs1")
+
+poo2020 <- get_acs(geography = "county",
+               state = "OH",
+               county = "Hamilton",
+               variables = c("Housing < $100" = "B25104_002",
+                             "Housing $100 - $199" = "B25104_003",
+                             "Housing $200 - $299" = "B25104_004",
+                             "Housing $300 - $399" = "B25104_005",
+                             "Housing $400 - $499" = "B25104_006",
+                             "Housing $500 - $599" = "B25104_007",
+                             "Housing $600 - $699" = "B25104_008",
+                             "Housing $700 - $799" = "B25104_009",
+                             "Housing $800 - $899" = "B25104_010",
+                             "Housing $900 - $999" = "B25104_011",
+                             "Housing $1000 - $1499" = "B25104_012",
+                             "Housing $1500 - $1999" = "B25104_013",
+                             "Housing $2000 - $2499" = "B25104_014",
+                             "Housing $2500 - $2999" = "B25104_015",
+                             "Housing > $3000" = "B25104_016"
+               ),
+               year = 2020,
+               sumfile = "acs1")
+
+poo2019 <- get_acs(geography = "county",
+               state = "OH",
+               county = "Hamilton",
+               variables = c("Housing < $100" = "B25104_002",
+                             "Housing $100 - $199" = "B25104_003",
+                             "Housing $200 - $299" = "B25104_004",
+                             "Housing $300 - $399" = "B25104_005",
+                             "Housing $400 - $499" = "B25104_006",
+                             "Housing $500 - $599" = "B25104_007",
+                             "Housing $600 - $699" = "B25104_008",
+                             "Housing $700 - $799" = "B25104_009",
+                             "Housing $800 - $899" = "B25104_010",
+                             "Housing $900 - $999" = "B25104_011",
+                             "Housing $1000 - $1499" = "B25104_012",
+                             "Housing $1500 - $1999" = "B25104_013",
+                             "Housing $2000 - $2499" = "B25104_014",
+                             "Housing $2500 - $2999" = "B25104_015",
+                             "Housing > $3000" = "B25104_016"
+               ),
+               year = 2019,
+               sumfile = "acs1")
+
+poo2019 %>% 
+      mutate(variable = factor(variable, levels = price_names)) %>%
+      ggplot(aes(x=variable,y=estimate))+
+      geom_col() +
+      coord_flip()+
+      labs(x = "Rent Price", 
+       y = "Number of Individuals", 
+       title = "Housing Prices in Cincinnati - 2019") +
+      geom_text(aes(label = estimate), 
+            hjust = -0.2, 
+            vjust = 0.5, 
+            color = "black", 
+            size = 3)
+
+poo2020 %>% 
+      mutate(variable = factor(variable, levels = price_names)) %>%
+      ggplot(aes(x=variable,y=estimate))+
+      geom_col() +
+      coord_flip()+
+      labs(x = "Rent Price", 
+       y = "Number of Individuals", 
+       title = "Housing Prices in Cincinnati - 2020") +
+      geom_text(aes(label = estimate), 
+            hjust = -0.2, 
+            vjust = 0.5, 
+            color = "black", 
+            size = 3)
+
+poo2021 %>% 
+      mutate(variable = factor(variable, levels = price_names)) %>%
+      ggplot(aes(x=variable,y=estimate))+
+      geom_col() +
+      ylim(0, 110000)+
+      coord_flip()+
+      labs(x = "Rent Price", 
+       y = "Number of Individuals", 
+       title = "Housing Prices in Cincinnati - 2021") +
+        geom_text(aes(label = estimate), 
+            hjust = -0.2, 
+            vjust = 0.5, 
+            color = "black", 
+            size = 3)
+
+
+
+       
+
+```
+
+
+
+
+## Quick ideas
+
+You can adjust the dimensions of your figures in the code chunk statement. This can be helpful if you have a certain size space that you want your graph to fit in on a slide. 
+
+```{r, fig.width=10,fig.height=11}
+price_names <- c("Housing < $100",
+                 "Housing $100 - $199",
+                 "Housing $200 - $299",
+                 "Housing $300 - $399",
+                 "Housing $400 - $499",
+                 "Housing $500 - $599",
+                 "Housing $600 - $699",
+                 "Housing $700 - $799",
+                 "Housing $800 - $899",
+                 "Housing $900 - $999",
+                 "Housing $1000 - $1499",
+                 "Housing $1500 - $1999",
+                 "Housing $2000 - $2499",
+                 "Housing $2500 - $2999",
+                 "Housing > $3000")
+
+poo2021 <- get_acs(geography = "county",
+               state = "OH",
+               county = "Hamilton",
+               variables = c("Housing < $100" = "B25104_002",
+                             "Housing $100 - $199" = "B25104_003",
+                             "Housing $200 - $299" = "B25104_004",
+                             "Housing $300 - $399" = "B25104_005",
+                             "Housing $400 - $499" = "B25104_006",
+                             "Housing $500 - $599" = "B25104_007",
+                             "Housing $600 - $699" = "B25104_008",
+                             "Housing $700 - $799" = "B25104_009",
+                             "Housing $800 - $899" = "B25104_010",
+                             "Housing $900 - $999" = "B25104_011",
+                             "Housing $1000 - $1499" = "B25104_012",
+                             "Housing $1500 - $1999" = "B25104_013",
+                             "Housing $2000 - $2499" = "B25104_014",
+                             "Housing $2500 - $2999" = "B25104_015",
+                             "Housing > $3000" = "B25104_016"
+               ),
+               year = 2021,
+               sumfile = "acs1")
+
+poo2020 <- get_acs(geography = "county",
+               state = "OH",
+               county = "Hamilton",
+               variables = c("Housing < $100" = "B25104_002",
+                             "Housing $100 - $199" = "B25104_003",
+                             "Housing $200 - $299" = "B25104_004",
+                             "Housing $300 - $399" = "B25104_005",
+                             "Housing $400 - $499" = "B25104_006",
+                             "Housing $500 - $599" = "B25104_007",
+                             "Housing $600 - $699" = "B25104_008",
+                             "Housing $700 - $799" = "B25104_009",
+                             "Housing $800 - $899" = "B25104_010",
+                             "Housing $900 - $999" = "B25104_011",
+                             "Housing $1000 - $1499" = "B25104_012",
+                             "Housing $1500 - $1999" = "B25104_013",
+                             "Housing $2000 - $2499" = "B25104_014",
+                             "Housing $2500 - $2999" = "B25104_015",
+                             "Housing > $3000" = "B25104_016"
+               ),
+               year = 2020,
+               sumfile = "acs1")
+
+poo2019 <- get_acs(geography = "county",
+               state = "OH",
+               county = "Hamilton",
+               variables = c("Housing < $100" = "B25104_002",
+                             "Housing $100 - $199" = "B25104_003",
+                             "Housing $200 - $299" = "B25104_004",
+                             "Housing $300 - $399" = "B25104_005",
+                             "Housing $400 - $499" = "B25104_006",
+                             "Housing $500 - $599" = "B25104_007",
+                             "Housing $600 - $699" = "B25104_008",
+                             "Housing $700 - $799" = "B25104_009",
+                             "Housing $800 - $899" = "B25104_010",
+                             "Housing $900 - $999" = "B25104_011",
+                             "Housing $1000 - $1499" = "B25104_012",
+                             "Housing $1500 - $1999" = "B25104_013",
+                             "Housing $2000 - $2499" = "B25104_014",
+                             "Housing $2500 - $2999" = "B25104_015",
+                             "Housing > $3000" = "B25104_016"
+               ),
+               year = 2019,
+               sumfile = "acs1")
+
+poo2019 %>% 
+      mutate(variable = factor(variable, levels = price_names)) %>%
+      ggplot(aes(x=variable,y=estimate))+
+      geom_col() +
+      coord_flip()+
+      labs(x = "Rent Price", 
+       y = "Number of Individuals", 
+       title = "Housing Prices in Cincinnati - 2019") +
+      geom_text(aes(label = estimate), 
+            hjust = -0.2, 
+            vjust = 0.5, 
+            color = "black", 
+            size = 3)
+
+poo2020 %>% 
+      mutate(variable = factor(variable, levels = price_names)) %>%
+      ggplot(aes(x=variable,y=estimate))+
+      geom_col() +
+      coord_flip()+
+      labs(x = "Rent Price", 
+       y = "Number of Individuals", 
+       title = "Housing Prices in Cincinnati - 2020") +
+      geom_text(aes(label = estimate), 
+            hjust = -0.2, 
+            vjust = 0.5, 
+            color = "black", 
+            size = 3)
+
+poo2021 %>% 
+      mutate(variable = factor(variable, levels = price_names)) %>%
+      ggplot(aes(x=variable,y=estimate))+
+      geom_col() +
+      coord_flip()+
+      labs(x = "Rent Price", 
+       y = "Number of Individuals", 
+       title = "Housing Prices in Cincinnati - 2021") +
+        geom_text(aes(label = estimate), 
+            hjust = -0.2, 
+            vjust = 0.5, 
+            color = "black", 
+            size = 3)
+
+
+
+       
+
+```
+
+It is probably more helpful when you make the dimensions relatively small. This has the effect of making fonts, graphics bigger and can improve clarity in the image that you actually put into a presentation.
+
+```{r, fig.width=1.5,fig.height=2.5}
+price_names <- c("Housing < $100",
+                 "Housing $100 - $199",
+                 "Housing $200 - $299",
+                 "Housing $300 - $399",
+                 "Housing $400 - $499",
+                 "Housing $500 - $599",
+                 "Housing $600 - $699",
+                 "Housing $700 - $799",
+                 "Housing $800 - $899",
+                 "Housing $900 - $999",
+                 "Housing $1000 - $1499",
+                 "Housing $1500 - $1999",
+                 "Housing $2000 - $2499",
+                 "Housing $2500 - $2999",
+                 "Housing > $3000")
+
+poo2021 <- get_acs(geography = "county",
+               state = "OH",
+               county = "Hamilton",
+               variables = c("Housing < $100" = "B25104_002",
+                             "Housing $100 - $199" = "B25104_003",
+                             "Housing $200 - $299" = "B25104_004",
+                             "Housing $300 - $399" = "B25104_005",
+                             "Housing $400 - $499" = "B25104_006",
+                             "Housing $500 - $599" = "B25104_007",
+                             "Housing $600 - $699" = "B25104_008",
+                             "Housing $700 - $799" = "B25104_009",
+                             "Housing $800 - $899" = "B25104_010",
+                             "Housing $900 - $999" = "B25104_011",
+                             "Housing $1000 - $1499" = "B25104_012",
+                             "Housing $1500 - $1999" = "B25104_013",
+                             "Housing $2000 - $2499" = "B25104_014",
+                             "Housing $2500 - $2999" = "B25104_015",
+                             "Housing > $3000" = "B25104_016"
+               ),
+               year = 2021,
+               sumfile = "acs1")
+
+poo2020 <- get_acs(geography = "county",
+               state = "OH",
+               county = "Hamilton",
+               variables = c("Housing < $100" = "B25104_002",
+                             "Housing $100 - $199" = "B25104_003",
+                             "Housing $200 - $299" = "B25104_004",
+                             "Housing $300 - $399" = "B25104_005",
+                             "Housing $400 - $499" = "B25104_006",
+                             "Housing $500 - $599" = "B25104_007",
+                             "Housing $600 - $699" = "B25104_008",
+                             "Housing $700 - $799" = "B25104_009",
+                             "Housing $800 - $899" = "B25104_010",
+                             "Housing $900 - $999" = "B25104_011",
+                             "Housing $1000 - $1499" = "B25104_012",
+                             "Housing $1500 - $1999" = "B25104_013",
+                             "Housing $2000 - $2499" = "B25104_014",
+                             "Housing $2500 - $2999" = "B25104_015",
+                             "Housing > $3000" = "B25104_016"
+               ),
+               year = 2020,
+               sumfile = "acs1")
+
+poo2019 <- get_acs(geography = "county",
+               state = "OH",
+               county = "Hamilton",
+               variables = c("Housing < $100" = "B25104_002",
+                             "Housing $100 - $199" = "B25104_003",
+                             "Housing $200 - $299" = "B25104_004",
+                             "Housing $300 - $399" = "B25104_005",
+                             "Housing $400 - $499" = "B25104_006",
+                             "Housing $500 - $599" = "B25104_007",
+                             "Housing $600 - $699" = "B25104_008",
+                             "Housing $700 - $799" = "B25104_009",
+                             "Housing $800 - $899" = "B25104_010",
+                             "Housing $900 - $999" = "B25104_011",
+                             "Housing $1000 - $1499" = "B25104_012",
+                             "Housing $1500 - $1999" = "B25104_013",
+                             "Housing $2000 - $2499" = "B25104_014",
+                             "Housing $2500 - $2999" = "B25104_015",
+                             "Housing > $3000" = "B25104_016"
+               ),
+               year = 2019,
+               sumfile = "acs1")
+
+poo2019 %>% 
+      mutate(variable = factor(variable, levels = price_names)) %>%
+      ggplot(aes(x=variable,y=estimate))+
+      geom_col() +
+      coord_flip()+
+      labs(x = "Rent Price", 
+       y = "Number of Individuals", 
+       title = "Housing Prices in Cincinnati - 2019") +
+      geom_text(aes(label = estimate), 
+            hjust = -0.2, 
+            vjust = 0.5, 
+            color = "black", 
+            size = 3)
+
+poo2020 %>% 
+      mutate(variable = factor(variable, levels = price_names)) %>%
+      ggplot(aes(x=variable,y=estimate))+
+      geom_col() +
+      coord_flip()+
+      labs(x = "Rent Price", 
+       y = "Number of Individuals", 
+       title = "Housing Prices in Cincinnati - 2020") +
+      geom_text(aes(label = estimate), 
+            hjust = -0.2, 
+            vjust = 0.5, 
+            color = "black", 
+            size = 3)
+
+poo2021 %>% 
+      mutate(variable = factor(variable, levels = price_names)) %>%
+      ggplot(aes(x=variable,y=estimate))+
+      geom_col() +
+      coord_flip()+
+      labs(x = "Rent Price", 
+       y = "Number of Individuals", 
+       title = "Housing Prices in Cincinnati - 2021") +
+        geom_text(aes(label = estimate), 
+            hjust = -0.2, 
+            vjust = 0.5, 
+            color = "black", 
+            size = 3)
+
+```
+
+Lose the word "Housing in front of every label on the vertical axis and also change "Housing" to "Rent" in the title
+
+```{r, fig.width=1.5,fig.height=2.5}
+price_names <- c("< $100",
+                 "$100 - $199",
+                 "$200 - $299",
+                 "$300 - $399",
+                 "$400 - $499",
+                 "$500 - $599",
+                 "$600 - $699",
+                 "$700 - $799",
+                 "$800 - $899",
+                 "$900 - $999",
+                 "$1000 - $1499",
+                 "$1500 - $1999",
+                 "$2000 - $2499",
+                 "$2500 - $2999",
+                 "> $3000")
+
+poo2021 <- get_acs(geography = "county",
+               state = "OH",
+               county = "Hamilton",
+               variables = c("< $100" = "B25104_002",
+                             "$100 - $199" = "B25104_003",
+                             "$200 - $299" = "B25104_004",
+                             "$300 - $399" = "B25104_005",
+                             "$400 - $499" = "B25104_006",
+                             "$500 - $599" = "B25104_007",
+                             "$600 - $699" = "B25104_008",
+                             "$700 - $799" = "B25104_009",
+                             "$800 - $899" = "B25104_010",
+                             "$900 - $999" = "B25104_011",
+                             "$1000 - $1499" = "B25104_012",
+                             "$1500 - $1999" = "B25104_013",
+                             "$2000 - $2499" = "B25104_014",
+                             "$2500 - $2999" = "B25104_015",
+                             "> $3000" = "B25104_016"
+               ),
+               year = 2021,
+               sumfile = "acs1")
+
+poo2020 <- get_acs(geography = "county",
+               state = "OH",
+               county = "Hamilton",
+               variables = c("< $100" = "B25104_002",
+                             "$100 - $199" = "B25104_003",
+                             "$200 - $299" = "B25104_004",
+                             "$300 - $399" = "B25104_005",
+                             "$400 - $499" = "B25104_006",
+                             "$500 - $599" = "B25104_007",
+                             "$600 - $699" = "B25104_008",
+                             "$700 - $799" = "B25104_009",
+                             "$800 - $899" = "B25104_010",
+                             "$900 - $999" = "B25104_011",
+                             "$1000 - $1499" = "B25104_012",
+                             "$1500 - $1999" = "B25104_013",
+                             "$2000 - $2499" = "B25104_014",
+                             "$2500 - $2999" = "B25104_015",
+                             "> $3000" = "B25104_016"
+               ),
+               year = 2020,
+               sumfile = "acs1")
+
+poo2019 <- get_acs(geography = "county",
+               state = "OH",
+               county = "Hamilton",
+               variables = c("< $100" = "B25104_002",
+                             "$100 - $199" = "B25104_003",
+                             "$200 - $299" = "B25104_004",
+                             "$300 - $399" = "B25104_005",
+                             "$400 - $499" = "B25104_006",
+                             "$500 - $599" = "B25104_007",
+                             "$600 - $699" = "B25104_008",
+                             "$700 - $799" = "B25104_009",
+                             "$800 - $899" = "B25104_010",
+                             "$900 - $999" = "B25104_011",
+                             "$1000 - $1499" = "B25104_012",
+                             "$1500 - $1999" = "B25104_013",
+                             "$2000 - $2499" = "B25104_014",
+                             "$2500 - $2999" = "B25104_015",
+                             "> $3000" = "B25104_016"
+               ),
+               year = 2019,
+               sumfile = "acs1")
+
+poo2019 %>% 
+      mutate(variable = factor(variable, levels = price_names)) %>%
+      ggplot(aes(x=variable,y=estimate))+
+      geom_col() +
+      coord_flip()+
+      labs(x = "Rent Price", 
+       y = "Number of Individuals", 
+       title = "Rent Prices in Cincinnati - 2019") +
+      geom_text(aes(label = estimate), 
+            hjust = -0.2, 
+            vjust = 0.5, 
+            color = "black", 
+            size = 3)
+
+poo2020 %>% 
+      mutate(variable = factor(variable, levels = price_names)) %>%
+      ggplot(aes(x=variable,y=estimate))+
+      geom_col() +
+      coord_flip()+
+      labs(x = "Rent Price", 
+       y = "Number of Individuals", 
+       title = "Rent Prices in Cincinnati - 2020") +
+      geom_text(aes(label = estimate), 
+            hjust = -0.2, 
+            vjust = 0.5, 
+            color = "black", 
+            size = 3)
+
+poo2021 %>% 
+      mutate(variable = factor(variable, levels = price_names)) %>%
+      ggplot(aes(x=variable,y=estimate))+
+      geom_col() +
+      coord_flip()+
+      labs(x = "Rent Price", 
+       y = "Number of Individuals", 
+       title = "Rent Prices in Cincinnati - 2021") +
+        geom_text(aes(label = estimate), 
+            hjust = -0.2, 
+            vjust = 0.5, 
+            color = "black", 
+            size = 3)
+
+```
+
+
+I'm not sure we need to label the numbers for the barplots
+
+```{r, fig.width=1.5,fig.height=2.5}
+price_names <- c("< $100",
+                 "$100 - $199",
+                 "$200 - $299",
+                 "$300 - $399",
+                 "$400 - $499",
+                 "$500 - $599",
+                 "$600 - $699",
+                 "$700 - $799",
+                 "$800 - $899",
+                 "$900 - $999",
+                 "$1000 - $1499",
+                 "$1500 - $1999",
+                 "$2000 - $2499",
+                 "$2500 - $2999",
+                 "> $3000")
+
+poo2021 <- get_acs(geography = "county",
+               state = "OH",
+               county = "Hamilton",
+               variables = c("< $100" = "B25104_002",
+                             "$100 - $199" = "B25104_003",
+                             "$200 - $299" = "B25104_004",
+                             "$300 - $399" = "B25104_005",
+                             "$400 - $499" = "B25104_006",
+                             "$500 - $599" = "B25104_007",
+                             "$600 - $699" = "B25104_008",
+                             "$700 - $799" = "B25104_009",
+                             "$800 - $899" = "B25104_010",
+                             "$900 - $999" = "B25104_011",
+                             "$1000 - $1499" = "B25104_012",
+                             "$1500 - $1999" = "B25104_013",
+                             "$2000 - $2499" = "B25104_014",
+                             "$2500 - $2999" = "B25104_015",
+                             "> $3000" = "B25104_016"
+               ),
+               year = 2021,
+               sumfile = "acs1")
+
+poo2020 <- get_acs(geography = "county",
+               state = "OH",
+               county = "Hamilton",
+               variables = c("< $100" = "B25104_002",
+                             "$100 - $199" = "B25104_003",
+                             "$200 - $299" = "B25104_004",
+                             "$300 - $399" = "B25104_005",
+                             "$400 - $499" = "B25104_006",
+                             "$500 - $599" = "B25104_007",
+                             "$600 - $699" = "B25104_008",
+                             "$700 - $799" = "B25104_009",
+                             "$800 - $899" = "B25104_010",
+                             "$900 - $999" = "B25104_011",
+                             "$1000 - $1499" = "B25104_012",
+                             "$1500 - $1999" = "B25104_013",
+                             "$2000 - $2499" = "B25104_014",
+                             "$2500 - $2999" = "B25104_015",
+                             "> $3000" = "B25104_016"
+               ),
+               year = 2020,
+               sumfile = "acs1")
+
+poo2019 <- get_acs(geography = "county",
+               state = "OH",
+               county = "Hamilton",
+               variables = c("< $100" = "B25104_002",
+                             "$100 - $199" = "B25104_003",
+                             "$200 - $299" = "B25104_004",
+                             "$300 - $399" = "B25104_005",
+                             "$400 - $499" = "B25104_006",
+                             "$500 - $599" = "B25104_007",
+                             "$600 - $699" = "B25104_008",
+                             "$700 - $799" = "B25104_009",
+                             "$800 - $899" = "B25104_010",
+                             "$900 - $999" = "B25104_011",
+                             "$1000 - $1499" = "B25104_012",
+                             "$1500 - $1999" = "B25104_013",
+                             "$2000 - $2499" = "B25104_014",
+                             "$2500 - $2999" = "B25104_015",
+                             "> $3000" = "B25104_016"
+               ),
+               year = 2019,
+               sumfile = "acs1")
+
+poo2019 %>% 
+      mutate(variable = factor(variable, levels = price_names)) %>%
+      ggplot(aes(x=variable,y=estimate))+
+      geom_col() +
+      coord_flip()+
+      labs(x = "Rent Price", 
+       y = "Number of Individuals", 
+       title = "Rent Prices in Cincinnati - 2019") 
+# +
+      # geom_text(aes(label = estimate), 
+      #       hjust = -0.2, 
+      #       vjust = 0.5, 
+      #       color = "black", 
+      #       size = 3)
+
+poo2020 %>% 
+      mutate(variable = factor(variable, levels = price_names)) %>%
+      ggplot(aes(x=variable,y=estimate))+
+      geom_col() +
+      coord_flip()+
+      labs(x = "Rent Price", 
+       y = "Number of Individuals", 
+       title = "Rent Prices in Cincinnati - 2020") 
+# +
+      # geom_text(aes(label = estimate), 
+      #       hjust = -0.2, 
+      #       vjust = 0.5, 
+      #       color = "black", 
+      #       size = 3)
+
+poo2021 %>% 
+      mutate(variable = factor(variable, levels = price_names)) %>%
+      ggplot(aes(x=variable,y=estimate))+
+      geom_col() +
+      coord_flip()+
+      labs(x = "Rent Price", 
+       y = "Number of Individuals", 
+       title = "Rent Prices in Cincinnati - 2021") 
+# +
+        # geom_text(aes(label = estimate), 
+        #     hjust = -0.2, 
+        #     vjust = 0.5, 
+        #     color = "black", 
+        #     size = 3)
+
+```
+
+
+## Bigger ideas
+
+The point of our graphics is to clearly demonstrate the point that we want to make.  In this case, that's the rent prices have increased. This should make us think hard about what would be the clearest visualization of that increase.
+
+My first idea for this is to try to get things on a single graph, rather than needing to compare two separate graphs and point out the difference.
+
+Option 1:
+
+* put 2019 and 2021 data into one dataframe and then make single graph with both in it.
+* you can also change font size directly without changing the size of your window.  In this example, we make font size bigger for the whole graphic but you can do this individually (i.e. axes labels, title, etc) too if you prefer.
+
+
+```{r}
+price_names <- c("< $100",
+                 "$100 - $199",
+                 "$200 - $299",
+                 "$300 - $399",
+                 "$400 - $499",
+                 "$500 - $599",
+                 "$600 - $699",
+                 "$700 - $799",
+                 "$800 - $899",
+                 "$900 - $999",
+                 "$1000 - $1499",
+                 "$1500 - $1999",
+                 "$2000 - $2499",
+                 "$2500 - $2999",
+                 "> $3000")
+
+poo2021 <- get_acs(geography = "county",
+               state = "OH",
+               county = "Hamilton",
+               variables = c("< $100" = "B25104_002",
+                             "$100 - $199" = "B25104_003",
+                             "$200 - $299" = "B25104_004",
+                             "$300 - $399" = "B25104_005",
+                             "$400 - $499" = "B25104_006",
+                             "$500 - $599" = "B25104_007",
+                             "$600 - $699" = "B25104_008",
+                             "$700 - $799" = "B25104_009",
+                             "$800 - $899" = "B25104_010",
+                             "$900 - $999" = "B25104_011",
+                             "$1000 - $1499" = "B25104_012",
+                             "$1500 - $1999" = "B25104_013",
+                             "$2000 - $2499" = "B25104_014",
+                             "$2500 - $2999" = "B25104_015",
+                             "> $3000" = "B25104_016"
+               ),
+               year = 2021,
+               sumfile = "acs1")
+
+poo2020 <- get_acs(geography = "county",
+               state = "OH",
+               county = "Hamilton",
+               variables = c("< $100" = "B25104_002",
+                             "$100 - $199" = "B25104_003",
+                             "$200 - $299" = "B25104_004",
+                             "$300 - $399" = "B25104_005",
+                             "$400 - $499" = "B25104_006",
+                             "$500 - $599" = "B25104_007",
+                             "$600 - $699" = "B25104_008",
+                             "$700 - $799" = "B25104_009",
+                             "$800 - $899" = "B25104_010",
+                             "$900 - $999" = "B25104_011",
+                             "$1000 - $1499" = "B25104_012",
+                             "$1500 - $1999" = "B25104_013",
+                             "$2000 - $2499" = "B25104_014",
+                             "$2500 - $2999" = "B25104_015",
+                             "> $3000" = "B25104_016"
+               ),
+               year = 2020,
+               sumfile = "acs1")
+
+poo2019 <- get_acs(geography = "county",
+               state = "OH",
+               county = "Hamilton",
+               variables = c("< $100" = "B25104_002",
+                             "$100 - $199" = "B25104_003",
+                             "$200 - $299" = "B25104_004",
+                             "$300 - $399" = "B25104_005",
+                             "$400 - $499" = "B25104_006",
+                             "$500 - $599" = "B25104_007",
+                             "$600 - $699" = "B25104_008",
+                             "$700 - $799" = "B25104_009",
+                             "$800 - $899" = "B25104_010",
+                             "$900 - $999" = "B25104_011",
+                             "$1000 - $1499" = "B25104_012",
+                             "$1500 - $1999" = "B25104_013",
+                             "$2000 - $2499" = "B25104_014",
+                             "$2500 - $2999" = "B25104_015",
+                             "> $3000" = "B25104_016"
+               ),
+               year = 2019,
+               sumfile = "acs1")
+
+## Add in a column for which year each data point is from and put them into one dataframe
+mut2019 <-
+  poo2019 %>% 
+  mutate(year = '2019')
+
+mut2021 <- poo2021 %>% 
+  mutate(year = '2021')
+
+poop = bind_rows(mut2019,mut2021)
+
+
+## plot them on the same axes.
+
+poop %>% 
+      mutate(variable = factor(variable, levels = price_names)) %>%
+      ggplot(aes(x=variable,y=estimate,fill=year,group=year))+
+      geom_col(position = "dodge") +
+      coord_flip()+
+      labs(x = "Rent Price", 
+       y = "Number of Individuals", 
+       title = "Rent Prices in Cincinnati") +
+   theme(text = element_text(size = 15))           
+```
+
+The last effort was pretty solid, but let's try one more. Instead of bars, let's try to show the shift in distribution by smoothing out the data with curves for 2019 and 2021.  The problem with "smoothing" like this is that it involves regression and you can't do regression on a label like ``$100-199.''  R sees that as a name and number a number.
+
+
+```{r}
+price_names <- c("< $100",
+                 "$100 - $199",
+                 "$200 - $299",
+                 "$300 - $399",
+                 "$400 - $499",
+                 "$500 - $599",
+                 "$600 - $699",
+                 "$700 - $799",
+                 "$800 - $899",
+                 "$900 - $999",
+                 "$1000 - $1499",
+                 "$1500 - $1999",
+                 "$2000 - $2499",
+                 "$2500 - $2999",
+                 "> $3000")
+
+price_midpoints <- c(50,
+                 150,
+                 250,
+                 350,
+                 450,
+                 550,
+                 650,
+                 750,
+                 850,
+                 950,
+                 1250,
+                 1750,
+                 2250,
+                 2750,
+                 3250)
+
+poo2021 <- get_acs(geography = "county",
+               state = "OH",
+               county = "Hamilton",
+               variables = c("< $100" = "B25104_002",
+                             "$100 - $199" = "B25104_003",
+                             "$200 - $299" = "B25104_004",
+                             "$300 - $399" = "B25104_005",
+                             "$400 - $499" = "B25104_006",
+                             "$500 - $599" = "B25104_007",
+                             "$600 - $699" = "B25104_008",
+                             "$700 - $799" = "B25104_009",
+                             "$800 - $899" = "B25104_010",
+                             "$900 - $999" = "B25104_011",
+                             "$1000 - $1499" = "B25104_012",
+                             "$1500 - $1999" = "B25104_013",
+                             "$2000 - $2499" = "B25104_014",
+                             "$2500 - $2999" = "B25104_015",
+                             "> $3000" = "B25104_016"
+               ),
+               year = 2021,
+               sumfile = "acs1") %>% 
+  mutate("price_midpoints"= price_midpoints)
+
+
+poo2019 <- get_acs(geography = "county",
+               state = "OH",
+               county = "Hamilton",
+               variables = c("< $100" = "B25104_002",
+                             "$100 - $199" = "B25104_003",
+                             "$200 - $299" = "B25104_004",
+                             "$300 - $399" = "B25104_005",
+                             "$400 - $499" = "B25104_006",
+                             "$500 - $599" = "B25104_007",
+                             "$600 - $699" = "B25104_008",
+                             "$700 - $799" = "B25104_009",
+                             "$800 - $899" = "B25104_010",
+                             "$900 - $999" = "B25104_011",
+                             "$1000 - $1499" = "B25104_012",
+                             "$1500 - $1999" = "B25104_013",
+                             "$2000 - $2499" = "B25104_014",
+                             "$2500 - $2999" = "B25104_015",
+                             "> $3000" = "B25104_016"
+               ),
+               year = 2019,
+               sumfile = "acs1") %>% 
+  mutate("price_midpoints"= price_midpoints)
+
+## Add in a column for which year each data point is from and put them into one dataframe
+mut2019 <-
+  poo2019 %>% 
+  mutate(year = '2019')
+
+mut2021 <- poo2021 %>% 
+  mutate(year = '2021')
+
+poop = bind_rows(mut2019,mut2021)
+
+
+
+poop %>% 
+      ggplot(aes(x=price_midpoints,y=estimate,group=year,color=year))+
+      geom_density(stat='identity',lwd=1) +
+      #coord_flip()+
+      labs(x = "Rent Price", 
+       y = "Number of Individuals", 
+       title = "Rent Prices in Cincinnati") +
+   theme(text = element_text(size = 15))           
+```
+
+
