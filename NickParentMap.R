@@ -1,0 +1,5 @@
+library(tidyverse)
+library(tidycensus)
+##My Special Key dc98f1c12e3b8ede55889807d8b33f71cc962dc9 (it opens the tomb of cuthulu)
+Acs5.vars <- load_variables(2023, "acs5", cache = TRUE)
+## B09002_001 Selfish Data (Familes with kids)
