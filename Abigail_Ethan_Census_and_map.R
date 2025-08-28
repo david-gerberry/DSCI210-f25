@@ -94,3 +94,18 @@ acs_data_total_pop <- acs_data_interpolated %>%
   scale_fill_viridis_c(option = "turbo")+
   labs(fill = "Total Population")
 
+
+total_pop <- sum(acs_data1_interpolated$pop_totalE)
+
+total_pop
+
+
+
+
+
+
+
+
+
+
+
