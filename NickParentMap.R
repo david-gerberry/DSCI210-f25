@@ -8,7 +8,7 @@ library(sf) #for getting our custom shapes (made by the amazing Dr. Gerberry) to
 ##making Vars
 new_acs = 2023 #normaly writing the number is cool but due to it changing soon im saving it in a var so i can change it more easily
 
-#not need more than once but this should let you explore the ACS 5 year in R. also will need a rerun come september.
+#not need more than once but this should let you explore the ACS 5 year in R. also will need a rerun come September.
 Acs5.vars <- load_variables(new_acs, "acs5", cache = TRUE)
 ## B11003_003 married couples with kids; B11003_010 single dads; B11003_016 single moms
 

@@ -1,0 +1,134 @@
+---
+title: "2025: District maps for DSCI 210 Campaigns"
+format: html
+editor: visual
+---
+
+## Quarto
+
+Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
+
+## Running Code
+
+When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
+
+```{r}
+knitr::opts_chunk$set(
+	echo = TRUE,
+	message = FALSE,
+	warning = FALSE
+)
+library(tidyverse)
+library(sf)
+library(readxl)
+library(RColorBrewer)
+```
+
+```{r}
+
+```
+
+```{r}
+#| label: Judicial 4th District
+## Only consider 4th District
+
+map2019 <- st_zm(st_read("data/maps/precincts_2019.shp"))
+results2019 <- read_excel("data/election results/G19_Official_Canvass.xlsx", sheet = "Judicial",skip=2)
+mapANDresults2019 <-  left_join(map2019, results2019, by = c("PRECINCT" = "PRECINCT")) 
+
+x = mapANDresults2019
+	
+	ind = which((x$`Josh Berkowitz`+x$`John Kennedy`)>0)		
+		y = x[ind,]
+
+		judicial_precincts <- y["geometry"]
+		judicial_boundary <-  st_union(y)
+		
+    judicial_precincts %>% 
+      ggplot(aes()) +
+      geom_sf()
+    
+     judicial_boundary %>% 
+      ggplot(aes()) +
+      geom_sf()
+		
+```
+
+```{r}
+#| label: City of Cincinnati
+
+### Only consider City of Cincinnati
+
+map2021 <- st_zm(st_read("data/maps/precincts_2021.shp"))
+results2021 <- read_excel("data/election results/G21_Official_Canvass.xlsx", sheet = "Cincinnati",skip=2)
+mapANDresults2021 <-  left_join(map2021, results2021, by = c("NAME" = "PRECINCT")) %>% 
+  rename(PRECINCT=NAME)
+
+
+x <- mapANDresults2021
+
+    ## which precincts had votes for Mayor in 2021
+    ind = which((x$`David              Mann`+x$`Aftab        Pureval`)>0)		
+		y = x[ind,]
+
+		cincy_precincts <- y["geometry"]
+		cincy_boundary <-  st_union(y)
+		
+    cincy_precincts %>% 
+      ggplot(aes()) +
+      geom_sf()
+    
+    cincy_boundary %>% 
+      ggplot(aes()) +
+      geom_sf()
+     
+			     
+     
+     
+```
+
+```{r}
+#| label: Cincinnati Public School District
+
+## shapefiles for school districts exist from the Census 
+cps_boundary <- st_zm(st_read("data/maps/tl_2021_39_unsd.shp")) %>% 
+  filter(NAME=="Cincinnati City School District")
+
+## Voting precinct maps and results from 2021
+map2021 <- st_zm(st_read("data/maps/precincts_2021.shp"))
+results2021 <- read_excel("data/election results/G21_Official_Canvass.xlsx", sheet = "Boards of Education",skip=2)
+mapANDresults2021 <-  right_join(map2021,results2021, by = c( "NAME" ="PRECINCT" )) %>% 
+  rename(PRECINCT=NAME)
+
+### Only consider CPS School District
+  
+x <- mapANDresults2021   ## just for ease of writing code
+
+  ## which precincts had votes in the CPS Board race in 2019
+  ind = which((x$`Pamela F. Bowers`+x$`Brandon Craig`+x$`Gary      Favors`+x$`Kareem T. Moffett`+x$`Mike    Moroski`+x$`Mary Wineberg`)>0)		
+  y = x[ind,]
+		
+		cps_precincts <- st_intersection(y["geometry"],cps_boundary)
+    cps_boundary = cps_boundary["geometry"]
+		
+    cps_precincts %>% 
+      ggplot(aes()) +
+      geom_sf()
+    
+    cps_boundary %>% 
+      ggplot(aes()) +
+      geom_sf()
+     
+```
+
+```{r}
+
+### save maps to file
+
+st_write(judicial_precincts, "judicial_precincts.shp",append=FALSE)
+st_write(judicial_boundary, "judicial_boundary.shp",append=FALSE)
+st_write(cincy_precincts, "cincy_precincts.shp",append=FALSE)
+st_write(cincy_boundary, "cincy_boundary.shp",append=FALSE)
+st_write(cps_precincts, "cps_precincts.shp",append=FALSE)
+st_write(cps_boundary, "cps_boundary.shp",append=FALSE)
+```

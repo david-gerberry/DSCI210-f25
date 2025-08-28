@@ -1,0 +1,92 @@
+---
+title: "Census data to campaign districts"
+format: html
+editor: visual
+---
+
+## Quarto
+
+Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
+
+## Packages and Census API
+
+```{r}
+library(tidycensus)
+library(tidyverse)
+library(sf)
+
+census_api_key("fa67b1dbacf4fbbb1b14c875f34437c6cbdaa694")
+```
+
+Let's get some Census data (with the maps).
+
+```{r}
+income_data <- get_acs(
+  geography = "block group",
+  variables = c(
+    med_household_income = "B19013_001"
+  ), 
+  state = "OH",
+  county= "Hamilton",
+  year = 2023,
+  geometry = TRUE
+)
+```
+
+Let's also get TOTAL_POP data all the way down at the Census block level. We need this to be able to interpolate between maps with different geometries.\
+
+```{r}
+block.total <- get_decennial(geography = "block", 
+                 state = "Ohio",
+                 county = "Hamilton",
+                 variables = "P1_001N", 
+                 year = 2020,
+                 sumfile = "dhc",
+                 geometry = TRUE) %>% 
+  select(total.pop = value) 
+```
+
+Let's load up a district map for one of our campaigns (City of Cincinnati in this case, for the council race).
+
+```{r}
+cincy_precincts <- st_read("shapefiles/cincy_precincts.shp")
+cincy_boundary <- st_read("shapefiles/cincy_boundary.shp")
+
+cincy_boundary <- st_set_crs(cincy_boundary, 4269)
+cincy_precincts <- st_set_crs(cincy_precincts, 4269)
+```
+
+### Interpolation
+
+Surprise! The Census boundaries and the boundaries for voting precincts don't match. We need to do interpolation.
+
+```{r}
+household_income_interpolated <- interpolate_pw(
+  from = st_make_valid(income_data),
+  to = st_make_valid(cincy_boundary),
+  extensive = FALSE,                 ## because you don't want to add the median ages,
+  weights =st_make_valid(block.total),
+  weight_column = "total.pop",
+  crs = 4269
+  ) 
+
+precinct_household_income_interpolated <- interpolate_pw(
+  from = st_make_valid(income_data),
+  to = st_make_valid(cincy_precincts),
+  extensive = FALSE,                 ## because you don't want to add the median ages,
+  weights =st_make_valid(block.total),
+  weight_column = "total.pop",
+  crs = 4269
+  ) 
+
+```
+
+```{r}
+
+precinct_household_income_interpolated %>%
+  ggplot(aes(fill = estimate))+
+  geom_sf()+
+  scale_fill_viridis_c(option = "turbo") +
+  labs(fill= "Median Household Income")
+
+```
