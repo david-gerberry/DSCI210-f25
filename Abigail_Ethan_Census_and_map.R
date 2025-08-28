@@ -95,17 +95,32 @@ acs_data_total_pop <- acs_data_interpolated %>%
   labs(fill = "Total Population")
 
 
+acs_data_total_pop
+
 total_pop <- sum(acs_data1_interpolated$pop_totalE)
 
 total_pop
 
+acs_data_interpolated$white_prop <- acs_data_interpolated$whiteE/acs_data_interpolated$pop_totalE
 
 
+acs_data_white_prop <- acs_data_interpolated %>%
+  ggplot(aes(fill = white_prop))+
+  geom_sf()+
+  scale_fill_viridis_c(option = "turbo")+
+  labs(fill = "Proportion of Population that is Caucasian")
+
+acs_data_white_prop
 
 
+white_prop_mean <- mean(as.numeric(acs_data_interpolated$white_prop), na.rm = TRUE)
 
+white_prop_mean
 
-
-
-
+income_mean <- weighted.mean(
+  x = as.numeric(acs_data_interpolated$med_incomeE),
+  w = as.numeric(acs_data_interpolated$pop_totalE),
+  na.rm = TRUE
+)
+income_mean
 
