@@ -28,54 +28,89 @@ demographicData = get_acs(
 )
 
 
+##Geting the block total to make mhy map better
+block.total <- get_decennial(geography = "block",
+  state = "Ohio",
+  county = "Hamilton",
+  variables = "P1_001N",
+  year = 2020,
+  sumfile = "dhc",
+  geometry = TRUE) %>% 
+  select(total.pop = value)
+  
+schoolPrecincts <- st_read("shapefiles/cps_precincts.shp")
+schoolBoundry <- st_read("shapefiles/cps_boundary.shp")
+
+schoolBoundry <- st_set_crs(schoolBoundry, 4269)
+schoolPrecincts <- st_set_crs(schoolPrecincts, 4269)
+
+
+
+
 ##make the data wide
 the_wiiide_school = demographicData %>% 
   select(GEOID, NAME, variable, estimate) %>% 
   pivot_wider(names_from = variable, values_from = estimate) 
 
-demographicData_wide <- demographicData %>%
+the_wiiide_school <- demographicData %>%
   select(GEOID, NAME, variable, estimate, geometry) %>%
   pivot_wider(names_from = variable, values_from = estimate) %>%
   mutate(total_parent_household = married_parents + single_dads + single_moms) %>% 
-  mutate(parent_porp = total_parent_household/ population)
+  mutate(parent_porp = ((total_parent_household/ population) *100))
 
 # Read custom school precinct shapefile
-schoolPrecincts <- st_read("shapefiles/cps_precincts.shp")
-schoolPrecincts <- st_set_crs(schoolPrecincts, 4269)
-
-# Align CRS
-schoolPrecincts <- st_transform(schoolPrecincts, st_crs(demographicData_wide))
-
-# Spatial join: attach ACS tracts to school precincts
-acs_joined <- st_join(demographicData_wide, schoolPrecincts, join = st_intersects)
-
-# Aggregate to one row per precinct
-acs_by_precinct <- acs_joined %>%
-  group_by(geometry) %>%  # Replace with your shapefile's precinct name column
-  summarise(
-    married_parents = sum(married_parents, na.rm = TRUE),
-    single_dads = sum(single_dads, na.rm = TRUE),
-    single_moms = sum(single_moms, na.rm = TRUE),
-    total_parent_household = sum(total_parent_household, na.rm = TRUE),
-    total_population = sum(population, na.rm = TRUE)   # sum total households/population
-  ) %>% 
-  mutate(parent_per = (total_parent_household/ total_population)*100 )
-
-# Map example
+#schoolPrecincts <- st_read("shapefiles/cps_precincts.shp")
+#schoolPrecincts <- st_set_crs(schoolPrecincts, 4269)
 
 
-ggplot(acs_by_precinct) +
-  geom_sf(aes(fill = parent_per)) +
-  scale_fill_viridis_c(trans = "sqrt") +
-  theme_minimal() +
-  labs(title = "Percent of households with parents by Precinct")
+interpolated_demographic_data <- interpolate_pw(
+  from = st_make_valid(the_wiiide_school),
+  to = st_make_valid(schoolBoundry),
+  extensive = FALSE,
+  weights = st_make_valid(block.total),
+  weight_column = "total.pop",
+  crs = 4269
+)
 
+precinct_interpolated_demographic_data <- interpolate_pw(
+  from = st_make_valid(the_wiiide_school),
+  to = st_make_valid(schoolPrecincts),
+  extensive = FALSE,
+  weights = st_make_valid(block.total),
+  weight_column = "total.pop",
+  crs = 4269
+)
 
+mx4_parent <- function(){
+  #credit  to the funk master
+  palette <- colorNumeric(
+    palette = viridisLite::turbo(256), # Yellow-Orange-Red color scale, 
+    domain = precinct_interpolated_demographic_data$parent_porp,
+    na.color = "transparent"
+  )
+  
+  leaflet() %>% 
+    addProviderTiles(providers$CartoDB.Positron) %>%
+    addPolygons(
+      data = precinct_interpolated_demographic_data,
+      weight = 1,
+      color = "black",
+      fillColor = ~palette(parent_porp),
+      fillOpacity = .5,
+      opacity = .4
+    ) %>% 
+    addLegend(
+      pal = palette,
+      values = precinct_interpolated_demographic_data$parent_porp,
+      title = "PublicPorp",
+      position = "bottomright"
+      
+    )
+}
 
-acs_clipped <- st_intersection(acs_by_precinct, schoolPrecincts)
-
-ggplot(acs_clipped) +
-  geom_sf(aes(fill = parent_per)) +
-  scale_fill_viridis_c(labels = scales::percent_format(accuracy = 1, trans = "sqrt")) +
-  theme_minimal() +
-  labs(title = "Percent of households with parents by Precinct")
+precinct_interpolated_demographic_data %>% 
+  ggplot(aes(fill = parent_porp)) +
+  geom_sf()+
+  scale_fill_viridis_c(option = "turbo") +
+  labs(title = "Percent of Population who are Parents Living with Kids") +
+  labs(fill = "Percent of Parents") 
