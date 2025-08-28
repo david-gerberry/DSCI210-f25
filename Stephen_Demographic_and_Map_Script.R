@@ -12,7 +12,21 @@ census_api_key("4951cbe6bdec5269e91df7656ba86ee58a29cff7")
 Census_Data <- get_acs(
   geography = "block group",
   variables = c(
-    med_household_income = "B19013_001",
+    med_household_income = "B19013_001"#,
+    #median_age_pop = "B01002_001",
+    #median_age_fam_hh = "B11007_002",      
+    #median_age_nonfam_hh = "B11007_003" 
+  ), 
+  state = "OH",
+  county= "Hamilton",
+  year = 2023,
+  geometry = TRUE
+)
+
+Census_Data_2 <- get_acs(
+  geography = "block group",
+  variables = c(
+    #med_household_income = "B19013_001"#,
     median_age_pop = "B01002_001",
     median_age_fam_hh = "B11007_002",      
     median_age_nonfam_hh = "B11007_003" 
@@ -22,7 +36,6 @@ Census_Data <- get_acs(
   year = 2023,
   geometry = TRUE
 )
-
 
 
 #### Map Making ####
