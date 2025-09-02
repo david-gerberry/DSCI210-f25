@@ -1,6 +1,7 @@
 library(tidyverse)
 library(tidycensus)
 library(ggplot2)
+library(leaflet)
 library(sf) #for getting our custom shapes (made by the amazing Dr. Gerberry) to work 
 ##My Special Key dc98f1c12e3b8ede55889807d8b33f71cc962dc9 (it opens the tomb of cuthulu)
 ##census_api_key("dc98f1c12e3b8ede55889807d8b33f71cc962dc9", install = TRUE)
