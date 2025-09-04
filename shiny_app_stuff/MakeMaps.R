@@ -1,13 +1,25 @@
+require("tidyverse")
+require("tidycensus")
+require("leaflet")
+require("sf")
 
 
-shiny.map <- function(shpFile){
+shiny.map <- function(shpFile = "CIT"){
   
   mapDict = c(
-    "CPS" = "banana",
-    "R" = "Z"
+    "CPS" = "cps_precincts.shp", #cincinatti public school
+    "MUN" = "judicial_precincts.shp", #municipal court
+    "CIT" = "cincy_precincts.shp" #city council!
   )
   
-  #map.title = "Municipal District 4 in Hamilton County"
+  ourMap = mapDict[shpFile] %>% #prep our shapefile
+    st_read() %>% 
+    st_zm() %>% 
+    st_as_sf(4269)
+  
+  ourData = read_csv("data/Acs_Data.csv")
+  
+  
   
   leaflet() %>% 
     # BASE MAP
@@ -15,17 +27,10 @@ shiny.map <- function(shpFile){
     
     # COLOR IN
     addPolygons(
-      data = interpolated.results,
+      data = ourMap,
       weight = 1,
       fillOpacity = .35,
       opacity = .375
-    ) %>% 
-    
-    addPolygons(
-      data = entireCountyGeometry,
-      weight = 2,
-      fillOpacity = 0.1,
-      opacity = 1
     )
   
 }
