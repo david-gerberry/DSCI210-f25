@@ -141,7 +141,7 @@ make_histogram <- function(district="judge", data="age"){
     )
 }
 
-make_histogram("cps","race")
+make_histogram("cps","income")
 
 
 
