@@ -41,7 +41,7 @@ x = mapANDresults2019
 	ind = which((x$`Josh Berkowitz`+x$`John Kennedy`)>0)		
 		y = x[ind,]
 
-		judicial_precincts <- y["geometry"]
+		judicial_precincts <- y %>% select(PRECINCT,`PRC #`,geometry)
 		judicial_boundary <-  st_union(y)
 		
     judicial_precincts %>% 
@@ -71,7 +71,7 @@ x <- mapANDresults2021
     ind = which((x$`David              Mann`+x$`Aftab        Pureval`)>0)		
 		y = x[ind,]
 
-		cincy_precincts <- y["geometry"]
+		cincy_precincts <- y %>% select(PRECINCT,`PRC #`,geometry)
 		cincy_boundary <-  st_union(y)
 		
     cincy_precincts %>% 
@@ -87,39 +87,46 @@ x <- mapANDresults2021
      
 ```
 
-```{r}
-#| label: Cincinnati Public School District
+-   <div>
 
-## shapefiles for school districts exist from the Census 
-cps_boundary <- st_zm(st_read("data/maps/tl_2021_39_unsd.shp")) %>% 
-  filter(NAME=="Cincinnati City School District")
+    ```{r}
+    #| label: Cincinnati Public School District
 
-## Voting precinct maps and results from 2021
-map2021 <- st_zm(st_read("data/maps/precincts_2021.shp"))
-results2021 <- read_excel("data/election results/G21_Official_Canvass.xlsx", sheet = "Boards of Education",skip=2)
-mapANDresults2021 <-  right_join(map2021,results2021, by = c( "NAME" ="PRECINCT" )) %>% 
-  rename(PRECINCT=NAME)
+    ## shapefiles for school districts exist from the Census 
+    cps_boundary <- st_zm(st_read("data/maps/tl_2021_39_unsd.shp")) %>% 
+      filter(NAME=="Cincinnati City School District")
 
-### Only consider CPS School District
-  
-x <- mapANDresults2021   ## just for ease of writing code
+    ## Voting precinct maps and results from 2021
+    map2021 <- st_zm(st_read("data/maps/precincts_2021.shp"))
+    results2021 <- read_excel("data/election results/G21_Official_Canvass.xlsx", sheet = "Boards of Education",skip=2)
+    mapANDresults2021 <-  right_join(map2021,results2021, by = c( "NAME" ="PRECINCT" )) %>% 
+      rename(PRECINCT=NAME)
 
-  ## which precincts had votes in the CPS Board race in 2019
-  ind = which((x$`Pamela F. Bowers`+x$`Brandon Craig`+x$`Gary      Favors`+x$`Kareem T. Moffett`+x$`Mike    Moroski`+x$`Mary Wineberg`)>0)		
-  y = x[ind,]
-		
-		cps_precincts <- st_intersection(y["geometry"],cps_boundary)
-    cps_boundary = cps_boundary["geometry"]
-		
-    cps_precincts %>% 
-      ggplot(aes()) +
-      geom_sf()
-    
-    cps_boundary %>% 
-      ggplot(aes()) +
-      geom_sf()
-     
-```
+    ### Only consider CPS School District
+      
+    x <- mapANDresults2021   ## just for ease of writing code
+
+      ## which precincts had votes in the CPS Board race in 2019
+      ind = which((x$`Pamela F. Bowers`+x$`Brandon Craig`+x$`Gary      Favors`+x$`Kareem T. Moffett`+x$`Mike    Moroski`+x$`Mary Wineberg`)>0)		
+      y = x[ind,] 
+
+      cps_precincts <- st_intersection(y,cps_boundary) %>% 
+        rename(`PRC #` = PRC..) %>%  
+    		  select(PRECINCT,`PRC #`,geometry)
+    		
+        cps_boundary = cps_boundary["geometry"]
+    		
+        cps_precincts %>% 
+          ggplot(aes()) +
+          geom_sf()
+        
+        cps_boundary %>% 
+          ggplot(aes()) +
+          geom_sf()
+         
+    ```
+
+    </div>
 
 ```{r}
 
