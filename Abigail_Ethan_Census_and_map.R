@@ -1,5 +1,5 @@
 # Install if not already installed
-# install.packages(c("sf", "tidycensus", "ggplot2", "dplyr"))
+# Install.packages(c("sf", "tidycensus", "ggplot2", "dplyr"))
 
 library(sf)
 library(ggplot2)
@@ -94,7 +94,6 @@ acs_data_total_pop <- acs_data_interpolated %>%
   scale_fill_viridis_c(option = "turbo")+
   labs(fill = "Total Population")
 
-
 acs_data_total_pop
 
 total_pop <- sum(acs_data1_interpolated$pop_totalE)
@@ -123,4 +122,3 @@ income_mean <- weighted.mean(
   na.rm = TRUE
 )
 income_mean
-
