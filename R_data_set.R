@@ -1,6 +1,7 @@
 library(tidycensus)
 library(tidyverse)
 library(dplyr)
+library(sf)
 
 # collected data
 acs_data_raw <- get_acs(
@@ -41,12 +42,48 @@ acs_data_raw <- get_acs(
   output = "wide"
 )
 
+income_vars <- c(
+  inc_lt10   = "B19001_002",
+  inc_10_14  = "B19001_003",
+  inc_15_19  = "B19001_004",
+  inc_20_24  = "B19001_005",
+  inc_25_29  = "B19001_006",
+  inc_30_34  = "B19001_007",
+  inc_35_39  = "B19001_008",
+  inc_40_44  = "B19001_009",
+  inc_45_49  = "B19001_010",
+  inc_50_59  = "B19001_011",
+  inc_60_74  = "B19001_012",
+  inc_75_99  = "B19001_013",
+  inc_100_124 = "B19001_014",
+  inc_125_149 = "B19001_015",
+  inc_150_199 = "B19001_016",
+  inc_200_plus = "B19001_017"
+)
+
+acs_income <- get_acs(
+  geography = "block group",
+  variables = income_vars,
+  state = "OH",
+  county = "Hamilton",
+  year = 2023,
+  geometry = FALSE,  # no need to pull geometry again
+  output = "wide"
+)
+
+# ---- Merge income detail into base ----
+acs_merged <- left_join(acs_data_raw, acs_income, by = "GEOID")
+
+acs_merged <- acs_merged %>%
+  mutate(NAME = paste0("Block Group ", substr(GEOID, 12, 12), 
+                       ", Tract ", substr(GEOID, 6, 11),
+                       ", Hamilton County, OH"))
+
 # Collapse into combined sex + 10-year bins
-acs_data <- acs_data_raw %>%
+acs_merged <- acs_merged %>%
   mutate(
     age_0_9   = m_under5E + m_5_9E + f_under5E + f_5_9E,
-    age_10_19 = m_10_14E + m_15_17E + m_18_19E +
-      f_10_14E + f_15_17E + f_18_19E,
+    age_10_19 = m_10_14E + m_15_17E + m_18_19E + f_10_14E + f_15_17E + f_18_19E,
     age_20_29 = m_20E + m_21E + m_22_24E + m_25_29E +
       f_20E + f_21E + f_22_24E + f_25_29E,
     age_30_39 = m_30_34E + m_35_39E + f_30_34E + f_35_39E,
@@ -56,9 +93,150 @@ acs_data <- acs_data_raw %>%
       f_60_61E + f_62_64E + f_65_66E + f_67_69E,
     age_70_79 = m_70_74E + m_75_79E + f_70_74E + f_75_79E,
     age_80plus = m_80_84E + m_85plusE + f_80_84E + f_85plusE
-  ) %>%
-  select(GEOID, NAME, geometry, pop_totalE, whiteE, blackE, asianE,
-         hispanicE, median_ageE, med_incomeE,
-         starts_with("age_"))
+  )
 
-write_csv("Acs_Data.csv", acs_data )
+# ---- Collapse INCOME into cohorts (example bins) ----
+acs_final <- acs_merged %>%
+  mutate(
+    hhinc_under25k = inc_lt10E + inc_10_14E + inc_15_19E + inc_20_24E,
+    hhinc_25_49k   = inc_25_29E + inc_30_34E + inc_35_39E + inc_40_44E + inc_45_49E,
+    hhinc_50_99k   = inc_50_59E + inc_60_74E + inc_75_99E,
+    hhinc_100_149k = inc_100_124E + inc_125_149E,
+    hhinc_150_199k = inc_150_199E,
+    hhinc_200plus  = inc_200_plusE
+  ) %>%
+  select(
+    GEOID, NAME, geometry,
+    pop_totalE, whiteE, blackE, asianE, hispanicE,
+    median_ageE, med_incomeE,
+    starts_with("age_"), starts_with("hhinc_")
+  )
+
+acs_extensive <- acs_final %>%
+  select(GEOID, geometry,
+         pop_totalE, whiteE, blackE, asianE, hispanicE,
+         starts_with("age_"), starts_with("hhinc_"))
+
+acs_intensive <- acs_final %>%
+  select(GEOID, geometry, median_ageE, med_incomeE)
+
+# Judicial Interpolation
+
+judicial_boundaries <- st_read("shapefiles/judicial_boundary.shp")
+judicial_precincts  <- st_read("shapefiles/judicial_precincts.shp")
+
+block.total <-get_decennial(geography = "block",
+                            state = "Ohio",
+                            county = "Hamilton",
+                            variables = "P1_001N",
+                            year = 2020,
+                            sumfile = "dhc",
+                            geometry = TRUE) %>%
+  select(pop_totalE = value)
+
+acs_interp_j_ext <- interpolate_pw(
+  from        = st_make_valid(acs_extensive),
+  to          = st_make_valid(judicial_precincts),
+  extensive   = TRUE,
+  weights     = st_make_valid(block.total),
+  weight_column = "pop_totalE",
+  crs         = 4269
+)
+
+acs_interp_j_int <- interpolate_pw(
+  from          = st_make_valid(acs_intensive),
+  to            = st_make_valid(judicial_precincts),
+  extensive     = FALSE,
+  weights       = st_make_valid(block.total),
+  weight_column = "pop_totalE",
+  crs           = 4269
+) %>%
+  st_drop_geometry()
+
+acs_interp_judicial <- acs_interp_j_ext %>%
+  left_join(acs_interp_j_int, by = "id")
+
+# cps interpolation
+
+cps_boundaries <- st_read("shapefiles/cps_boundary.shp")
+cps_precincts <- st_read("shapefiles/cps_precincts.shp")
+
+acs_interp_cps_ext <- interpolate_pw(
+  from        = st_make_valid(acs_extensive),
+  to          = st_make_valid(cps_precincts),
+  extensive   = TRUE,
+  weights     = st_make_valid(block.total),
+  weight_column = "pop_totalE",
+  crs         = 4269
+)
+
+
+acs_interp_cps_int <- interpolate_pw(
+  from          = st_make_valid(acs_intensive),
+  to            = st_make_valid(cps_precincts),
+  extensive     = FALSE,
+  weights       = st_make_valid(block.total),
+  weight_column = "pop_totalE",
+  crs           = 4269
+) %>%
+  st_drop_geometry()
+
+acs_interp_cps <- acs_interp_cps_ext %>%
+  left_join(acs_interp_cps_int, by = "id")
+
+# cincy interpolation
+cincy_boundaries <- st_read("shapefiles/cincy_boundary.shp")
+cincy_precincts <- st_read("shapefiles/cincy_precincts.shp")
+
+acs_interp_cincy_ext <- interpolate_pw(
+  from        = st_make_valid(acs_extensive),
+  to          = st_make_valid(cincy_precincts),
+  extensive   = TRUE,
+  weights     = st_make_valid(block.total),
+  weight_column = "pop_totalE",
+  crs         = 4269
+)
+
+
+acs_interp_cincy_int <- interpolate_pw(
+  from          = st_make_valid(acs_intensive),
+  to            = st_make_valid(cincy_precincts),
+  extensive     = FALSE,
+  weights       = st_make_valid(block.total),
+  weight_column = "pop_totalE",
+  crs           = 4269
+) %>%
+  st_drop_geometry()
+
+acs_interp_cincy <- acs_interp_cincy_ext %>%
+  left_join(acs_interp_cincy_int, by = "id")
+
+#hamilton county interpolation
+
+ham_boundaries <- st_read("shapefiles/cincy_boundary.shp")
+ham_precincts <- st_read("shapefiles/precincts_2024.shp")
+
+acs_interp_ham_ext <- interpolate_pw(
+  from        = st_make_valid(acs_extensive),
+  to          = st_make_valid(ham_precincts),
+  extensive   = TRUE,
+  weights     = st_make_valid(block.total),
+  weight_column = "pop_totalE",
+  crs         = 4269
+)
+
+
+acs_interp_ham_int <- interpolate_pw(
+  from          = st_make_valid(acs_intensive),
+  to            = st_make_valid(ham_precincts),
+  extensive     = FALSE,
+  weights       = st_make_valid(block.total),
+  weight_column = "pop_totalE",
+  crs           = 4269
+) %>%
+  st_drop_geometry()
+
+acs_interp_ham <- acs_interp_ham_ext %>%
+  left_join(acs_interp_ham_int, by = "id")
+
+save(acs_interp_judicial, acs_interp_cps, acs_interp_cincy, acs_interp_ham, file = "acs_data.RData")
