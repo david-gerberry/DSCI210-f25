@@ -8,6 +8,8 @@ require("sf")
 #'    "CPS" = cincinatti public school
 #'    "MUN" = municipal court 4
 #'    "CIT" = cincinatti city council
+#'    
+#' @param colName the name of the column that we want to draw data from
 #'
 shiny.map <- function(shpFile = "CIT",colName = "pop_totalE"){
   
