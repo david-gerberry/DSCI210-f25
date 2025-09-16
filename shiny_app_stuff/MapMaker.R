@@ -45,7 +45,8 @@ shiny.map <- function(shpFile = "CIT",colName = "pop_totalE"){
       fillOpacity = .35,
       opacity = .375,
       color = ourClr,
-      label = ~paste( colName ,": ", round(ourMap[[colName]]))
+      label = ~paste( colName ,": ", round(ourMap[[colName]])),
+    layerId = ~ourMap$PRECINCT
     ) %>% 
     
     addControl(
