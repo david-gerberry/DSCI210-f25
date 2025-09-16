@@ -2,7 +2,7 @@ library(shiny)
 library(tidyverse)
 library(shinycssloaders)
 library(leaflet)
-
+load("data/acs_data.RData")
 
 test = function(map) {
   if (map == "CPS") {
@@ -20,7 +20,7 @@ else {
 
 ui <- fluidPage(
   
-  titlePanel("Funky Census Map"),
+  titlePanel("Demographics Map"),
   
   # row for dropdowns
   fluidRow(
@@ -31,16 +31,16 @@ ui <- fluidPage(
                   choices = c("School Board" = "CPS",
                               "City Council" = "CIT",
                               "Judge" = "MUN"),
-                  selected = "CPS")   # must match stored value
+                  selected = "CPS")   
     ),
     column(
       width = 3,
       selectInput(inputId = "data_dropdown", 
                   label = "Choose a Demographic", 
-                  choices = c("Funkyness" = "funk",
-                              "Tomfunkery" = "tom",
-                              "19-34 on Medicaid" = "medicaid"),
-                  selected = "funk")  # must match stored value
+                  choices = c("Age" = "age",
+                              "Income" = "income",
+                              "race" = "race"),
+                  selected = "age") 
     )
   ),
   
@@ -52,7 +52,7 @@ ui <- fluidPage(
       h3("Precinct Map"),
       withSpinner(
         leafletOutput("map_result", height = 400), 
-        type = 8, color = '#7B4BCC', proxy.height = 196
+        type = 8, proxy.height = 196
       )
     )
   ),#end column
@@ -62,11 +62,11 @@ ui <- fluidPage(
       h3("Test"),
       withSpinner(
         plotOutput("test1"),
-        type = 8, color = '#7B4BCC', proxy.height = 196
+        type = 8, proxy.height = 196
       ),
       withSpinner(
         textOutput("test2"),
-        type = 8, color = '#7B4BCC', proxy.height = 196
+        type = 8, proxy.height = 196
       )
     )
   )
@@ -75,12 +75,10 @@ ui <- fluidPage(
 
 server <- function(input, output, session) {
   output$map_result <- renderLeaflet({
-    # Example placeholder (replace with your function)
-    # Use the selected campaign
     shiny.map(input$map_dropdown)
   })
   output$test1 <- renderPlot({
-    test(input$map_dropdown)
+    make_histogram_dist(input$map_dropdown, input$data_dropdown)
   })
   output$test2 <- renderPrint({
     click <- input$map_result_shape_click
