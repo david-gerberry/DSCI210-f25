@@ -3,6 +3,21 @@ library(tidyverse)
 library(shinycssloaders)
 library(leaflet)
 
+
+test = function(map) {
+  if (map == "CPS") {
+  hist(starwars$mass, breaks = 100)
+  }
+else if (map == "MUN") {
+  hist(starwars$birth_year)
+}
+else {
+  hist(starwars$height)
+}
+  
+}
+
+
 ui <- fluidPage(
   
   titlePanel("Funky Census Map"),
@@ -34,16 +49,25 @@ ui <- fluidPage(
     column( width = 6,
       div(
       class = "map",
-      h3("Map"),
+      h3("Precinct Map"),
       withSpinner(
         leafletOutput("map_result", height = 400), 
         type = 8, color = '#7B4BCC', proxy.height = 196
       )
     )
   ),#end column
-  column(
+  column( width = 6,
     div(
-      class = ""
+      class = "Graph Display",
+      h3("Test"),
+      withSpinner(
+        plotOutput("test1"),
+        type = 8, color = '#7B4BCC', proxy.height = 196
+      ),
+      withSpinner(
+        textOutput("test2"),
+        type = 8, color = '#7B4BCC', proxy.height = 196
+      )
     )
   )
   )
@@ -54,6 +78,17 @@ server <- function(input, output, session) {
     # Example placeholder (replace with your function)
     # Use the selected campaign
     shiny.map(input$map_dropdown)
+  })
+  output$test1 <- renderPlot({
+    test(input$map_dropdown)
+  })
+  output$test2 <- renderPrint({
+    click <- input$map_result_shape_click
+    if (is.null(click)) {
+      "Click on a shape"
+    } else {
+      paste("You clicked:", click$id)
+    }
   })
 }
 
