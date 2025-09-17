@@ -238,13 +238,13 @@ make_histogram_pre <- function(district="MUN",code="0101 CIN 1-A", data="age"){
   if(data == "age"){
     
     if(district == "MUN"){
-      word <- paste("Total Pop in Age Cohorts for Precint ",precint,sep="")
+      word <- paste("Total Pop in Age Cohorts for Precinct ",code,sep="")
     }
     if(district == "CIT"){
-      word <- paste("Total Pop in Age Cohorts for Precint ",precint,sep="")
+      word <- paste("Total Pop in Age Cohorts for Precinct ",code,sep="")
     }
     if(district == "CPS"){
-      word <- paste("Total Pop in Age Cohorts for Precint ",precint,sep="")
+      word <- paste("Total Pop in Age Cohorts for Precinct ",code,sep="")
     }
     
     `0-9` <- df_row$age_0_9
@@ -280,13 +280,13 @@ make_histogram_pre <- function(district="MUN",code="0101 CIN 1-A", data="age"){
   if(data == "income"){
     
     if(district == "MUN"){
-      word <- paste("Household Income Cohorts for Precint ",precint,sep="")
+      word <- paste("Household Income Cohorts for Precinct ",code,sep="")
     }
     if(district == "CIT"){
-      word <- paste("Household Income Cohorts for Precint ",precint,sep="")
+      word <- paste("Household Income Cohorts for Precinct ",code,sep="")
     }
     if(district == "CPS"){
-      word <- paste("Household Income Cohorts for Precint ",precint,sep="")
+      word <- paste("Household Income Cohorts for Precinct ",code,sep="")
     }
     
     `under25` <- df_row$hhinc_under25k
@@ -327,13 +327,13 @@ make_histogram_pre <- function(district="MUN",code="0101 CIN 1-A", data="age"){
   if(data == "race"){
     
     if(district == "MUN"){
-      word <- paste("Frequency of Races for Precint ",precint,sep="")
+      word <- paste("Frequency of Races for Precinct ",code,sep="")
     }
     if(district == "CIT"){
-      word <- paste("Frequency of Races for Precint ",precint,sep="")
+      word <- paste("Frequency of Races for Precinct ",code,sep="")
     }
     if(district == "CPS"){
-      word <- paste("Frequency of Races for Precint ",precint,sep="")
+      word <- paste("Frequency of Races for Precinct ",code,sep="")
     }
     
     `white` <- df_row$whiteE
