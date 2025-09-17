@@ -39,8 +39,8 @@ block.total <- get_decennial(geography = "block",
   geometry = TRUE) %>% 
   select(total.pop = value)
   
-schoolPrecincts <- st_read("cps_precincts.shp")
-schoolBoundry <- st_read("cps_boundary.shp")
+schoolPrecincts <- st_read("shapefiles/cps_precincts.shp")
+schoolBoundry <- st_read("shapefiles/cps_boundary.shp")
 
 schoolBoundry <- st_set_crs(schoolBoundry, 4269)
 schoolPrecincts <- st_set_crs(schoolPrecincts, 4269)
