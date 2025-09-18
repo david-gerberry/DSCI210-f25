@@ -38,7 +38,7 @@ shiny.map <- function(shpFile = "CIT",colType = "age"){
   
   # PREPARE VISUALS FOR THE GRAPH
   palette <- colorNumeric(
-    palette = c("yellow", "orange", "red"), # Yellow-Orange-Red color scale
+    palette = "plasma", # purple to yellow color scale
     domain = ourMap[[colName]]
   )
   
@@ -57,6 +57,18 @@ shiny.map <- function(shpFile = "CIT",colType = "age"){
     "race" = "Total Population"
   )[colType]
   
+  # for specifying unit type
+  displayPrefix = c(
+    "age" = "",
+    "income" = "$",
+    "race" = ""
+  )[colType]
+  displaySuffix = c(
+    "age" = " years old",
+    "income" = "",
+    "race" = ""
+  )[colType]
+  
   # MAKE THE MAP!
   leaflet() %>% 
     # BASE MAP
@@ -68,11 +80,16 @@ shiny.map <- function(shpFile = "CIT",colType = "age"){
       weight = 1,
       fillOpacity = .35,
       opacity = .375,
-      color = ourClr,
-      label = ~paste( columnFullName ,": ", round(ourMap[[colName]])),
+      color = ourClr, 
+      # ignore this yucky line
+      label = ~paste( columnFullName ,": ", displayPrefix, 
+                      format(round(ourMap[[colName]])
+                             , big.mark = ",", scientific = FALSE),
+                      displaySuffix
+                      ),
     layerId = ~ourMap$PRECINCT
     ) %>% 
-    
+    # TITLE
     addControl(
       html = paste0(
         "<div style='
@@ -85,6 +102,13 @@ shiny.map <- function(shpFile = "CIT",colType = "age"){
           ", mapFullName , " | ", columnFullName ,"
          </div>"),
       position = "topright"
+    ) %>% 
+    # LEGEND
+    addLegend(
+      position = "bottomright",
+      pal = palette,
+      values = ourMap[[colName]],
+      title = "Legend",
+      opacity = 1
     )
-
 }
