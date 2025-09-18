@@ -368,6 +368,10 @@ make_histogram_pre <- function(district="MUN",code="0101 CIN 1-A", data="age"){
 
 make_histogram_pre("MUN","0101 CIN 1-A","income")
 
+truncate_to_2 <- function(x) {
+  floor(x * 100) / 100
+}
+
 return_median_pre <- function(district="MUN",code="0101 CIN 1-A", data="age"){
   
   if(district == "MUN"){
@@ -398,13 +402,17 @@ return_median_pre <- function(district="MUN",code="0101 CIN 1-A", data="age"){
     df_row$white_per <- df_row$whiteE/df_row$pop_totalE
     
     return_value <- as.numeric(df_row$white_per)
+    return_value <- return_value * 100
+    return_value <- truncate_to_2(return_value)
+    return_value <- paste(return_value,"%",sep = "")
+    
     
     return(return_value)
   }
   
 }
 
-return_median_pre("CPS","1202 CIN 12-B","income")
+return_median_pre("CPS","2203 CIN 22-C","race")
 
 precinct_name <- function(district="MUN",code="0101 CIN 1-A"){
   
@@ -432,8 +440,6 @@ precinct_name <- function(district="MUN",code="0101 CIN 1-A"){
 }
 
 precinct_name("MUN","0101 CIN 1-A")
-
-
 
 
 
