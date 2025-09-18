@@ -137,6 +137,7 @@ block.total <-get_decennial(geography = "block",
 acs_interp_j_ext <- interpolate_pw(
   from        = st_make_valid(acs_extensive),
   to          = st_make_valid(judicial_precincts),
+  to_id = "PRECINCT",
   extensive   = TRUE,
   weights     = st_make_valid(block.total),
   weight_column = "pop_totalE",
@@ -146,6 +147,7 @@ acs_interp_j_ext <- interpolate_pw(
 acs_interp_j_int <- interpolate_pw(
   from          = st_make_valid(acs_intensive),
   to            = st_make_valid(judicial_precincts),
+  to_id = "PRECINCT",
   extensive     = FALSE,
   weights       = st_make_valid(block.total),
   weight_column = "pop_totalE",
@@ -154,7 +156,7 @@ acs_interp_j_int <- interpolate_pw(
   st_drop_geometry()
 
 acs_interp_judicial <- acs_interp_j_ext %>%
-  left_join(acs_interp_j_int, by = "id")
+  left_join(acs_interp_j_int, by = "PRECINCT")
 
 # cps interpolation
 
@@ -164,6 +166,7 @@ cps_precincts <- st_read("shapefiles/cps_precincts.shp")
 acs_interp_cps_ext <- interpolate_pw(
   from        = st_make_valid(acs_extensive),
   to          = st_make_valid(cps_precincts),
+  to_id = "PRECINCT",
   extensive   = TRUE,
   weights     = st_make_valid(block.total),
   weight_column = "pop_totalE",
@@ -174,6 +177,7 @@ acs_interp_cps_ext <- interpolate_pw(
 acs_interp_cps_int <- interpolate_pw(
   from          = st_make_valid(acs_intensive),
   to            = st_make_valid(cps_precincts),
+  to_id = "PRECINCT",
   extensive     = FALSE,
   weights       = st_make_valid(block.total),
   weight_column = "pop_totalE",
@@ -182,7 +186,7 @@ acs_interp_cps_int <- interpolate_pw(
   st_drop_geometry()
 
 acs_interp_cps <- acs_interp_cps_ext %>%
-  left_join(acs_interp_cps_int, by = "id")
+  left_join(acs_interp_cps_int, by = "PRECINCT")
 
 # cincy interpolation
 cincy_boundaries <- st_read("shapefiles/cincy_boundary.shp")
@@ -191,6 +195,7 @@ cincy_precincts <- st_read("shapefiles/cincy_precincts.shp")
 acs_interp_cincy_ext <- interpolate_pw(
   from        = st_make_valid(acs_extensive),
   to          = st_make_valid(cincy_precincts),
+  to_id = "PRECINCT",
   extensive   = TRUE,
   weights     = st_make_valid(block.total),
   weight_column = "pop_totalE",
@@ -201,6 +206,7 @@ acs_interp_cincy_ext <- interpolate_pw(
 acs_interp_cincy_int <- interpolate_pw(
   from          = st_make_valid(acs_intensive),
   to            = st_make_valid(cincy_precincts),
+  to_id = "PRECINCT",
   extensive     = FALSE,
   weights       = st_make_valid(block.total),
   weight_column = "pop_totalE",
@@ -209,7 +215,7 @@ acs_interp_cincy_int <- interpolate_pw(
   st_drop_geometry()
 
 acs_interp_cincy <- acs_interp_cincy_ext %>%
-  left_join(acs_interp_cincy_int, by = "id")
+  left_join(acs_interp_cincy_int, by = "PRECINCT")
 
 #hamilton county interpolation
 
@@ -219,6 +225,7 @@ ham_precincts <- st_read("shapefiles/precincts_2024.shp")
 acs_interp_ham_ext <- interpolate_pw(
   from        = st_make_valid(acs_extensive),
   to          = st_make_valid(ham_precincts),
+  to_id = "PRC_NAME",
   extensive   = TRUE,
   weights     = st_make_valid(block.total),
   weight_column = "pop_totalE",
@@ -229,6 +236,7 @@ acs_interp_ham_ext <- interpolate_pw(
 acs_interp_ham_int <- interpolate_pw(
   from          = st_make_valid(acs_intensive),
   to            = st_make_valid(ham_precincts),
+  to_id = "PRC_NAME",
   extensive     = FALSE,
   weights       = st_make_valid(block.total),
   weight_column = "pop_totalE",
@@ -237,6 +245,9 @@ acs_interp_ham_int <- interpolate_pw(
   st_drop_geometry()
 
 acs_interp_ham <- acs_interp_ham_ext %>%
-  left_join(acs_interp_ham_int, by = "id")
+  left_join(acs_interp_ham_int, by = "PRC_NAME")
+
+acs_interp_ham <- acs_interp_ham %>%
+  rename(PRECINCT = PRC_NAME)
 
 save(acs_interp_judicial, acs_interp_cps, acs_interp_cincy, acs_interp_ham, file = "acs_data.RData")

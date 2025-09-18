@@ -51,8 +51,8 @@ block.total <- get_decennial(geography = "block",
                              geometry = TRUE) %>% 
   select(total.pop = value)
 
-schoolPrecincts <- st_read("cps_precincts.shp")
-schoolBoundry <- st_read("cps_boundary.shp")
+schoolPrecincts <- st_read("shapefiles/cps_precincts.shp")
+schoolBoundry <- st_read("shapefiles/cps_boundary.shp")
 
 schoolBoundry <- st_set_crs(schoolBoundry, 4269)
 schoolPrecincts <- st_set_crs(schoolPrecincts, 4269)
@@ -126,8 +126,8 @@ mx4_public <- function(){
 }
 
 precinct_interpolated_PublicVSPrivate %>% 
-  ggplot(aes(fill = PublicPorp)) +
+  ggplot(aes(fill = PrivatePorp)) +
   geom_sf()+
   scale_fill_viridis_c(option = "turbo") +
-  labs(title = "Percent of Students K-12 going to CPS")
-  labs(fill = "Percent of K-12 Public School")
+  labs(title = "Percent of Students K-12 going to Private School")
+  labs(fill = "Percent of K-12 Public Private School")
