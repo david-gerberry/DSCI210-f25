@@ -218,6 +218,33 @@ return_median_dist("CIT","race")
   
 #### Precinct Functions ####
 
+precinct_name <- function(district="MUN",code="0101 CIN 1-A"){
+  
+  if(district == "MUN"){
+    df <- acs_interp_judicial
+  }
+  if(district == "CIT"){
+    df <- acs_interp_cincy
+  }
+  if(district == "CPS"){
+    df <- acs_interp_cps
+  }
+  
+  df <- df[, -24]
+  
+  df_row <- df %>% 
+    filter(PRECINCT == code)
+  
+  word <- df_row$PRECINCT
+  
+  result <- substring(word, 6)
+  
+  return(result)
+  
+}
+
+precinct_name("MUN","0101 CIN 1-A")
+
 make_histogram_pre <- function(district="MUN",code="0101 CIN 1-A", data="age"){
   
   if(district == "MUN"){
@@ -414,32 +441,9 @@ return_median_pre <- function(district="MUN",code="0101 CIN 1-A", data="age"){
 
 return_median_pre("CPS","2203 CIN 22-C","race")
 
-precinct_name <- function(district="MUN",code="0101 CIN 1-A"){
-  
-  if(district == "MUN"){
-    df <- acs_interp_judicial
-  }
-  if(district == "CIT"){
-    df <- acs_interp_cincy
-  }
-  if(district == "CPS"){
-    df <- acs_interp_cps
-  }
-  
-  df <- df[, -24]
-  
-  df_row <- df %>% 
-    filter(PRECINCT == code)
-  
-  word <- df_row$PRECINCT
-  
-  result <- substring(word, 6)
-  
-  return(result)
-  
-}
 
-precinct_name("MUN","0101 CIN 1-A")
+
+
 
 
 
