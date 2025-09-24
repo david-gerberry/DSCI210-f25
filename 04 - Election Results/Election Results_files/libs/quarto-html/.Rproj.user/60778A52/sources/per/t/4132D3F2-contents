@@ -1,0 +1,95 @@
+---
+title: "DSCI 210: Mapping Election Results"
+author: "David Gerberry"
+output: html
+---
+
+As always, we start off by loading up the packages we'll need for this. If there is a package that is new to you in this list, you will have to run "install.packages()" first.
+
+```{r setup, message=FALSE,warning=FALSE}
+knitr::opts_chunk$set(
+	echo = TRUE,
+	message = FALSE,
+	warning = FALSE
+)
+library(tidyverse)
+library(sf)
+library(readxl)
+library(RColorBrewer)
+```
+
+# Read in the map file
+
+The first thing we need to do is load our map(s). Maps in geospatial software (ArcGIS, R, python, etc.) are stored as a "shapefile." These shapefiles create the maps as a group of polygons (i.e. points connected by line segments). We will probably need to get into the weeds a bit more about shapefiles later in the semester, but for now we can just think of them as the files that contain our maps, that will also eventually include the data associated with those maps.
+
+```{r}
+map2020 <- st_zm(st_read("../data/PRECINCT2020_052219.shp"))
+
+class(map2020)
+print(map2020,n=3)
+```
+
+# Draw the map
+
+We have already seen how to make a map using ggplot(). In the Census maps that we we made, we used ggplot(aes(fill = value)), but right now we have no data to color in the map with. All ggplot() commands need to start with an aesthetic though, so we'll just leave it blank and use aes().
+
+```{r}
+map2020 %>%
+  ggplot(aes())+
+  geom_sf()
+```
+
+# Get Election Data
+
+Our overall goal is to use mapping to inform political campaigns. One thing that will be immediately valuable is be able to visualize the results of previous elections. The results of previous elections are available at the Hamilton County Board of Elections website.
+
+-   <https://votehamiltoncountyohio.gov/results/>
+
+```{r}
+results2020 <- read_excel("../data/G20_Official_Canvass.xlsx", 
+                       sheet = "Candidates",skip=1)
+```
+
+# Merge election results into the shapefile
+
+```{r}
+mapANDresults2020 <-
+  left_join(map2020, results2020, by = c("PRECINCT" = "PRECINCT"))
+```
+
+# Make a map of the results of the 2020 Presidential race.
+
+```{r}
+mapANDresults2020 %>% 
+  mutate(Biden.prop = `Biden & Harris  (Dem)`/( `Biden & Harris  (Dem)`+ `Trump & Pence       (Rep)`)) %>%
+  ggplot(aes(fill=Biden.prop)) +
+  geom_sf()
+```
+
+# Spruce up the map to make it prettier, clearer, and ready for a presentation.
+
+So this map is "correct" but not something I want to include in a presentation. Let's dress this thing up.
+
+-   Fix the title, subtitle
+-   Change the colors. For Democratic vs. Republican races it is natural to use a Blue vs. Red color scheme
+-   Make the colors go all the way from 0 to 1, this way my middle/neutral color represents a precinct that was an even 50/50 split.
+-   Change the labels to be "%." We want it as clear as possible for a general audience.
+
+```{r}
+mapANDresults2020 %>% 
+  mutate(Biden.prop = `Biden & Harris  (Dem)`/( `Biden & Harris  (Dem)`+ `Trump & Pence       (Rep)`)) %>%
+  ggplot(aes(fill=Biden.prop)) +
+  geom_sf()+
+  labs(title = "2020 Presidential Election", 
+       subtitle = "Joe Biden vs Donald Trump",
+       fill = "Vote for \nBiden (%)", 
+       caption = "")+
+  scale_fill_gradientn(colours=brewer.pal(n=6,name="RdBu"),na.value = "transparent",                        breaks=c(0,.25,0.5,.75,1),labels=c("0%","25%","50%","75%","100%"),
+                           limits=c(0,1))
+```
+
+NOW THAT IS ONE BEAUTIFUL ELECTION MAP!!
+
+# Assignment
+
+Identify a previous election with results that will be pertinent to your campaign this year.  Make a map of those results.in

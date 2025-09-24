@@ -1,0 +1,102 @@
+---
+title: "DSCI 210: Base/Swing Maps"
+author: "David Gerberry"
+output: html
+---
+
+Today's goal is pretty similar to the last one. The only difference is that we now want to identify the precincts that our campaign will consider Base, Swing, and Residuals. The idea here being that
+
+-   Base: a precinct where our candidate is expected to receive strong support
+-   Swing: a precinct where voters are fairly evenly divided. In other words, our candidate can receive significant support here with the proper messaging
+-   Residual: a precinct where voters are not expected to support our candidate strongly
+
+In completing this task, there are essentially two tasks:
+
+1.  You and your campaign teams will have to determine where the \`\`cutoffs'' will be that produce a meaningful distinction of base/swing/residual for your candidate.
+2.  The R programming necessary to color in a map based on those cutoffs.
+
+The same packages will do the trick as last time.
+
+```{r setup, message=FALSE,warning=FALSE}
+knitr::opts_chunk$set(
+	echo = TRUE,
+	message = FALSE,
+	warning = FALSE
+)
+library(tidyverse)
+library(sf)
+library(readxl)
+library(RColorBrewer)
+```
+
+# Map from last time
+
+Most of the process of this example the same as the last election maps that we made.
+
+```{r}
+map2020 <- st_zm(st_read("../data/maps/PRECINCT_052219.shp"))
+
+results2020 <- read_excel("../data/election results/G20_Official_Canvass.xlsx", 
+                       sheet = "Candidates",skip=1)
+
+mapANDresults2020 <-
+  left_join(map2020, results2020, by = c("PRECINCT" = "PRECINCT"))
+
+mapANDresults2020 %>% 
+  mutate(Biden.prop = `Biden & Harris  (Dem)`/( `Biden & Harris  (Dem)`+ `Trump & Pence       (Rep)`)) %>%
+  ggplot(aes(fill=Biden.prop)) +
+  geom_sf()+
+  labs(title = "2020 Presidential Election", 
+       subtitle = "Joe Biden vs Donald Trump",
+       fill = "Vote for \nBiden (%)", 
+       caption = "")+
+  scale_fill_gradientn(colours=brewer.pal(n=10,name="RdBu"),na.value = "transparent",
+                           breaks=c(0,.25,0.5,.75,1),labels=c("0%","25%","50%","75%","100%"),
+                           limits=c(0,1))
+
+```
+
+# Base/Swing Maps
+
+In head-to-head elections, the typical definitions of base/swing/residual are give by:
+
+-   Base: Greater than 60% support (typically colored red/blue depending on party)
+-   Swing: Between 40% and 60% support (typically colored yellow)
+-   Residual: Less than 40% support (typically colored red/blue depending on party)
+
+However, groups in the past have had more interesting ideas for this that have been meaningful to their campaign plan (e.g. "Strong Base", "Base", etc.)
+
+Assignment: \* Fill in the code to make a base/swing map relative to your candidate
+
+```{r}
+map2020 <- st_zm(st_read("../data/maps/PRECINCT_052219.shp"))
+
+results2020 <- read_excel("../data/election results/G20_Official_Canvass.xlsx", 
+                       sheet = "Candidates",skip=1)
+
+mapANDresults2020 <-
+  left_join(map2020, results2020, by = c("PRECINCT" = "PRECINCT"))
+
+mapANDresults2020 %>% 
+  mutate(Biden.prop = `Biden & Harris  (Dem)`/( `Biden & Harris  (Dem)`+ `Trump & Pence       (Rep)`)) %>%
+  mutate(Biden.baseswing = cut(Biden.prop, breaks = c(-0.001, 0.40, 0.60, 1),labels = c("Residual", "Swing", "Base")))%>%
+  ggplot(aes(fill=Biden.baseswing)) +
+  geom_sf()+
+  labs(title = "2020 Presidential Election", 
+       subtitle = "Joe Biden vs Donald Trump",
+       fill = "Vote for \nBiden (%)", 
+       caption = "")+
+scale_fill_manual(
+  values = c(
+    "Residual" = "red",
+    "Base" = "blue",
+    "Swing" = "yellow"
+  )
+)
+
+  
+```
+
+It should look something like
+
+![BaseSwingmap](../figs/Biden%20base-swing.png)
