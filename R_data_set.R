@@ -126,9 +126,15 @@ acs_final$med_incomeE[is.na(acs_final$med_incomeE)] <-
      acs_final$hhinc_150_199k[is.na(acs_final$med_incomeE)] +
      acs_final$hhinc_200plus[is.na(acs_final$med_incomeE)])
 
+acs_final$other_race <- pmax(0, acs_final$pop_totalE - (acs_final$whiteE + 
+                                                          acs_final$blackE + 
+                                                          acs_final$asianE + 
+                                                          acs_final$hispanicE))
+
+
 acs_extensive <- acs_final %>%
   select(GEOID, geometry,
-         pop_totalE, whiteE, blackE, asianE, hispanicE,
+         pop_totalE, whiteE, blackE, asianE, hispanicE, other_race,
          starts_with("age_"), starts_with("hhinc_"))
 
 acs_intensive <- acs_final %>%
