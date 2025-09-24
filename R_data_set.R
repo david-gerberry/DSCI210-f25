@@ -112,6 +112,20 @@ acs_final <- acs_merged %>%
     starts_with("age_"), starts_with("hhinc_")
   )
 
+acs_final$med_incomeE[is.na(acs_final$med_incomeE)] <-
+  (12500  * acs_final$hhinc_under25k[is.na(acs_final$med_incomeE)] +
+     37500  * acs_final$hhinc_25_49k[is.na(acs_final$med_incomeE)] +
+     75000  * acs_final$hhinc_50_99k[is.na(acs_final$med_incomeE)] +
+     125000  * acs_final$hhinc_100_149k[is.na(acs_final$med_incomeE)] +
+     175000  * acs_final$hhinc_150_199k[is.na(acs_final$med_incomeE)]) +
+     250000  * acs_final$hhinc_200plus[is.na(acs_final$med_incomeE)] /
+  (acs_final$hhinc_under25k[is.na(acs_final$med_incomeE)] +
+     acs_final$hhinc_25_49k[is.na(acs_final$med_incomeE)] +
+     acs_final$hhinc_50_99k[is.na(acs_final$med_incomeE)] +
+     acs_final$hhinc_100_149k[is.na(acs_final$med_incomeE)] +
+     acs_final$hhinc_150_199k[is.na(acs_final$med_incomeE)] +
+     acs_final$hhinc_200plus[is.na(acs_final$med_incomeE)])
+
 acs_extensive <- acs_final %>%
   select(GEOID, geometry,
          pop_totalE, whiteE, blackE, asianE, hispanicE,
