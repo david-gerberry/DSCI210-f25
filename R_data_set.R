@@ -117,8 +117,8 @@ acs_final$med_incomeE[is.na(acs_final$med_incomeE)] <-
      37500  * acs_final$hhinc_25_49k[is.na(acs_final$med_incomeE)] +
      75000  * acs_final$hhinc_50_99k[is.na(acs_final$med_incomeE)] +
      125000  * acs_final$hhinc_100_149k[is.na(acs_final$med_incomeE)] +
-     175000  * acs_final$hhinc_150_199k[is.na(acs_final$med_incomeE)]) +
-     250000  * acs_final$hhinc_200plus[is.na(acs_final$med_incomeE)] /
+     175000  * acs_final$hhinc_150_199k[is.na(acs_final$med_incomeE)] +
+     250000  * acs_final$hhinc_200plus[is.na(acs_final$med_incomeE)]) /
   (acs_final$hhinc_under25k[is.na(acs_final$med_incomeE)] +
      acs_final$hhinc_25_49k[is.na(acs_final$med_incomeE)] +
      acs_final$hhinc_50_99k[is.na(acs_final$med_incomeE)] +
@@ -257,6 +257,7 @@ acs_interp_ham_int <- interpolate_pw(
   crs           = 4269
 ) %>%
   st_drop_geometry()
+
 
 acs_interp_ham <- acs_interp_ham_ext %>%
   left_join(acs_interp_ham_int, by = "PRC_NAME")
