@@ -32,7 +32,7 @@ make_histogram_dist <- function(district="MUN", data="age"){
     word <- "Total Pop in Age Cohorts for CPS District"
   }
 
-  `0-9` <- sum(as.numeric(df$age_0_9))
+  `0-9` <- sum(as.numeric(df$age_0_9),na.rm = TRUE)
   `10-19` <- sum(as.numeric(df$age_10_19),na.rm = TRUE)
   `20-29` <- sum(as.numeric(df$age_20_29),na.rm = TRUE)
   `30-39` <- sum(as.numeric(df$age_30_39),na.rm = TRUE)
@@ -174,7 +174,7 @@ make_histogram_dist <- function(district="MUN", data="age"){
   
 }
 
-make_histogram_dist("CPS","income")
+make_histogram_dist("CPS","age")
 
 return_median_dist <- function(district="MUN", data="age"){
   
@@ -218,6 +218,33 @@ return_median_dist("CIT","race")
   
 #### Precinct Functions ####
 
+precinct_name <- function(district="MUN",code="0101 CIN 1-A"){
+  
+  if(district == "MUN"){
+    df <- acs_interp_judicial
+  }
+  if(district == "CIT"){
+    df <- acs_interp_cincy
+  }
+  if(district == "CPS"){
+    df <- acs_interp_cps
+  }
+  
+  df <- df[, -24]
+  
+  df_row <- df %>% 
+    filter(PRECINCT == code)
+  
+  word <- df_row$PRECINCT
+  
+  result <- substring(word, 6)
+  
+  return(result)
+  
+}
+
+precinct_name("MUN","0101 CIN 1-A")
+
 make_histogram_pre <- function(district="MUN",code="0101 CIN 1-A", data="age"){
   
   if(district == "MUN"){
@@ -238,13 +265,13 @@ make_histogram_pre <- function(district="MUN",code="0101 CIN 1-A", data="age"){
   if(data == "age"){
     
     if(district == "MUN"){
-      word <- paste("Total Pop in Age Cohorts for Precinct ",code,sep="")
+      word <- paste("Total Pop in Age Cohorts for Precinct ",precinct_name(district,code),sep="")
     }
     if(district == "CIT"){
-      word <- paste("Total Pop in Age Cohorts for Precinct ",code,sep="")
+      word <- paste("Total Pop in Age Cohorts for Precinct ",precinct_name(district,code),sep="")
     }
     if(district == "CPS"){
-      word <- paste("Total Pop in Age Cohorts for Precinct ",code,sep="")
+      word <- paste("Total Pop in Age Cohorts for Precinct ",precinct_name(district,code),sep="")
     }
     
     `0-9` <- df_row$age_0_9
@@ -280,13 +307,13 @@ make_histogram_pre <- function(district="MUN",code="0101 CIN 1-A", data="age"){
   if(data == "income"){
     
     if(district == "MUN"){
-      word <- paste("Household Income Cohorts for Precinct ",code,sep="")
+      word <- paste("Household Income Cohorts for Precinct ",precinct_name(district,code),sep="")
     }
     if(district == "CIT"){
-      word <- paste("Household Income Cohorts for Precinct ",code,sep="")
+      word <- paste("Household Income Cohorts for Precinct ",precinct_name(district,code),sep="")
     }
     if(district == "CPS"){
-      word <- paste("Household Income Cohorts for Precinct ",code,sep="")
+      word <- paste("Household Income Cohorts for Precinct ",precinct_name(district,code),sep="")
     }
     
     `under25` <- df_row$hhinc_under25k
@@ -327,13 +354,13 @@ make_histogram_pre <- function(district="MUN",code="0101 CIN 1-A", data="age"){
   if(data == "race"){
     
     if(district == "MUN"){
-      word <- paste("Frequency of Races for Precinct ",code,sep="")
+      word <- paste("Frequency of Races for Precinct ",precinct_name(district,code),sep="")
     }
     if(district == "CIT"){
-      word <- paste("Frequency of Races for Precinct ",code,sep="")
+      word <- paste("Frequency of Races for Precinct ",precinct_name(district,code),sep="")
     }
     if(district == "CPS"){
-      word <- paste("Frequency of Races for Precinct ",code,sep="")
+      word <- paste("Frequency of Races for Precinct ",precinct_name(district,code),sep="")
     }
     
     `white` <- df_row$whiteE
@@ -368,6 +395,10 @@ make_histogram_pre <- function(district="MUN",code="0101 CIN 1-A", data="age"){
 
 make_histogram_pre("MUN","0101 CIN 1-A","income")
 
+truncate_to_2 <- function(x) {
+  floor(x * 100) / 100
+}
+
 return_median_pre <- function(district="MUN",code="0101 CIN 1-A", data="age"){
   
   if(district == "MUN"){
@@ -398,40 +429,19 @@ return_median_pre <- function(district="MUN",code="0101 CIN 1-A", data="age"){
     df_row$white_per <- df_row$whiteE/df_row$pop_totalE
     
     return_value <- as.numeric(df_row$white_per)
+    return_value <- return_value * 100
+    return_value <- truncate_to_2(return_value)
+    return_value <- paste(return_value,"%",sep = "")
+    
     
     return(return_value)
   }
   
 }
 
-return_median_pre("MUN","0101 CIN 1-A","income")
+return_median_pre("CPS","2203 CIN 22-C","race")
 
-precinct_name <- function(district="MUN",code="0101 CIN 1-A"){
-  
-  if(district == "MUN"){
-    df <- acs_interp_judicial
-  }
-  if(district == "CIT"){
-    df <- acs_interp_cincy
-  }
-  if(district == "CPS"){
-    df <- acs_interp_cps
-  }
-  
-  df <- df[, -24]
-  
-  df_row <- df %>% 
-    filter(PRECINCT == code)
-  
-  word <- df_row$PRECINCT
-  
-  result <- substring(word, 6)
-  
-  return(result)
-  
-}
 
-precinct_name("MUN","0101 CIN 1-A")
 
 
 
