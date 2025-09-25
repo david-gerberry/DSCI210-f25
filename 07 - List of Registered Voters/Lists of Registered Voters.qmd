@@ -1,0 +1,186 @@
+---
+title: "DSCI 210: Lists of Registered Voters"
+author: "David Gerberry"
+output: html
+---
+
+Loading necessary packages and such.
+
+```{r setup, message=FALSE,warning=FALSE}
+knitr::opts_chunk$set(
+	echo = TRUE,
+	message = FALSE,
+	warning = FALSE
+)
+library(tidyverse)
+library(sf)
+library(readxl)
+library(RColorBrewer)
+library(tidycensus)
+
+```
+
+
+# Lists of registered voters
+
+## Hamilton County Board of Elections
+
+The Hamilton County Board of Elections (BOE) website is our main source of data for our campaign work. Under the "Campaign & Media Tools" tab, the BOE provides multiple useful data sets.  The `Registered Voter List' is updated daily in leading up to an election (see <https://votehamiltoncountyohio.gov/campaign-media/>). Voter registration closed one month before an election.  From that time on, the list of registered voters is complete and finalized.
+
+```{r}
+voters.boe <-read_csv("../data/registered voters/VoterListExport-20240917-pn.csv")
+```
+
+
+## Ohio Secretary of State
+
+The Secretary of State (SOS) is the highest level administrator in charge of elections in Ohio.  From the SOS website, we can download registered voter lists as well (<https://www6.ohiosos.gov/ords/f?p=111:1>).  We can do this by county, the whole state, or a variety of electoral districts. For now, let's look at registered voters in Hamilton County.
+
+```{r}
+voters.sos <-read_csv("../data/registered voters/HAMILTON.csv")
+```
+
+## Why download both of these?
+
+Let's take some notes on what's different between these two sets, (better/worse)
+- more elections in Sec of State's data set
+- fun
+- different labels, different columns could be useful
+
+
+
+# What can we do with the Registered Voter List?  ANS:  Data Science!
+
+## What are the most democratic/republican areas
+
+First, we can calculate the proportion of registered voters in each precinct that are Rep/Dem/Unaffiliated
+
+```{r}
+voter.summary <- 
+voters.sos %>%
+  mutate(PARTY_AFFILIATION = replace_na(PARTY_AFFILIATION, 'U')) %>% 
+  group_by(PRECINCT_NAME) %>%
+  summarize(total_voters = n(),
+            un_voters = sum(PARTY_AFFILIATION == "U"), 
+            rep_voters = sum(PARTY_AFFILIATION == "R"), 
+            dem_voters = sum(PARTY_AFFILIATION == "D")) %>%
+  mutate(dem.prop.of.reg = dem_voters / (dem_voters+rep_voters)) %>% 
+  mutate(rep.prop.of.reg = rep_voters / (dem_voters+rep_voters)) %>% 
+  mutate(unaffiliated.prop = un_voters / total_voters)
+```
+
+
+Now, let's see what are the most conservative/progressive areas of Hamilton County.
+
+```{r}
+
+poo = voters.sos %>%
+  mutate(area = coalesce(TOWNSHIP,VILLAGE,WARD,CITY)) %>% 
+  group_by(area) %>% 
+  mutate(PARTY_AFFILIATION = replace_na(PARTY_AFFILIATION, 'U')) %>% 
+  summarize(total_voters = n(),
+            un_voters = sum(PARTY_AFFILIATION == "U"), 
+            rep_voters = sum(PARTY_AFFILIATION == "R"), 
+            dem_voters = sum(PARTY_AFFILIATION == "D")) %>%
+  mutate(dem.prop.of.aff = dem_voters / (dem_voters+rep_voters)) %>% 
+  mutate(rep.prop.of.aff = rep_voters / (dem_voters+rep_voters)) %>% 
+  mutate(unaffiliated.prop = un_voters / total_voters)
+
+
+most_dem <-poo %>% 
+  arrange(desc(dem.prop.of.aff))
+```
+
+## It would be cool if we can map precincts by the proportion of unaffiliated voters
+
+
+```{r}
+map2024 <- st_zm(read_sf("../data/maps/precincts_2024.shp"))
+mapANDvoters2024 <-
+  left_join(map2024, voter.summary, by = c("PRC_NAME" = "PRECINCT_NAME"))
+
+mapANDvoters2024 %>% 
+  ggplot(aes(fill=unaffiliated.prop)) +
+  geom_sf()+
+  labs(title = "2024 Proportion of Unaffiliated Voters", 
+       subtitle = "",
+       fill = "", 
+       caption = "")+
+  scale_fill_gradientn(colours=brewer.pal(n=10,name="Spectral"),na.value = "transparent",
+                           breaks=c(0,.25,0.5,.75,1),labels=c("0%","25%","50%","75%","100%"),
+                           limits=c(0,1))
+
+
+```
+
+
+
+
+## Let's actually go into the List of Registered Voters and find people we may want to target with certain messages.
+
+
+```{r}
+
+election.date = "2024-11-05"
+
+## start by only looking at the start of the data frame.  It will make our calculations run in a more reasonable amount of time.
+## we'll do the first 5,000 rows only. 
+
+# df = voters.sos 
+df = voters.sos[1:5000,]
+
+df <- df %>%  
+   rename_with(~ gsub("-", ".", .))  
+
+temp = df %>% 
+  select(LAST_NAME,
+         FIRST_NAME,
+         DATE_OF_BIRTH,
+         REGISTRATION_DATE,
+         `PRIMARY.03/07/2000`,
+         `GENERAL.11/07/2000`,
+         `SPECIAL.05/08/2001`,
+         `GENERAL.11/07/2000`)
+
+temp <- temp %>%
+  mutate(Age = as.numeric(difftime(as.Date(election.date), as.Date(DATE_OF_BIRTH), units = "weeks")) / 52.25)
+
+
+check_after_registration <- function(election_col, election_date_col, registration_date) {
+  # Check if election date is after registration date
+  if_else(as.Date(election_date_col) < registration_date, election_col, 'o')
+}
+
+election_cols <- temp %>%
+  select(starts_with("PRIMARY") | starts_with("GENERAL") | starts_with("SPECIAL")) %>%
+  colnames()
+
+
+for (X in election_cols){
+  elect.date = str_extract(X,"(?<=\\.).*") %>%
+  as.Date(format = "%m/%d/%Y")
+  
+  temp[[X]] = check_after_registration(temp[[X]],elect.date,temp$REGISTRATION_DATE)
+}
+
+
+
+# Extract the dates from those column names
+election_dates <- election_cols %>%
+  str_extract("(?<=\\.).*") %>%
+  as.Date(format = "%m/%d/%Y")
+
+# View the election columns with their extracted dates
+tibble(election_cols, election_dates)
+
+
+
+poo <- df %>%
+  rowwise() %>%
+  mutate(
+    D_count = sum(across(47:127, ~ . == "D"),na.rm = T),
+    R_count = sum(across(47:127, ~ . == "R"),na.rm = T)
+  ) %>%
+  ungroup()
+
+```

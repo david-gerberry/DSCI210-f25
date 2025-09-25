@@ -1,0 +1,3 @@
+"0","map2020 <- st_zm(st_read(""../data/PRECINCT2020_052219.shp""))"
+"2","Error: Cannot open ""../data/PRECINCT2020_052219.shp""; The file doesn't seem to exist.
+"
