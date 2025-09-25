@@ -230,7 +230,7 @@ precinct_name <- function(district="MUN",code="0101 CIN 1-A"){
     df <- acs_interp_cps
   }
   
-  df <- df[, -24]
+  df <- df[, -25]
   
   df_row <- df %>% 
     filter(PRECINCT == code)
@@ -257,7 +257,7 @@ make_histogram_pre <- function(district="MUN",code="0101 CIN 1-A", data="age"){
     df <- acs_interp_cps
   }
   
-  df <- df[, -24]
+  df <- df[, -25]
   
   df_row <- df %>% 
     filter(PRECINCT == code)
@@ -367,11 +367,12 @@ make_histogram_pre <- function(district="MUN",code="0101 CIN 1-A", data="age"){
     `black` <- df_row$blackE
     `asian` <- df_row$asianE
     `hispanic` <- df_row$hispanicE
+    `other` <- df_row$other_race
     
     
-    values <- c(white,`black`,`asian`,`hispanic`)
+    values <- c(white,`black`,`asian`,`hispanic`,`other`)
     
-    names(values) <- c("White", "Black", "Asian", "Hispanic")
+    names(values) <- c("White", "Black", "Asian", "Hispanic","Other")
     
     df_plot <- data.frame(
       age_group = names(values),
@@ -393,7 +394,7 @@ make_histogram_pre <- function(district="MUN",code="0101 CIN 1-A", data="age"){
   
 }
 
-make_histogram_pre("MUN","0101 CIN 1-A","income")
+make_histogram_pre("MUN","0102 CIN 1-B","race")
 
 truncate_to_2 <- function(x) {
   floor(x * 100) / 100
@@ -411,7 +412,7 @@ return_median_pre <- function(district="MUN",code="0101 CIN 1-A", data="age"){
     df <- acs_interp_cps
   }
   
-  df <- df[, -24]
+  df <- df[, -25]
   
   df_row <- df %>% 
     filter(PRECINCT == code)
