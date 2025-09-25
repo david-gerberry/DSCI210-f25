@@ -6,7 +6,6 @@ library(sf)
 library(tidycensus)
 load("data/acs_data.RData")
 
-####Maps####
 #' Creates a map
 #' @param shpFile what map we're going to use ( all caps! )
 #'    "CPS" = cincinatti public school
@@ -332,6 +331,31 @@ return_median_dist("CIT","race")
 
 #### Precinct Functions ####
 
+precinct_name <- function(district="MUN",code="0101 CIN 1-A"){
+  
+  if(district == "MUN"){
+    df <- acs_interp_judicial
+  }
+  if(district == "CIT"){
+    df <- acs_interp_cincy
+  }
+  if(district == "CPS"){
+    df <- acs_interp_cps
+  }
+  
+  df <- df[, -24]
+  
+  df_row <- df %>% 
+    filter(PRECINCT == code)
+  
+  word <- df_row$PRECINCT
+  
+  result <- substring(word, 6)
+  
+  return(result)
+  
+}
+
 make_histogram_pre <- function(district="MUN",code="0101 CIN 1-A", data="age"){
   
   if(district == "MUN"){
@@ -528,30 +552,7 @@ return_median_pre <- function(district="MUN",code="0101 CIN 1-A", data="age"){
 
 return_median_pre("CPS","2203 CIN 22-C","race")
 
-precinct_name <- function(district="MUN",code="0101 CIN 1-A"){
-  
-  if(district == "MUN"){
-    df <- acs_interp_judicial
-  }
-  if(district == "CIT"){
-    df <- acs_interp_cincy
-  }
-  if(district == "CPS"){
-    df <- acs_interp_cps
-  }
-  
-  df <- df[, -24]
-  
-  df_row <- df %>% 
-    filter(PRECINCT == code)
-  
-  word <- df_row$PRECINCT
-  
-  result <- substring(word, 6)
-  
-  return(result)
-  
-}
+
 
 precinct_name("MUN","0101 CIN 1-A")
 ####Shiny code ####
@@ -624,24 +625,74 @@ ui <- fluidPage(
 )
 
 server <- function(input, output, session) {
+  
+  # helper: map choice -> dataset object name
+  mapDict = list(
+    "MUN" = "acs_interp_judicial",
+    "CIT" = "acs_interp_cincy",
+    "CPS" = "acs_interp_cps"
+  )
+  
+  # returns vector of precinct ids for the given map choice
+  get_precinct_list <- function(map_choice) {
+    ds_name <- mapDict[[as.character(map_choice)]]
+    if (is.null(ds_name)) return(character(0))
+    df <- tryCatch(get(ds_name), error = function(e) NULL)
+    if (is.null(df)) return(character(0))
+    # if your data had a junk column 24 you previously removed, be safe:
+    if (ncol(df) >= 24) {
+      # don't drop here globally, just ensure PRECINCT exists
+      # df <- df[, -24]
+      invisible(NULL)
+    }
+    precincts <- unique(as.character(df$PRECINCT))
+    precincts <- precincts[!is.na(precincts)]
+    return(precincts)
+  }
+  
+  # Render leaflet map (unchanged)
   output$map_result <- renderLeaflet({
     shiny.map(input$map_dropdown, input$data_dropdown)
   })
+  
+  # district-level plot
   output$test1 <- renderPlot({
     make_histogram_dist(input$map_dropdown, input$data_dropdown)
   })
+  
+  # precinct-level plot (uses clicked precinct if valid; otherwise uses a sensible default)
   output$test2 <- renderPlot({
     click <- input$map_result_shape_click
-    click <- input$map_result_shape_click
+    precincts <- get_precinct_list(input$map_dropdown)
     
-    if (is.null(click) || is.null(click$id)) {
-      Pre <- "0601 CIN 6-A"   # <- default ID
-    } else {
-      Pre <- click$id
+    # Determine chosen precinct id:
+    Pre <- NULL
+    if (!is.null(click) && !is.null(click$id)) {
+      # sometimes click$id can be a list/number; coerce to character
+      clicked_id <- as.character(click$id)
+      if (clicked_id %in% precincts) {
+        Pre <- clicked_id
+      } else {
+        # clicked id not in current precinct list (e.g., from previous map); ignore it
+        Pre <- NULL
+      }
     }
+    
+    # If we don't have a valid clicked precinct, pick a default (first precinct in dataset)
+    if (is.null(Pre)) {
+      if (length(precincts) > 0) {
+        Pre <- precincts[1]
+      } else {
+        # ultimate fallback: a known code for each map (keeps backward compatibility)
+        fallback <- c("MUN" = "0601 CIN 6-A", "CIT" = "0101 CIN 1-A", "CPS" = "2203 CIN 22-C")
+        Pre <- fallback[[input$map_dropdown]]
+      }
+    }
+    
+    # Now draw the precinct histogram
     make_histogram_pre(input$map_dropdown, Pre, input$data_dropdown)
-
   })
 }
 
+# run app
 shinyApp(ui, server)

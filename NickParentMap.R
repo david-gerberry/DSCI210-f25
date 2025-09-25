@@ -115,3 +115,8 @@ precinct_interpolated_demographic_data %>%
   scale_fill_viridis_c(option = "turbo") +
   labs(title = "Percent of Population who are Parents Living with Kids") +
   labs(fill = "Percent of Parents") 
+
+smalldata <- precinct_interpolated_demographic_data %>% 
+  select(parent_porp, geometry) %>% 
+  sf::st_join(schoolPrecincts)
+write_csv(smalldata, "PrecentOfParents.csv")
