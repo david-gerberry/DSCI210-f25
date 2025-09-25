@@ -18,10 +18,18 @@ schoolPrecincts %>%
 
 MapWResults <- left_join(schoolPrecincts, FUXL, by = c("PRECINCT" = "PRECINCT"))
 
-MapWResults <- MapWResults %>% 
-  mutate(NEW_PERCENT = PERCENT * 100)
+#TIME FOR DATA WRANGLE
+SmallMap <- MapWResults %>% 
+  mutate(NEW_PERCENT = `BALLOTS CAST TOTAL`/ `REGISTERED VOTERS TOTAL`) %>% 
+  select(PRECINCT, `REGISTERED VOTERS TOTAL`, `BALLOTS CAST TOTAL`, NEW_PERCENT, 
+         `Eve           Bolton`, `Bryan        Cannon`, `Ben             Lindy`,
+         `Kendra        Mapp`, `Paul         Schiele`) %>% 
+  mutate(TOT_SCHOOL_BOARD = `Eve           Bolton` + `Bryan        Cannon` + 
+           `Ben             Lindy` + `Kendra        Mapp` + `Paul         Schiele`) %>% 
+  filter(TOT_SCHOOL_BOARD != 0) %>% 
+  
 
-MapWResults %>% 
+ SmallMap %>% 
   ggplot(aes(fill = NEW_PERCENT)) +
   geom_sf() +
   scale_fill_viridis_c(option = "turbo") +
