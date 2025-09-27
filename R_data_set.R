@@ -135,15 +135,23 @@ acs_final$other_race <- pmax(0, acs_final$pop_totalE - (acs_final$whiteE +
 acs_extensive <- acs_final %>%
   select(GEOID, geometry,
          pop_totalE, whiteE, blackE, asianE, hispanicE, other_race,
-         starts_with("age_"), starts_with("hhinc_"))
+         starts_with("age_"), starts_with("hhinc_")) %>%
+  st_make_valid() %>%
+  st_cast("MULTIPOLYGON", warn = FALSE)
 
 acs_intensive <- acs_final %>%
-  select(GEOID, geometry, median_ageE, med_incomeE)
+  select(GEOID, geometry, median_ageE, med_incomeE) %>%
+  st_make_valid() %>%
+  st_cast("MULTIPOLYGON", warn = FALSE)
 
 # Judicial Interpolation
 
-judicial_boundaries <- st_read("shapefiles/judicial_boundary.shp")
-judicial_precincts  <- st_read("shapefiles/judicial_precincts.shp")
+judicial_boundaries <- st_read("shapefiles/judicial_boundary.shp") %>%
+  st_make_valid() %>%
+  st_cast("MULTIPOLYGON", warn = FALSE)
+judicial_precincts  <- st_read("shapefiles/judicial_precincts.shp")%>%
+  st_make_valid() %>%
+  st_cast("MULTIPOLYGON", warn = FALSE)
 
 block.total <-get_decennial(geography = "block",
                             state = "Ohio",
@@ -272,3 +280,4 @@ acs_interp_ham <- acs_interp_ham %>%
   rename(PRECINCT = PRC_NAME)
 
 save(acs_interp_judicial, acs_interp_cps, acs_interp_cincy, acs_interp_ham, file = "acs_data.RData")
+
