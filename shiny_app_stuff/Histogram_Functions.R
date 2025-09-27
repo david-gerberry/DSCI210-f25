@@ -440,7 +440,7 @@ return_median_pre <- function(district="MUN",code="0101 CIN 1-A", data="age"){
   
 }
 
-return_median_pre("CPS","2203 CIN 22-C","race")
+return_median_pre("CPS","2203 CIN 22-C","income")
 
 
 
