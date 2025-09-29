@@ -278,6 +278,17 @@ turnout_df$election_type <- c(
 ggplot(turnout_df, aes(x = year, y = turnout, color = election_type, group = election_type)) +
   geom_line(size = 1.2, na.rm = TRUE) +
   geom_point(size = 3, na.rm = TRUE) +
+  
+  # Add percentage labels above each dot
+  geom_text(
+    aes(label = scales::percent(turnout, accuracy = 1)),
+    vjust = -1,                # put label above the dot
+    color = "black",           # keep labels black
+    size = 4,                  # adjust font size
+    show.legend = FALSE,       # don’t add extra legend item
+    na.rm = TRUE
+  ) +
+  
   # Special orange dot for 2025
   geom_point(
     data = subset(turnout_df, year == 2025),
@@ -285,6 +296,7 @@ ggplot(turnout_df, aes(x = year, y = turnout, color = election_type, group = ele
     color = "orange", size = 4,
     inherit.aes = FALSE
   ) +
+  
   # Label for prediction
   geom_text(
     data = subset(turnout_df, year == 2025),
@@ -293,15 +305,17 @@ ggplot(turnout_df, aes(x = year, y = turnout, color = election_type, group = ele
     fontface = "bold", color = "black",
     inherit.aes = FALSE
   ) +
-  # 🔥 Regression line for Off-cycle elections extended to 2025
+  
+  # Regression line for Off-cycle elections extended to 2025
   geom_smooth(
     data = subset(turnout_df, election_type == "Off-cycle"),
     method = "lm", se = FALSE, color = "black", linetype = "dashed",
     fullrange = TRUE
   ) +
+  
   scale_x_continuous(
-    breaks = turnout_df$year,   # put a tick for each year in the dataset
-    labels = turnout_df$year    # show the years as labels
+    breaks = turnout_df$year,
+    labels = turnout_df$year
   ) +
   scale_y_continuous(
     labels = scales::percent_format(accuracy = 1),
@@ -317,8 +331,6 @@ ggplot(turnout_df, aes(x = year, y = turnout, color = election_type, group = ele
   theme_minimal(base_size = 14)
 
 #### Drop-Off ####
-
-# Add 2017 and 2015
 
 data_19 <- data_19 %>% 
   mutate(Cast = `Josh Berkowitz`+`John Kennedy`)
@@ -383,20 +395,40 @@ ggplot(observed_df, aes(x = year, y = turnout)) +
   geom_line(size = 1.2, color = "steelblue") +
   geom_point(size = 3, color = "steelblue") +
   
+  # Labels for observed points
+  geom_text(
+    data = observed_df,
+    aes(label = scales::percent(turnout, accuracy = 1)),
+    vjust = -1,
+    color = "black",
+    size = 4
+  ) +
+  
   # Prediction point (same color as line)
   geom_point(
     data = prediction_df,
     aes(x = year, y = turnout),
     color = "steelblue", size = 4
   ) +
-  geom_smooth(method = "lm", se = FALSE, color = "black", linetype = "dashed") +
-  # Label for prediction (on the LEFT side now)
+  
+  # Label for prediction percentage
+  geom_text(
+    data = prediction_df,
+    aes(x = year, y = turnout, label = scales::percent(turnout, accuracy = 1)),
+    vjust = -1,
+    color = "black",
+    size = 4
+  ) +
+  
+  # Label for prediction text
   geom_text(
     data = prediction_df,
     aes(x = year, y = turnout, label = "Our Prediction"),
-    hjust = 1.2, vjust = 0.5,   # move label to the left
+    hjust = 1.2, vjust = 0.5,
     fontface = "bold", color = "black"
   ) +
+  
+  geom_smooth(method = "lm", se = FALSE, color = "black", linetype = "dashed") +
   
   scale_x_continuous(
     breaks = c(observed_df$year, prediction_df$year),
@@ -443,6 +475,47 @@ sum
 sum_2
 
 # This is the number of votes he got in his victory in 2019
+
+
+#### Maps ####
+
+acs_data_total_pop <- acs_interp_judicial %>%
+  ggplot(aes(fill = median_ageE)) +
+  geom_sf(color = "white", size = 0.2) +  # thin borders for clarity
+  scale_fill_viridis_c(
+    option = "turbo",
+    direction = -1,      # optional: reverse colors so higher = darker
+    name = "Median Age"
+  ) +
+  labs(
+    title = "Median Age by Precinct",
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    panel.background = element_rect(fill = "aliceblue"),
+    panel.grid.major = element_line(color = "transparent"),
+    axis.text = element_blank(),
+    axis.ticks = element_blank(),
+    axis.title = element_blank(),
+    legend.position = "right",
+    plot.title = element_text(size = 16, face = "bold"),
+    plot.subtitle = element_text(size = 12, color = "gray30"),
+    plot.caption = element_text(size = 10, color = "gray50")
+  )
+
+
+acs_data_total_pop
+
+
+
+
+
+
+
+
+
+
+
 
 
 
