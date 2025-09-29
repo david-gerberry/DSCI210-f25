@@ -179,15 +179,21 @@ ggplot(turnout_df, aes(x = year, y = turnout, color = election_type, group = ele
   geom_text(
     data = subset(turnout_df, year == 2025),
     aes(x = year, y = turnout, label = "Our Prediction"),
-    hjust = 1.2, vjust = 0.5,   # moves label to the right
+    hjust = 1.2, vjust = 0.5,
     fontface = "bold", color = "black",
     inherit.aes = FALSE
   ) +
+  # 🔥 Regression line for off-cycle extended to 2025
+  geom_smooth(
+    data = subset(turnout_df, election_type == "Off-cycle"),
+    method = "lm", se = FALSE, color = "black", linetype = "dashed",
+    fullrange = TRUE
+  ) +
   scale_y_continuous(
-    labels = percent_format(accuracy = 1),
+    labels = scales::percent_format(accuracy = 1),
     limits = c(.25, .9)
   ) +
-  scale_color_discrete(na.translate = FALSE) +   # 🚀 removes "NA" from legend
+  scale_color_discrete(na.translate = FALSE) +
   labs(
     title = "Voter Turnout by Election Type",
     x = "Year",
