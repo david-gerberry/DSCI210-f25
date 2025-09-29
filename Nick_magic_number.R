@@ -1,13 +1,13 @@
 library(tidyverse)
-
+##run election results firts
 
 # Define constants
-
+dropOffE = 0.2769175
 #final registered voters <- 603958
 #total_projected_votes <- 448859.  #Actual number of total ballots (projected)
 #total_votes <- 405825 #Actual number of total ballots (official)       43,034 less than projected
 total_votes <- 1000   #Use smaller number so simulation actually finishes
-percentages <- c( 0.2769175, 0, 0, 0, 0.7230825)  # Votes distribution
+percentages <- c(dropOffE, 0, 0, 0, 0.7230825)  # Votes distribution
 
 # Calculate the number of votes
 no_votes <- round(total_votes * percentages[1])  # No votes
@@ -57,8 +57,8 @@ head(results_df)
 
 
 magic_number_average <- mean(results_df$MagicNumber)
-needed_votes <- magic_number_average * ((BallotSum19 + BallotSum21)/2)
-needed_votes
+needed_votes <- magic_number_average * (((BallotSum19 + BallotSum21)/2)*dropOffE)
+print(needed_votes)
 
 # Basic boxplot without notches and jitter points
 boxplot(

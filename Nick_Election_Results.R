@@ -4,23 +4,26 @@ library(sf)
 library(RColorBrewer)
 FUXL23 <- read_excel("Data/election results/G23_Official_Canvass.xlsx", 
                                    sheet = 'Boards of Education', skip = 2, n_max = 562)
-view(FUXL23)
+
 
 FUXL21 <- read_excel("Data/election results/G21_Official_Canvass.xlsx", 
                      sheet = 'Boards of Education', skip = 2, n_max = 564)
-view(FUXL21)
+
 
 FUXL19 <- read_excel("Data/election results/G19_Official_Canvass.xlsx", 
                    sheet = 'Boards of Education', skip = 2, n_max=563)
-view(FUXL19)
 
-##I love the new shape files so much here is some data cleaning to make them useable
-FUXL23$PRECINCT <- substr(FUXL23$PRECINCT, 1, nchar(FUXL23$PRECINCT) - 8)
-FUXL21$PRECINCT <- substr(FUXL21$PRECINCT, 1, nchar(FUXL21$PRECINCT) - 8)
-FUXL19$PRECINCT <- substr(FUXL19$PRECINCT, 1, nchar(FUXL19$PRECINCT) - 8)
+
+
+
 
 schoolPrecincts <- st_read("shapefiles/cps_precincts.shp")
 schoolBoundry <- st_read("shapefiles/cps_boundary.shp")
+
+##I love the new shape files so much here is some data cleaning to make them useable
+FUXL23$PRECINCT <- substr(FUXL23$PRECINCT, 1, 4)
+FUXL21$PRECINCT <- substr(FUXL21$PRECINCT, 1, 4)
+FUXL19$PRECINCT <- substr(FUXL19$PRECINCT, 1, 4)
 
 schoolBoundry <- st_set_crs(schoolBoundry, 4269)
 schoolPrecincts <- st_set_crs(schoolPrecincts, 4269)
@@ -75,25 +78,43 @@ EDrop19 <-  (sum(SmallMap19$`BALLOTS CAST TOTAL`) - (sum(SmallMap19$TOT_SCHOOL_B
   scale_fill_viridis_c(option = "turbo") +
   labs(title = "Voter Turn out By Precinct for 2023 Cincinnati School Board") +
   labs(fill = "Voter Turn out") 
-  
+
+SmallMap19 %>% 
+  ggplot(aes(fill = NEW_PERCENT)) +
+  geom_sf() +
+  scale_fill_viridis_c(option = "turbo") +
+  labs(title = "Voter Turn out By Precinct for 2019 Cincinnati School Board") +
+  labs(fill = "Voter Turn out") 
+
+SmallMap19 %>% 
+  ggplot(aes(fill = dropOffestimate)) +
+  geom_sf() +
+  scale_fill_viridis_c(option = "turbo") +
+  labs(title = "drop off By Precinct for 2019 Cincinnati School Board") +
+  labs(fill = "drop off") 
+
+##getting precent proxy
   SmallMap <- SmallMap %>% 
     mutate(PrecentPorxy = `Kendra        Mapp`/`BALLOTS CAST TOTAL`)
   
-  SmallMap %>% 
-    ggplot(aes(fill = PrecentPorxy)) +
-    geom_sf() +
-    scale_fill_viridis_c(option = "turbo") +
-    labs(title = "Votes for Mapp") +
-    labs(fill = "Percent of Vote") 
   
-  SmallMap %>%
-    mutate(MappBaseSwing = cut(PrecentPorxy, breaks = c(-0.001, .35, .50, 1), label = c('Residual', 'Swing', 'Base'))) %>% 
-    ggplot(aes(fill = MappBaseSwing)) +
-    geom_sf() +
-    scale_fill_manual(
-      values = c(
-        "Residual" = "red",   
-        "Base" = "blue",   
-        "Swing" = "gold"   
-      )
-    )
+  SmallMap19 <- SmallMap19 %>% 
+    mutate(PrecentPorxy = `Carolyn Jones`/`BALLOTS CAST TOTAL`)
+  
+  AvgMap <- SmallMap %>%
+    select(PRECINCT, PrecentPorxy) %>% 
+    mutate(PrecentPorxy23 = PrecentPorxy)
+  
+  
+  tempMap <- SmallMap19 %>%
+    st_set_geometry(NULL) %>%   
+    select(PRECINCT, PrecentPorxy) %>% 
+    mutate(PrecentPorxy19 = PrecentPorxy)
+  
+  # Join on PRECINCT, geometry is preserved
+  AvgMap <- AvgMap %>%
+    left_join(tempMap, by = "PRECINCT")
+  
+  
+  AvgMap <- AvgMap %>% 
+    mutate(AvgProx = (PrecentPorxy23 + PrecentPorxy19)/2)
