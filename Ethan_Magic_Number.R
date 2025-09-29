@@ -97,7 +97,11 @@ data_23$`REGISTERED VOTERS TOTAL` <- as.numeric(data_23$`REGISTERED VOTERS TOTAL
 data_24$`BALLOTS CAST TOTAL` <- as.numeric(data_24$`BALLOTS CAST TOTAL`)
 data_24$`REGISTERED VOTERS TOTAL` <- as.numeric(data_24$`REGISTERED VOTERS TOTAL`)
 
+data_19$`Josh Berkowitz` <- as.numeric(data_19$`Josh Berkowitz`)
+data_19$`John Kennedy` <- as.numeric(data_19$`John Kennedy`)
 
+data_23$`Curt           Kissinger` <- as.numeric(data_23$`Curt           Kissinger`)
+data_23$`Samantha Silverstein` <- as.numeric(data_23$`Samantha Silverstein`)
 #### Turnout ####
 
 data_18 <- data_18 %>% 
@@ -203,6 +207,66 @@ ggplot(turnout_df, aes(x = year, y = turnout, color = election_type, group = ele
   theme_minimal(base_size = 14)
 
 #### Drop-Off ####
+
+data_19 <- data_19 %>% 
+  mutate(Cast = `Josh Berkowitz`+`John Kennedy`)
+
+data_23 <- data_23 %>% 
+  mutate(Cast = `Curt           Kissinger`+`Samantha Silverstein`)
+
+data_19 <- data_19 %>% 
+  mutate(Drop = 1-(`Cast`/`BALLOTS CAST TOTAL`))
+
+data_23 <- data_23 %>% 
+  mutate(Drop = 1-(`Cast`/`BALLOTS CAST TOTAL`))
+
+sum <- sum(data_19$`Josh Berkowitz`)
+
+drop <- function(year){
+  
+  df <- get(paste0("data_", year))
+  
+  total <- sum(df$`BALLOTS CAST TOTAL`, na.rm = TRUE)
+  judge <- sum(df$`Cast`, na.rm = TRUE)
+  
+  drop <- 1-(judge / total)
+  
+  return(drop)
+  
+}
+
+drop(19)
+drop(23)
+
+drop_prediction <- .14
+
+# So drop-off in 2019 was 12.9% and drop-off was 15.4% in 2023.
+
+# So we can predict about a 14% drop-off this year.
+
+# With this we can calculate the magic number for Judge Berkowitz
+
+registered <- 100105
+
+# People that will show up
+
+vote <- registered*turn_25
+
+# People that will vote in our race
+
+judge_voters <- as.integer(vote*(1-drop_prediction))
+
+# Now we get half of the voters in the judicial race and add 1
+
+magic_number <- (judge_voters/2)+1
+
+magic_number
+
+# We predict that Judge Berkowitz will need 17,219 votes to win this election
+
+sum
+
+# This is the number of votes he got in his victory in 2019
 
 
 
