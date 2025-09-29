@@ -6,7 +6,7 @@ library(tidyverse)
 #final registered voters <- 603958
 #total_projected_votes <- 448859.  #Actual number of total ballots (projected)
 #total_votes <- 405825 #Actual number of total ballots (official)       43,034 less than projected
-total_votes <- 10000   #Use smaller number so simulation actually finishes
+total_votes <- 1000   #Use smaller number so simulation actually finishes
 percentages <- c(0.313, 0.044, 0.6426)  # Votes distribution
 
 # Calculate the number of votes
