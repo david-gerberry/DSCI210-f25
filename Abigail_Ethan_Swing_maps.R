@@ -31,11 +31,15 @@ silverstein_2023 <- silverstein_2023 %>%
 precincts_votes <-precincts %>%
   left_join(silverstein_2023, by = c("PRECINCT" = "PRC #"))
 
+png("Abigail_Pct_votes_silverstein.png", width = 700, height = 500)
 ggplot(data = precincts_votes) +
   geom_sf(aes(fill = pct_silverstein), color = "white", size = 0.2) +
   geom_sf(data = boundary, fill = NA, color = "black", size = 0.5) +
-  scale_fill_viridis_c(na.value = "grey90", option = "plasma",
-                       name = "Pct Silverstein") +
+  scale_fill_gradient(
+    low = "red", high = "blue",
+    na.value = "grey90",
+    name = "Pct Silverstein"
+  )  +
   theme_void() +
   labs(
     title = "Percentage of Votes for Silverstein by Precinct",
@@ -45,7 +49,9 @@ ggplot(data = precincts_votes) +
   theme(
     axis.text = element_blank(),      # remove numbers
     axis.ticks = element_blank()
-  )  
+  ) 
+dev.off()
+
 
 #berkowits 2019
 berkowitz_2019 <- read_excel("data/election results/G19_Official_Canvass.xlsx")
@@ -72,11 +78,15 @@ berkowitz_2019 <- berkowitz_2019 %>%
 precincts_berk_votes <-precincts %>%
   left_join(berkowitz_2019, by = c("PRECINCT" = "PRC #"))
 
+png("Abigail_Pct_votes_berkowitz.png", width = 700, height = 500)
 ggplot(data = precincts_berk_votes) +
   geom_sf(aes(fill = pct_berkowitz), color = "white", size = 0.2) +
   geom_sf(data = boundary, fill = NA, color = "black", size = 0.5) +
-  scale_fill_viridis_c(na.value = "grey90", option = "plasma",
-                       name = "Pct Berkowitz") +
+  scale_fill_gradient(
+    low = "blue", high = "red",
+    na.value = "grey90",
+    name = "Pct Berkowitz"
+  )  +
   theme_void() +
   labs(
     title = "Percentage of Votes for Berkowitz by Precinct",
@@ -86,7 +96,9 @@ ggplot(data = precincts_berk_votes) +
   theme(
     axis.text = element_blank(),      # remove numbers
     axis.ticks = element_blank()
-  )  
+  ) 
+dev.off()
+
 
 #base/swing map #2023
 precincts_swing <- precincts %>%
@@ -103,6 +115,8 @@ precincts_swing <- precincts %>%
       TRUE ~ "Missing"
     )
   )
+
+png("Abigail_swing_silverstein.png", width = 700, height = 500)
 ggplot(precincts_swing) +
   geom_sf(aes(fill = category), color = "black", size = 0.2) +
   geom_sf(data = boundary, fill = NA, color = "black", size = 0.5) +
@@ -121,6 +135,8 @@ ggplot(precincts_swing) +
     axis.text = element_blank(),
     axis.ticks = element_blank()
   )
+dev.off()
+
 
 #base/swing map #2019 
 
@@ -130,6 +146,7 @@ mapANDresults2019 <-
   left_join(map2020, results2019, by = c("PRECINCT" = "PRECINCT")) %>% 
   filter( !is.na(`Josh Berkowitz`) )
 
+png("Abigail_swing_berkowitz.png", width = 700, height = 500)
 mapANDresults2019 %>% 
   mutate(Rep.prop = `Josh Berkowitz`/( `Josh Berkowitz`+ `John Kennedy`)) %>%
   mutate(Rep.baseswing = cut(Rep.prop, breaks = c(-0.001, 0.2,.40, 0.60, 0.8,1),labels = c("Very Residual","Residual", "Swing", "Base","Very Base")))%>%
@@ -150,53 +167,10 @@ mapANDresults2019 %>%
     )
   ) +
   theme_void()
+dev.off()
+
 
 #combined
-results2019 <- results2019 %>%
-  mutate(
-    total2019 = `Josh Berkowitz` + `John Kennedy`,
-    pct_rep_2019 = 100 * `Josh Berkowitz` / total2019
-  )
-precincts_swing <- precincts %>%
-  left_join(silverstein_2023 %>% 
-              select(`PRC #`, `Curt           Kissinger`, `Samantha Silverstein`), 
-            by = c("PRECINCT" = "PRC #")) %>%
-  mutate(
-    total2023 = `Curt           Kissinger` + `Samantha Silverstein`,
-    pct_rep_2023 = 100 * `Curt           Kissinger` / total2023
-  )
-combined <- precincts_swing %>%
-  left_join(
-    results2019 %>% select(PRECINCT, pct_rep_2019),
-    by = c("PRECINCT" = "PRECINCT")
-  )
-combined <- combined %>%
-  mutate(
-    category = case_when(
-      pct_rep_2023 >= 60 & pct_rep_2019 >= 60 ~ "Base (Red)",
-      pct_rep_2023 < 40 & pct_rep_2019 < 40 ~ "Residual (Blue)",
-      TRUE ~ "Swing (Yellow)"
-    )
-  )
-
-ggplot(combined) +
-  geom_sf(aes(fill = category), color = "white", size = 0.2) +
-  geom_sf(data = boundary, fill = NA, color = "black", size = 0.5) +
-  scale_fill_manual(values = c(
-    "Base (Red)" = "red",
-    "Swing (Yellow)" = "yellow",
-    "Residual (Blue)" = "blue"
-  )) +
-  theme_minimal() +
-  labs(
-    title = "Combined Base / Swing / Residual Precincts",
-    subtitle = "2019 Berkowitz vs 2023 Kissinger",
-    fill = "Category"
-  ) +
-  theme(
-    axis.text = element_blank(),
-    axis.ticks = element_blank()
-  )
 
 #combined weighted
 precincts <- precincts %>% mutate(PRC = substr(PRECINCT, 1, 4))
@@ -220,7 +194,7 @@ combined_w <- precincts %>%
   left_join(select(berkowitz_2019, PRC, pct_rep_2019), by = "PRC") %>%
   left_join(select(silverstein_2023, PRC, pct_rep_2023), by = "PRC") %>%
   mutate(
-    w = 0.7,  # weight on 2019
+    w = 0.5,  # weight on 2019
     weighted_rep = w * pct_rep_2019 + (1 - w) * pct_rep_2023,
     category = case_when(
       weighted_rep >= 60 ~ "Base (Red)",
@@ -231,6 +205,12 @@ combined_w <- precincts %>%
   )
 
 # Map
+cincy.neighborhoods <- st_zm(st_read("data/maps/snabnd_2010.shp"))
+oakley <- cincy.neighborhoods[grepl('Oakley', cincy.neighborhoods$SNA_NAME),]
+linwood <- cincy.neighborhoods[grepl('Linwood', cincy.neighborhoods$SNA_NAME),]
+
+
+png("Abigail_swing_combined_neighborhoods.png", width = 700, height = 500)
 ggplot(combined_w) +
   geom_sf(aes(fill = category), color = "black", size = 0.2) +
   geom_sf(data = boundary, fill = NA, color = "black", size = 0.5) +
@@ -238,14 +218,21 @@ ggplot(combined_w) +
     values = c("Base (Red)" = "red",
                "Swing (Yellow)" = "yellow",
                "Residual (Blue)" = "blue",
-               "Missing" = "grey90")
+               "Missing" = "blue"),
+               breaks = c("Base (Red)", "Swing (Yellow)", "Residual (Blue)")  # exclude Missing from legend)
   ) +
   theme_minimal() +
   labs(
     title = "Weighted Base/Swing Map",
-    subtitle = "70% weight to 2019, 30% to 2023",
+    subtitle = "50% weight to 2019, 50% to 2023",
     fill = "Category"
   ) +
   theme(axis.text = element_blank(),
-        axis.ticks = element_blank())
+        axis.ticks = element_blank()) +
+  geom_sf(data = oakley,col='pink',fill=NA,lwd=1.5)+
+  geom_sf_label(data=oakley,aes(label = 'Oakley'), cex=2.5, position = position_nudge(x=.03, y=-.005)) +
+  geom_sf(data = linwood,col='orange',fill=NA,lwd=1.5)+
+  geom_sf_label(data=linwood,aes(label = 'Linwood'), cex=2.5, position = position_nudge(x=.005, y=-.008))
+dev.off()
+
 
