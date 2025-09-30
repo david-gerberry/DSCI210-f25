@@ -63,24 +63,29 @@ the_wiiide_school <- demographicData %>%
 #schoolPrecincts <- st_read("shapefiles/cps_precincts.shp")
 #schoolPrecincts <- st_set_crs(schoolPrecincts, 4269)
 
+the_wiiide_school <- st_make_valid(the_wiiide_school)
+schoolPrecincts   <- st_make_valid(schoolPrecincts)
 
-interpolated_demographic_data <- interpolate_pw(
-  from = st_make_valid(the_wiiide_school),
+interpolated_demographic_data <- interpolate_pw( 
+  from = st_make_valid(the_wiiide_school), 
   to = st_make_valid(schoolBoundry),
-  extensive = FALSE,
-  weights = st_make_valid(block.total),
-  weight_column = "total.pop",
-  crs = 4269
-)
+  extensive = FALSE, weights = st_make_valid(block.total), 
+  weight_column = "total.pop", crs = 4269 ) 
+
+schoolPrecincts <- schoolPrecincts %>%
+  filter(st_geometry_type(.) %in% c("POLYGON", "MULTIPOLYGON"))
+
 
 precinct_interpolated_demographic_data <- interpolate_pw(
   from = st_make_valid(the_wiiide_school),
-  to = st_make_valid(schoolPrecincts),
+  to = st_make_valid(schoolPrecincts),  # Changed from schoolBoundry to schoolPrecincts
   extensive = FALSE,
   weights = st_make_valid(block.total),
   weight_column = "total.pop",
   crs = 4269
 )
+
+
 
 mx4_parent <- function(){
   #credit  to the funk master
