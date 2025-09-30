@@ -3,12 +3,12 @@ library(tidyverse)
 
 # Define constants
 
-#final registered voters <- 603958
-#total_projected_votes <- 448859.  #Actual number of total ballots (projected)
+final_registered_voters <- 216982
+total_projected_votes <- 60625  #Actual number of total ballots (projected)
 #total_votes <- 405825 #Actual number of total ballots (official)       43,034 less than projected
-total_ballots <- 59692   #Use smaller number so simulation actually finishes
+total_ballots <- 60625   #Use smaller number so simulation actually finishes
 
-percentages <- c(0.66, 0.34)  # Votes distribution
+percentages <- c(0.25, 0.75)  # Votes distribution
 
 # Calculate the number of votes
 six_votes_on_ballot <- round(total_ballots * percentages[1])  # Votes for six candidate
@@ -45,7 +45,6 @@ results <- replicate(100, simulate_election(candidates, six_votes_on_ballot, sev
 
 # Convert results to a data frame
 results_df <- as.data.frame(t(results))
-colnames(results_df) <- candidates
 
 
 
@@ -59,6 +58,9 @@ results_long <- results_df %>%
     values_to = "Votes"
   )
 
+results_long <- results_long %>% 
+  mutate(Total_Votes_cast = seven_votes_on_ballot * 7 + six_votes_on_ballot *6)
+
 # Get winners per election
 winners <- results_long %>%
   group_by(Election) %>%
@@ -70,15 +72,10 @@ winners <- results_long %>%
 # Add MagicNumber = (next-place votes + 1) / total_votes
 magic_numbers <- winners %>%
   group_by(Election) %>%
-  filter(Rank) %>% 
-  mutate(magic_percent = Votes / total)
+  filter(Rank == 9) %>% 
+  mutate(magic_percent = Votes / Total_Votes_cast)
 
-# Combine winners + magic number
-final_results <- winners %>%
-  select(Election, Rank, Candidate) %>%
-  pivot_wider(names_from = Rank, values_from = Candidate,
-              names_prefix = "Winner") %>%
-  left_join(magic_numbers, by = "Election")
+
 
 
 # Display results
