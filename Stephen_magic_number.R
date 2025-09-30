@@ -6,54 +6,80 @@ library(tidyverse)
 #final registered voters <- 603958
 #total_projected_votes <- 448859.  #Actual number of total ballots (projected)
 #total_votes <- 405825 #Actual number of total ballots (official)       43,034 less than projected
-total_votes <- 10000   #Use smaller number so simulation actually finishes
-percentages <- c(0.313, 0.044, 0.6426)  # Votes distribution
+total_ballots <- 59692   #Use smaller number so simulation actually finishes
+
+percentages <- c(0.66, 0.34)  # Votes distribution
 
 # Calculate the number of votes
-no_votes <- round(total_votes * percentages[1])  # No votes
-one_vote <- round(total_votes * percentages[2])  # Votes for one candidate
-nine_votes <- round(total_votes * percentages[3])  # Votes for two candidates
+six_votes_on_ballot <- round(total_ballots * percentages[1])  # Votes for six candidate
+seven_votes_on_ballot <- round(total_ballots * percentages[2])  # Votes for seven candidates
 
 # Define candidates
-candidates <- c("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "21", "22", "23", "24", "25", "26")
+candidates <- c("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "21", "22", "23", "24", "25", "26", "27")
 
 # Function to simulate the election
-simulate_election <- function(candidates, one_vote, two_votes) {
+simulate_election <- function(candidates, six_votes_on_ballot, seven_votes_on_ballot) {
   # Create a ballot list
-  ballots <- vector("list", total_votes)
+  total_ballots = six_votes_on_ballot + seven_votes_on_ballot
+  ballots <- vector("list", total_ballots)
   
-  # Assign ballots for no votes
-  for (i in 1:no_votes) {
-    ballots[[i]] <- c()  # No votes
+  
+  for (i in 1:six_votes_on_ballot) {
+    ballots[[i]] <- sample(candidates, 6)  # Six Votes
   }
   
-  # Assign ballots for one candidate
-  for (i in (no_votes + 1):(no_votes + one_vote)) {
-    ballots[[i]] <- sample(candidates, 1)  # Vote for one candidate
-  }
-  
-  # Assign ballots for two candidates
-  for (i in (no_votes + one_vote + 1):total_votes) {
-    ballots[[i]] <- sample(candidates, 2)  # Vote for two candidates
+
+  for (i in (six_votes_on_ballot + 1):total_ballots) {
+    ballots[[i]] <- sample(candidates, 7)  # Seven Votes
   }
   
   # Count votes for each candidate
   vote_counts <- table(unlist(ballots))
+  vote_counts[is.na(vote_counts)] <- 0
+  
   return(as.numeric(vote_counts))
 }
 
 # Store results
-results <- replicate(1000, simulate_election(candidates, one_vote, two_votes))
+results <- replicate(100, simulate_election(candidates, six_votes_on_ballot, seven_votes_on_ballot))
 
 # Convert results to a data frame
 results_df <- as.data.frame(t(results))
 colnames(results_df) <- candidates
 
-# Determine winners (top 2 candidates)
-results_df$Election <- 1:nrow(results_df)
-results_df$Winner1 <- apply(results_df[, 1:5], 1, function(x) names(sort(x, decreasing = TRUE)[1]))
-results_df$Winner2 <- apply(results_df[, 1:5], 1, function(x) names(sort(x, decreasing = TRUE)[2]))
-results_df$MagicNumber <- apply(results_df[, 1:5], 1, function(x) (sort(x, decreasing = TRUE)[3]+1)/total_votes)
+
+
+num_winners <- 9  # how many winners you want
+
+results_long <- results_df %>%
+  mutate(Election = row_number()) %>%
+  pivot_longer(
+    cols = starts_with("V"),   # candidate columns
+    names_to = "Candidate",
+    values_to = "Votes"
+  )
+
+# Get winners per election
+winners <- results_long %>%
+  group_by(Election) %>%
+  arrange(desc(Votes)) %>%
+  mutate(Rank = row_number()) %>%
+  filter(Rank <= num_winners) %>%
+  ungroup()
+
+# Add MagicNumber = (next-place votes + 1) / total_votes
+magic_numbers <- winners %>%
+  group_by(Election) %>%
+  filter(Rank) %>% 
+  mutate(magic_percent = Votes / total)
+
+# Combine winners + magic number
+final_results <- winners %>%
+  select(Election, Rank, Candidate) %>%
+  pivot_wider(names_from = Rank, values_from = Candidate,
+              names_prefix = "Winner") %>%
+  left_join(magic_numbers, by = "Election")
+
 
 # Display results
 head(results_df)
