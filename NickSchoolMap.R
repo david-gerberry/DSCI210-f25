@@ -58,7 +58,7 @@ schoolBoundry <- st_set_crs(schoolBoundry, 4269)
 schoolPrecincts <- st_set_crs(schoolPrecincts, 4269)
 
 
-
+s
 
 
 ##make the data wide
@@ -78,6 +78,9 @@ the_wiiider_school <- PublicVSPrivate %>%
   
 
 
+schoolPrecincts <- schoolPrecincts %>%
+  filter(st_geometry_type(.) %in% c("POLYGON", "MULTIPOLYGON"))
+
 interpolated_PublicVSPrivate <- interpolate_pw(
   from = st_make_valid(the_wiiider_school),
   to = st_make_valid(schoolBoundry),
@@ -87,9 +90,10 @@ interpolated_PublicVSPrivate <- interpolate_pw(
   crs = 4269
 )
 
+
 precinct_interpolated_PublicVSPrivate <- interpolate_pw(
   from = st_make_valid(the_wiiider_school),
-  to = st_make_valid(schoolPrecincts),
+  to = st_make_valid(schoolPrecincts),  # Changed from schoolBoundry to schoolPrecincts
   extensive = FALSE,
   weights = st_make_valid(block.total),
   weight_column = "total.pop",
@@ -97,14 +101,12 @@ precinct_interpolated_PublicVSPrivate <- interpolate_pw(
 )
 
 
-
 mx4_public <- function(){
   #credit  to the funk master
   palette <- colorNumeric(
     palette = viridisLite::turbo(256), # Yellow-Orange-Red color scale, 
     domain = precinct_interpolated_PublicVSPrivate$PublicPorp,
-    na.color = "transparent"
-  )
+    na.color = "transparent")
   
   leaflet() %>% 
     addProviderTiles(providers$CartoDB.Positron) %>%

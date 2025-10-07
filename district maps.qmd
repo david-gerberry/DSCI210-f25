@@ -91,8 +91,6 @@ x <- mapANDresults2021
      
 ```
 
-
-
 ```{r}
 #| label: Cincinnati Public School District
 
@@ -123,9 +121,11 @@ cps_precincts <- st_intersection(st_transform(map2025, st_crs(map2021)),cps_boun
           ggplot(aes()) +
           geom_sf()
          
-    ```
+```
 
-    </div>
+```         
+</div>
+```
 
 ```{r}
 
