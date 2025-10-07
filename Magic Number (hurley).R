@@ -6,7 +6,7 @@ library(tidyverse)
 #final registered voters <- 603958
 #total_projected_votes <- 448859.  #Actual number of total ballots (projected)
 #total_votes <- 405825 #Actual number of total ballots (official)       43,034 less than projected
-total_votes <- 10000   #Use smaller number so simulation actually finishes
+total_votes <- 100   #Use smaller number so simulation actually finishes
 percentages <- c(0.313, 0.044, 0.6426)  # Votes distribution
 
 # Calculate the number of votes
@@ -100,11 +100,11 @@ hist(
 )
 
 # Add a vertical line for the mean
-abline(v = mean_value, col = "black", lwd = 2)
+abline(v = magic_number_average, col = "black", lwd = 2)
 
 
 # Add text for the mean
-text(x = mean_value + 0.008, y = 80, 
-     labels = paste("Mean:", round(mean_value*100, 2),"%"), 
+text(x = magic_number_average + 0.008, y = 80, 
+     labels = paste("Mean:", round(magic_number_average*100, 2),"%"), 
      col = "black", cex = 2) 
 
