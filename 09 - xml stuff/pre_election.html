@@ -1,0 +1,2327 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.57">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="David Gerberry, Xavier University">
+
+<title>Pre-Election Preparation</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="pre_election_files/libs/clipboard/clipboard.min.js"></script>
+<script src="pre_election_files/libs/quarto-html/quarto.js"></script>
+<script src="pre_election_files/libs/quarto-html/popper.min.js"></script>
+<script src="pre_election_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="pre_election_files/libs/quarto-html/anchor.min.js"></script>
+<link href="pre_election_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="pre_election_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="pre_election_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="pre_election_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="pre_election_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul class="collapse">
+  <li><a href="#setup" id="toc-setup" class="nav-link active" data-scroll-target="#setup">Setup</a>
+  <ul class="collapse">
+  <li><a href="#import-election-results" id="toc-import-election-results" class="nav-link" data-scroll-target="#import-election-results">Import election results</a></li>
+  <li><a href="#functions" id="toc-functions" class="nav-link" data-scroll-target="#functions">Functions</a></li>
+  </ul></li>
+  <li><a href="#maps-of-areas-in-hamilton-county" id="toc-maps-of-areas-in-hamilton-county" class="nav-link" data-scroll-target="#maps-of-areas-in-hamilton-county">Maps of Areas in Hamilton County</a></li>
+  <li><a href="#turnout" id="toc-turnout" class="nav-link" data-scroll-target="#turnout">2020 Turnout</a>
+  <ul class="collapse">
+  <li><a href="#overall-election-turnout" id="toc-overall-election-turnout" class="nav-link" data-scroll-target="#overall-election-turnout">Overall election turnout</a></li>
+  </ul></li>
+  <li><a href="#contests-and-candidates" id="toc-contests-and-candidates" class="nav-link" data-scroll-target="#contests-and-candidates">2020 Contests and Candidates</a>
+  <ul class="collapse">
+  <li><a href="#biden-vs.-trump" id="toc-biden-vs.-trump" class="nav-link" data-scroll-target="#biden-vs.-trump">Biden vs.&nbsp;Trump</a></li>
+  <li><a href="#rucker-vs.-deters" id="toc-rucker-vs.-deters" class="nav-link" data-scroll-target="#rucker-vs.-deters">Rucker vs.&nbsp;Deters</a></li>
+  </ul></li>
+  <li><a href="#contests-and-candidates-1" id="toc-contests-and-candidates-1" class="nav-link" data-scroll-target="#contests-and-candidates-1">2022 Contests and Candidates</a>
+  <ul class="collapse">
+  <li><a href="#ryan-vs.-vance" id="toc-ryan-vs.-vance" class="nav-link" data-scroll-target="#ryan-vs.-vance">Ryan vs.&nbsp;Vance</a></li>
+  <li><a href="#whaley-vs.-dewine" id="toc-whaley-vs.-dewine" class="nav-link" data-scroll-target="#whaley-vs.-dewine">Whaley vs.&nbsp;DeWine</a></li>
+  </ul></li>
+  <li><a href="#contest-and-candidates" id="toc-contest-and-candidates" class="nav-link" data-scroll-target="#contest-and-candidates">2018 Contest and Candidates</a>
+  <ul class="collapse">
+  <li><a href="#brown-vs.-renacci" id="toc-brown-vs.-renacci" class="nav-link" data-scroll-target="#brown-vs.-renacci">Brown vs.&nbsp;Renacci</a></li>
+  </ul></li>
+  <li><a href="#contest-and-candidates-1" id="toc-contest-and-candidates-1" class="nav-link" data-scroll-target="#contest-and-candidates-1">2023 Contest and Candidates</a>
+  <ul class="collapse">
+  <li><a href="#issue-1-abortion-and-other-reproductive-rights" id="toc-issue-1-abortion-and-other-reproductive-rights" class="nav-link" data-scroll-target="#issue-1-abortion-and-other-reproductive-rights">Issue #1 Abortion and other reproductive rights</a></li>
+  <li><a href="#issue-2-cannabis-legalization" id="toc-issue-2-cannabis-legalization" class="nav-link" data-scroll-target="#issue-2-cannabis-legalization">Issue #2 Cannabis Legalization</a></li>
+  </ul></li>
+  <li><a href="#save-objects-to-file" id="toc-save-objects-to-file" class="nav-link" data-scroll-target="#save-objects-to-file">Save objects to file</a></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Pre-Election Preparation</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>David Gerberry, Xavier University </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="setup" class="level1">
+<h1>Setup</h1>
+<p>Function that parses the xml results files.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>parse_contest_results <span class="ot">&lt;-</span> <span class="cf">function</span>(xml_file){</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="do">## Get all Contest nodes</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  contests <span class="ot">&lt;-</span> xml_file <span class="sc">%&gt;%</span> <span class="fu">xml_find_all</span>(<span class="st">".//Contest"</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Function to extract vote data for each contest and candidate</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  parse_contest_votes <span class="ot">&lt;-</span> <span class="cf">function</span>(contest_node) {</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    contest_name <span class="ot">&lt;-</span> <span class="fu">xml_attr</span>(contest_node, <span class="st">"text"</span>)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Get all candidate (Choice) nodes</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    choices <span class="ot">&lt;-</span> contest_node <span class="sc">%&gt;%</span> <span class="fu">xml_find_all</span>(<span class="st">".//Choice"</span>)</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Iterate through each candidate</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">map_df</span>(choices, <span class="cf">function</span>(choice) {</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>      candidate_name <span class="ot">&lt;-</span> <span class="fu">xml_attr</span>(choice, <span class="st">"text"</span>)</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Get all VoteType nodes (Early, Election)</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>      vote_types <span class="ot">&lt;-</span> choice <span class="sc">%&gt;%</span> <span class="fu">xml_find_all</span>(<span class="st">".//VoteType"</span>)</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Iterate through each VoteType and precinct data</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>      <span class="fu">map_df</span>(vote_types, <span class="cf">function</span>(vote_type) {</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>        vote_type_name <span class="ot">&lt;-</span> <span class="fu">xml_attr</span>(vote_type, <span class="st">"name"</span>)</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Extract precincts</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>        precincts <span class="ot">&lt;-</span> vote_type <span class="sc">%&gt;%</span> <span class="fu">xml_find_all</span>(<span class="st">".//Precinct"</span>)</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>        <span class="co"># For each precinct, extract the votes and precinct name</span></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>        <span class="fu">map_df</span>(precincts, <span class="cf">function</span>(precinct) {</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>          precinct_name <span class="ot">&lt;-</span> <span class="fu">xml_attr</span>(precinct, <span class="st">"name"</span>)</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>          votes <span class="ot">&lt;-</span> <span class="fu">xml_attr</span>(precinct, <span class="st">"votes"</span>) <span class="sc">%&gt;%</span> <span class="fu">as.numeric</span>()</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>          </span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>          <span class="fu">tibble</span>(</span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>            <span class="at">contest =</span> contest_name,</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>            <span class="at">candidate =</span> candidate_name,</span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>            <span class="at">vote_type =</span> vote_type_name,</span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>            <span class="at">precinct =</span> precinct_name,</span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>            <span class="at">votes =</span> votes</span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>          )</span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>        })</span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>      })</span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>    })</span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Apply the function to all contests</span></span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a>  election_data <span class="ot">&lt;-</span> contests <span class="sc">%&gt;%</span> <span class="fu">map_df</span>(parse_contest_votes)</span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(election_data)</span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<section id="import-election-results" class="level2">
+<h2 class="anchored" data-anchor-id="import-election-results">Import election results</h2>
+<p>Get census population data for interpolating between</p>
+</section>
+<section id="functions" class="level2">
+<h2 class="anchored" data-anchor-id="functions">Functions</h2>
+<p>A function to get turnout from the xml file</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>turnout.df <span class="ot">&lt;-</span> <span class="cf">function</span>(turnout.data){</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Create a data frame</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  turnout.df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">name =</span> <span class="fu">xml_attr</span>(turnout.data<span class="fl">.2020</span>, <span class="st">"name"</span>),</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">totalVoters =</span> <span class="fu">as.integer</span>(<span class="fu">xml_attr</span>(turnout.data, <span class="st">"totalVoters"</span>)),</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">ballotsCast =</span> <span class="fu">as.integer</span>(<span class="fu">xml_attr</span>(turnout.data, <span class="st">"ballotsCast"</span>)),</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">voterTurnout =</span> <span class="fu">as.numeric</span>(<span class="fu">xml_attr</span>(turnout.data, <span class="st">"voterTurnout"</span>)),</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">percentReporting =</span> <span class="fu">as.numeric</span>(<span class="fu">xml_attr</span>(turnout.data, <span class="st">"percentReporting"</span>)),</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(turnout.df)</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>A function to summarize the overall results of a head-to-head race.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>results.df <span class="ot">&lt;-</span> <span class="cf">function</span>(my.race, my.dem, my.rep, election_data) {</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="do">## Take the total election results and sum up votes for Presidential candidates</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  vote_sums <span class="ot">&lt;-</span> election_data  <span class="sc">%&gt;%</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(contest <span class="sc">==</span> my.race) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(candidate, vote_type) <span class="sc">%&gt;%</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarize</span>(<span class="at">total =</span> <span class="fu">sum</span>(votes, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),<span class="at">.groups=</span><span class="st">"keep"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> vote_type, <span class="at">values_from =</span> total) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">Overall =</span> <span class="fu">rowSums</span>(<span class="fu">across</span>(<span class="fu">everything</span>()))) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ungroup</span>()</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  column_sums <span class="ot">&lt;-</span> vote_sums <span class="sc">%&gt;%</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(<span class="fu">where</span>(is.numeric)) <span class="sc">%&gt;%</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarize</span>(<span class="fu">across</span>(<span class="fu">everything</span>(), <span class="sc">~</span> <span class="fu">sum</span>(.x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)))</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>  vote_sums <span class="ot">&lt;-</span> vote_sums <span class="sc">%&gt;%</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">add_row</span>(<span class="at">candidate =</span> <span class="st">"Total"</span>, <span class="sc">!!!</span>column_sums)</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>  <span class="do">## Pull out the Democratic and Republican candidates and calculate their percentages</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>  dem.row <span class="ot">=</span> vote_sums <span class="sc">%&gt;%</span> <span class="fu">filter</span>(candidate <span class="sc">==</span> my.dem)</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>  rep.row <span class="ot">=</span> vote_sums <span class="sc">%&gt;%</span> <span class="fu">filter</span>(candidate <span class="sc">==</span> my.rep)</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>  tot.row <span class="ot">=</span> vote_sums <span class="sc">%&gt;%</span> <span class="fu">filter</span>(candidate <span class="sc">==</span> <span class="st">'Total'</span>)</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>  output <span class="ot">=</span> <span class="fu">rbind</span>(<span class="fu">round</span>(<span class="dv">100</span><span class="sc">*</span>dem.row[<span class="dv">2</span><span class="sc">:</span><span class="dv">4</span>]<span class="sc">/</span>tot.row[<span class="dv">2</span><span class="sc">:</span><span class="dv">4</span>],<span class="dv">1</span>),<span class="fu">round</span>(<span class="dv">100</span><span class="sc">*</span>rep.row[<span class="dv">2</span><span class="sc">:</span><span class="dv">4</span>]<span class="sc">/</span>tot.row[<span class="dv">2</span><span class="sc">:</span><span class="dv">4</span>],<span class="dv">1</span>))</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rownames</span>(output) <span class="ot">=</span> <span class="fu">c</span>(my.dem,my.rep)</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(output)</span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>A function to get head-to-head election results by the precinct</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>precinct.results.df <span class="ot">&lt;-</span> <span class="cf">function</span>(my.race, my.dem, my.rep, election.data) {</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="do">## Get the precinct-by-precinct election results for Democrat and Republican in head-to-head race</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  early <span class="ot">&lt;-</span> election_data  <span class="sc">%&gt;%</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(contest <span class="sc">==</span> my.race,vote_type<span class="sc">==</span><span class="st">'Early'</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(precinct) <span class="sc">%&gt;%</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarize</span>(<span class="at">early =</span> <span class="fu">sum</span>(votes, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),<span class="at">.groups=</span><span class="st">"keep"</span>) </span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  election <span class="ot">&lt;-</span> election_data  <span class="sc">%&gt;%</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(contest <span class="sc">==</span> my.race,vote_type <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Election"</span>,<span class="st">"Election Day"</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(precinct) <span class="sc">%&gt;%</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarize</span>(<span class="at">election =</span> <span class="fu">sum</span>(votes, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),<span class="at">.groups=</span><span class="st">"keep"</span>) </span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>  overall <span class="ot">&lt;-</span> election_data  <span class="sc">%&gt;%</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(contest <span class="sc">==</span> my.race) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(precinct) <span class="sc">%&gt;%</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarize</span>(<span class="at">overall =</span> <span class="fu">sum</span>(votes, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),<span class="at">.groups=</span><span class="st">"keep"</span>)   </span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>  dem.early <span class="ot">&lt;-</span> election_data  <span class="sc">%&gt;%</span></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(contest <span class="sc">==</span> my.race,candidate<span class="sc">==</span>my.dem,vote_type<span class="sc">==</span><span class="st">'Early'</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(precinct) <span class="sc">%&gt;%</span></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarize</span>(<span class="at">dem.early =</span> <span class="fu">sum</span>(votes, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),<span class="at">.groups=</span><span class="st">"keep"</span>) </span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>  dem.election <span class="ot">&lt;-</span> election_data  <span class="sc">%&gt;%</span></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(contest <span class="sc">==</span> my.race,candidate<span class="sc">==</span>my.dem,vote_type <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Election"</span>,<span class="st">"Election Day"</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(precinct) <span class="sc">%&gt;%</span></span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarize</span>(<span class="at">dem.election =</span> <span class="fu">sum</span>(votes, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),<span class="at">.groups=</span><span class="st">"keep"</span>) </span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>  dem.overall <span class="ot">&lt;-</span> election_data  <span class="sc">%&gt;%</span></span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(contest <span class="sc">==</span> my.race,candidate<span class="sc">==</span>my.dem) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(precinct) <span class="sc">%&gt;%</span></span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarize</span>(<span class="at">dem.overall =</span> <span class="fu">sum</span>(votes, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),<span class="at">.groups=</span><span class="st">"keep"</span>) </span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>  rep.early <span class="ot">&lt;-</span> election_data  <span class="sc">%&gt;%</span></span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(contest <span class="sc">==</span> my.race,candidate<span class="sc">==</span>my.rep,vote_type<span class="sc">==</span><span class="st">'Early'</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(precinct) <span class="sc">%&gt;%</span></span>
+<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarize</span>(<span class="at">rep.early =</span> <span class="fu">sum</span>(votes, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),<span class="at">.groups=</span><span class="st">"keep"</span>) </span>
+<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a>  rep.election <span class="ot">&lt;-</span> election_data  <span class="sc">%&gt;%</span></span>
+<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(contest <span class="sc">==</span> my.race,candidate<span class="sc">==</span>my.rep,vote_type<span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Election"</span>,<span class="st">"Election Day"</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(precinct) <span class="sc">%&gt;%</span></span>
+<span id="cb4-41"><a href="#cb4-41" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarize</span>(<span class="at">rep.election =</span> <span class="fu">sum</span>(votes, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),<span class="at">.groups=</span><span class="st">"keep"</span>) </span>
+<span id="cb4-42"><a href="#cb4-42" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb4-43"><a href="#cb4-43" aria-hidden="true" tabindex="-1"></a>  rep.overall <span class="ot">&lt;-</span> election_data  <span class="sc">%&gt;%</span></span>
+<span id="cb4-44"><a href="#cb4-44" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(contest <span class="sc">==</span> my.race,candidate<span class="sc">==</span>my.rep) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-45"><a href="#cb4-45" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(precinct) <span class="sc">%&gt;%</span></span>
+<span id="cb4-46"><a href="#cb4-46" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarize</span>(<span class="at">rep.overall =</span> <span class="fu">sum</span>(votes, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),<span class="at">.groups=</span><span class="st">"keep"</span>)   </span>
+<span id="cb4-47"><a href="#cb4-47" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb4-48"><a href="#cb4-48" aria-hidden="true" tabindex="-1"></a>  output <span class="ot">&lt;-</span></span>
+<span id="cb4-49"><a href="#cb4-49" aria-hidden="true" tabindex="-1"></a>    <span class="fu">left_join</span>(early,election,<span class="at">by=</span><span class="st">'precinct'</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-50"><a href="#cb4-50" aria-hidden="true" tabindex="-1"></a>    <span class="fu">left_join</span>(overall,<span class="at">by=</span><span class="st">"precinct"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-51"><a href="#cb4-51" aria-hidden="true" tabindex="-1"></a>    <span class="fu">left_join</span>(dem.early,<span class="at">by=</span><span class="st">"precinct"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-52"><a href="#cb4-52" aria-hidden="true" tabindex="-1"></a>    <span class="fu">left_join</span>(dem.election,<span class="at">by=</span><span class="st">"precinct"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-53"><a href="#cb4-53" aria-hidden="true" tabindex="-1"></a>    <span class="fu">left_join</span>(dem.overall,<span class="at">by=</span><span class="st">"precinct"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-54"><a href="#cb4-54" aria-hidden="true" tabindex="-1"></a>    <span class="fu">left_join</span>(rep.early,<span class="at">by=</span><span class="st">"precinct"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-55"><a href="#cb4-55" aria-hidden="true" tabindex="-1"></a>    <span class="fu">left_join</span>(rep.election,<span class="at">by=</span><span class="st">"precinct"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-56"><a href="#cb4-56" aria-hidden="true" tabindex="-1"></a>    <span class="fu">left_join</span>(rep.overall,<span class="at">by=</span><span class="st">"precinct"</span>)</span>
+<span id="cb4-57"><a href="#cb4-57" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb4-58"><a href="#cb4-58" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(output)</span>
+<span id="cb4-59"><a href="#cb4-59" aria-hidden="true" tabindex="-1"></a>  }</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+</section>
+<section id="maps-of-areas-in-hamilton-county" class="level1">
+<h1>Maps of Areas in Hamilton County</h1>
+<p><img src="cities-in-hamilton-county-map.jpg" class="img-fluid" alt="Cities"> <img src="All-Neighborhoods-Cincinnati.jpg" class="img-fluid" alt="Cincy Neighborhoods"></p>
+</section>
+<section id="turnout" class="level1">
+<h1>2020 Turnout</h1>
+<section id="overall-election-turnout" class="level2">
+<h2 class="anchored" data-anchor-id="overall-election-turnout">Overall election turnout</h2>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>my.year <span class="ot">=</span> <span class="st">"2020"</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>turnout_data <span class="ot">=</span> turnout.data<span class="fl">.2020</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>my.map <span class="ot">=</span> map2020</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>my.name <span class="ot">=</span> <span class="st">"Turnout.2020"</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>prec.turnout <span class="ot">&lt;-</span> <span class="fu">turnout.df</span>(turnout_data)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>mapANDresults <span class="ot">&lt;-</span> <span class="fu">left_join</span>(my.map,prec.turnout,<span class="at">by=</span><span class="fu">c</span>(<span class="st">"PRECINCT"</span><span class="ot">=</span><span class="st">"name"</span>))</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>interpolated.results <span class="ot">&lt;-</span> <span class="fu">interpolate_pw</span>(</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">from =</span> <span class="fu">st_make_valid</span>(mapANDresults),</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">to =</span> <span class="fu">st_make_valid</span>(map),</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">to_id =</span> <span class="st">"PRECINCT"</span>,</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">extensive =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">weights =</span> <span class="fu">st_make_valid</span>(block.total),</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">weight_column =</span> <span class="st">"total.pop"</span>,</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">crs =</span> <span class="fu">st_crs</span>(map)</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>) </span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>m <span class="ot">=</span> <span class="fu">min</span>(interpolated.results<span class="sc">$</span>ballotsCast<span class="sc">/</span>interpolated.results<span class="sc">$</span>totalVoters)</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>M <span class="ot">=</span> <span class="fu">max</span>(interpolated.results<span class="sc">$</span>ballotsCast<span class="sc">/</span>interpolated.results<span class="sc">$</span>totalVoters)</span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>interpolated.results <span class="sc">%&gt;%</span> </span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">fill=</span>ballotsCast<span class="sc">/</span>totalVoters)) <span class="sc">+</span></span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>()<span class="sc">+</span></span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="fu">paste</span>(<span class="st">'Overall Election Voter Turnout'</span>,my.year,<span class="at">sep =</span> <span class="st">", "</span>),</span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">""</span>,</span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>       <span class="at">fill =</span> <span class="st">""</span>, </span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>       <span class="at">caption =</span> <span class="st">""</span>)<span class="sc">+</span></span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_gradientn</span>(<span class="at">colours=</span><span class="fu">rev</span>(<span class="fu">brewer.pal</span>(<span class="at">n=</span><span class="dv">10</span>,<span class="at">name=</span><span class="st">"Spectral"</span>)),<span class="at">na.value =</span> <span class="st">"transparent"</span>,</span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>                           <span class="at">breaks=</span><span class="fu">c</span>(<span class="dv">0</span>,.<span class="dv">25</span>,.<span class="dv">50</span>,.<span class="dv">75</span>,<span class="dv">1</span>),<span class="at">labels=</span><span class="fu">c</span>(<span class="st">"0%"</span>,<span class="st">"25%"</span>,<span class="st">"50%"</span>,<span class="st">"75%"</span>,<span class="st">"100%"</span>),</span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>                           <span class="at">limits=</span><span class="fu">c</span>(m,M))<span class="sc">+</span></span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="pre_election_files/figure-html/overall-turnout-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="do">## this interpolation makes no sence for proportions or categorical variables, so remove those results</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>interpolated.results <span class="ot">&lt;-</span> interpolated.results <span class="sc">%&gt;%</span> </span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span><span class="fu">c</span>(voterTurnout,percentReporting))</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="fu">assign</span>(<span class="fu">paste</span>(<span class="st">"interpolated.results_"</span>,my.name,<span class="at">sep=</span><span class="st">""</span>), interpolated.results)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+</section>
+<section id="contests-and-candidates" class="level1">
+<h1>2020 Contests and Candidates</h1>
+<p>Print out all Contest/Candidates to be able to pull appropriate data</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="st">"-------2020-------"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "-------2020-------"</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">unique</span>(election.data<span class="fl">.2020</span><span class="sc">$</span>contest))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "For President and Vice President"                                                                    
+ [2] "For Representative to Congress (1st District)"                                                       
+ [3] "For Representative to Congress (2nd District)"                                                       
+ [4] "For State Senator (8th District)"                                                                    
+ [5] "For State Representative (27th District)"                                                            
+ [6] "For State Representative (28th District)"                                                            
+ [7] "For State Representative (29th District)"                                                            
+ [8] "For State Representative (30th District)"                                                            
+ [9] "For State Representative (31st District)"                                                            
+[10] "For State Representative (32th District)"                                                            
+[11] "For State Representative (33rd District)"                                                            
+[12] "For County Commissioner (Full term commencing 1-2-2021)"                                             
+[13] "For County Commissioner (Full term commencing 1-3-2021)"                                             
+[14] "For Prosecuting Attorney"                                                                            
+[15] "For Clerk of the Court of Common Pleas"                                                              
+[16] "For Sheriff"                                                                                         
+[17] "For County Recorder"                                                                                 
+[18] "For County Treasurer"                                                                                
+[19] "For County Engineer"                                                                                 
+[20] "For Coroner"                                                                                         
+[21] "For Justice of the Supreme Court (Full term commencing 1-1-2021)"                                    
+[22] "For Justice of the Supreme Court (Full term commencing 1-2-2021)"                                    
+[23] "For Judge of the Court of Appeals (1st District)"                                                    
+[24] "For Judge of the Court of Common Pleas (Full term commencing 1-1-2021)"                              
+[25] "For Judge of the Court of Common Pleas (Full term commencing 1-2-2021)"                              
+[26] "For Judge of the Court of Common Pleas (Full term commencing 1-4-2021)"                              
+[27] "For Judge of the Court of Common Pleas (Full term commencing 2-9-2021)"                              
+[28] "For Judge of the Court of Common Pleas (Full term commencing 2-10-2021)"                             
+[29] "For Judge of the Court of Common Pleas (Full term commencing 2-11-2021)"                             
+[30] "For Judge of the Court of Common Pleas (Full term commencing 2-12-2021)"                             
+[31] "For Judge of the Court of Common Pleas (Full term commencing 2-13-2021)"                             
+[32] "For Judge of the Court of Common Pleas (Drug Court Division) (Full term commencing 1-3-2021)"        
+[33] "For Judge of the Court of Common Pleas (Probate Division) (Full term commencing 2-9-2021)"           
+[34] "For Judge of the Court of Common Pleas (Juvenile Division) (Full term commencing 2-14-2021)"         
+[35] "For Judge of the Court of Common Pleas (Domestic Relations Division) (Full term commencing 7-1-2021)"
+[36] "1 PROPOSED TAX LEVY (RENEWAL) CITY OF CHEVIOT - 0.75ml Current Expenses"                             
+[37] "2 PROPOSED TAX LEVY (RENEWAL) CITY OF CHEVIOT - 4.25ml Current Expenses"                             
+[38] "3 PROPOSED TAX LEVY (RENEWAL) CITY OF CHEVIOT - Roads &amp; Bridges"                                     
+[39] "4 PARTICULAR PREMISES LOCAL OPTION JUDGMENT ENTRY - KNOWLTON'S TAVERN (LB LLC, INC) CINTI 15-A"      
+[40] "5 PARTICULAR PREMISES LOCAL OPTION JUDGMENT ENTRY - WARSAW FOOD MART, LLC CINTI 20-B"                
+[41] "6 PROPOSED CHARTER CITY OF DEER PARK"                                                                
+[42] "7 PROPOSED TAX LEVY (ADDITIONAL) COLERAIN TOWNSHIP"                                                  
+[43] "8 PROPOSED TAX LEVY (RENEWAL) VILLAGE OF ELMWOOD PLACE"                                              
+[44] "9 PROPOSED TAX LEVY (RENEWAL)  VILLAGE OF GLENDALE"                                                  
+[45] "10 REFERENDUM ON ORDINANCE NO. 2019-10 (BY PETITION) VILLAGE OF GOLF MANOR"                          
+[46] "11 PROPOSED TAX LEVY (RENEWAL) VILLAGE OF GREENHILLS"                                                
+[47] "12 PROPOSED TAX LEVY (ADDITIONAL) VILLAGE OF NORTH BEND"                                             
+[48] "13 PROPOSED TAX LEVY (ADDITIONAL) SPRINGFIELD TOWNSHIP - Fire"                                       
+[49] "14 PROPOSED TAX LEVY (ADDITIONAL) SPRINGFIELD TOWNSHIP - Police"                                     
+[50] "15 PROPOSED TAX LEVY (RENEWAL) VILLAGE OF TERRACE PARK"                                              
+[51] "16 PROPOSED CHARTER AMENDMENT VILLAGE OF WOODLAWN"                                                   
+[52] "17 PROPOSED TAX LEVY (RENEWAL) CINCINNATI CITY SCHOOL DISTRICT"                                      
+[53] "18 PROPOSED TAX LEVY (SUBSTITUTE) NORWOOD CITY SCHOOL DISTRICT"                                      
+[54] "19 PROPOSED TAX LEVY (ADDITIONAL) WINTON WOODS CITY SCHOOL DISTRICT"                                 </code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">unique</span>(election.data<span class="fl">.2020</span><span class="sc">$</span>candidate))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "Joseph R. Biden / Kamala D. Harris"             
+ [2] "Donald J. Trump / Michael R. Pence"             
+ [3] "Jo Jorgensen / Spike Cohen"                     
+ [4] "Howie Hawkins / Angela Walker"                  
+ [5] "Brian Carroll / Amar Patel (Write-in)"          
+ [6] "Jade Simmons / Claudeliah J. Roze (Write-in)"   
+ [7] "Tom Hoefling / Andy Prior (Write-in)"           
+ [8] "Kasey Wells / Rachel Wells (Write-in)"          
+ [9] "Dario Hunter / Dawn Neptune Adams (Write-in)"   
+[10] "President R19 Boddie / Eric Stoneham (Write-in)"
+[11] "Kate Schroder"                                  
+[12] "Steve Chabot"                                   
+[13] "Kevin David Kahn"                               
+[14] "Kiumars Kiani (Write-in)"                       
+[15] "Jaime M. Castle"                                
+[16] "Brad Wenstrup"                                  
+[17] "Louis W. Blessing III"                          
+[18] "Daniel Brown"                                   
+[19] "Tom Brinkman"                                   
+[20] "Sara Bitter"                                    
+[21] "Jessica E. Miranda"                             
+[22] "Chris Monzel"                                   
+[23] "Cindy Abrams"                                   
+[24] "Harrison T. Stanley (Write-in)"                 
+[25] "Bill Seitz"                                     
+[26] "Tom Roll"                                       
+[27] "Brigid Kelly"                                   
+[28] "Catherine D. Ingram"                            
+[29] "Sedrick Denson"                                 
+[30] "Mary L. Hill"                                   
+[31] "Alicia Reece"                                   
+[32] "Andy Black"                                     
+[33] "Herman J. Najoli"                               
+[34] "Denise Driehaus"                                
+[35] "Matthew Paul O'Neill"                           
+[36] "Joseph T. Deters"                               
+[37] "Fanon A. Rucker"                                
+[38] "Aftab Pureval"                                  
+[39] "Alex Glandorf"                                  
+[40] "Charmaine McGuffey"                             
+[41] "Bruce Hoffbauer"                                
+[42] "Scott Crowley"                                  
+[43] "Norbert A. Nadel"                               
+[44] "Jill Schiller"                                  
+[45] "Charlie Winburn"                                
+[46] "Eric J. Beck"                                   
+[47] "Lakshmi Kode Sammarco"                          
+[48] "John P. O'Donnell"                              
+[49] "Sharon L. Kennedy"                              
+[50] "Jennifer Brunner"                               
+[51] "Judi French"                                    
+[52] "Ginger Bock"                                    
+[53] "Russell J. Mock"                                
+[54] "Melba Marsh"                                    
+[55] "Heidi Rosales"                                  
+[56] "Christian A. Jenkins"                           
+[57] "Pat Dinkelacker"                                
+[58] "Chris Wagner"                                   
+[59] "Curt C. Hartman"                                
+[60] "Jennifer Branch"                                
+[61] "Elizabeth Callan"                               
+[62] "Alan C. Triggs"                                 
+[63] "Stacey DeGraffenreid"                           
+[64] "Robert A. Goering"                              
+[65] "Thomas O. Beridon"                              
+[66] "Wende Cross"                                    
+[67] "Ethna Marie Cooper"                             
+[68] "Alison Hatheway"                                
+[69] "Charles J. Kubicki, Jr."                        
+[70] "Nicole Sanders"                                 
+[71] "Kim Wilson Burke"                               
+[72] "Ralph Winkler"                                  
+[73] "Pavan Parikh"                                   
+[74] "Kari L. Bloom"                                  
+[75] "John M. Williams"                               
+[76] "Amy Searcy"                                     
+[77] "Anne B. Flottman"                               
+[78] "FOR THE TAX LEVY"                               
+[79] "AGAINST THE TAX LEVY"                           
+[80] "NO"                                             
+[81] "YES"                                            </code></pre>
+</div>
+</div>
+<section id="biden-vs.-trump" class="level2">
+<h2 class="anchored" data-anchor-id="biden-vs.-trump">Biden vs.&nbsp;Trump</h2>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>my.year <span class="ot">=</span> <span class="st">"2020"</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>my.race <span class="ot">=</span> <span class="st">"For President and Vice President"</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>my.dem <span class="ot">=</span> <span class="st">"Joseph R. Biden / Kamala D. Harris"</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>my.rep <span class="ot">=</span> <span class="st">"Donald J. Trump / Michael R. Pence"</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>election_data <span class="ot">=</span> election.data<span class="fl">.2020</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>my.map <span class="ot">=</span> map2020</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>my.name <span class="ot">=</span> <span class="st">"Biden.v.Trump.2020"</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>overall.results <span class="ot">&lt;-</span> <span class="fu">results.df</span>(my.race,my.dem,my.rep,election_data)</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>prec.results <span class="ot">&lt;-</span> <span class="fu">precinct.results.df</span>(my.race,my.dem,my.rep,election_data)</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>mapANDresults <span class="ot">&lt;-</span> <span class="fu">left_join</span>(my.map,prec.results,<span class="at">by=</span><span class="fu">c</span>(<span class="st">"PRECINCT"</span><span class="ot">=</span><span class="st">"precinct"</span>))</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>interpolated.results <span class="ot">&lt;-</span> <span class="fu">interpolate_pw</span>(</span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">from =</span> <span class="fu">st_make_valid</span>(mapANDresults),</span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">to =</span> <span class="fu">st_make_valid</span>(map),</span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">to_id =</span> <span class="st">"PRECINCT"</span>,</span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">extensive =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">weights =</span> <span class="fu">st_make_valid</span>(block.total),</span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">weight_column =</span> <span class="st">"total.pop"</span>,</span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">crs =</span> <span class="fu">st_crs</span>(map)</span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>) </span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>interpolated.results <span class="sc">%&gt;%</span> </span>
+<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">dem.prop =</span> dem.overall<span class="sc">/</span>overall) <span class="sc">%&gt;%</span></span>
+<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">fill=</span>dem.prop)) <span class="sc">+</span></span>
+<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>()<span class="sc">+</span></span>
+<span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="fu">paste</span>(my.race,my.year,<span class="at">sep =</span> <span class="st">", "</span>),</span>
+<span id="cb13-28"><a href="#cb13-28" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="fu">paste</span>(my.dem,<span class="st">' ('</span>, overall.results<span class="sc">$</span>Overall[<span class="dv">1</span>],<span class="st">'%) vs '</span>,my.rep,<span class="st">' ('</span>,overall.results<span class="sc">$</span>Overall[<span class="dv">2</span>],<span class="st">'%)'</span>,<span class="at">sep=</span><span class="st">''</span>),</span>
+<span id="cb13-29"><a href="#cb13-29" aria-hidden="true" tabindex="-1"></a>       <span class="at">fill =</span> <span class="st">""</span>, </span>
+<span id="cb13-30"><a href="#cb13-30" aria-hidden="true" tabindex="-1"></a>       <span class="at">caption =</span> <span class="st">""</span>)<span class="sc">+</span></span>
+<span id="cb13-31"><a href="#cb13-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_gradientn</span>(<span class="at">colours=</span><span class="fu">brewer.pal</span>(<span class="at">n=</span><span class="dv">10</span>,<span class="at">name=</span><span class="st">"RdBu"</span>),<span class="at">na.value =</span> <span class="st">"transparent"</span>,</span>
+<span id="cb13-32"><a href="#cb13-32" aria-hidden="true" tabindex="-1"></a>                           <span class="at">breaks=</span><span class="fu">c</span>(<span class="dv">0</span>,.<span class="dv">25</span>,<span class="fl">0.5</span>,.<span class="dv">75</span>,<span class="dv">1</span>),<span class="at">labels=</span><span class="fu">c</span>(<span class="st">"100% Rep"</span>,<span class="st">""</span>,<span class="st">"50%/50%"</span>,<span class="st">""</span>,<span class="st">"100% Dem"</span>),</span>
+<span id="cb13-33"><a href="#cb13-33" aria-hidden="true" tabindex="-1"></a>                           <span class="at">limits=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>))<span class="sc">+</span></span>
+<span id="cb13-34"><a href="#cb13-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="pre_election_files/figure-html/biden.v.trump.2020-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(overall.results)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>                                   Early Election Overall
+Joseph R. Biden / Kamala D. Harris  69.0     40.9    57.1
+Donald J. Trump / Michael R. Pence  29.7     57.0    41.3</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">assign</span>(<span class="fu">paste</span>(<span class="st">"interpolated.results_"</span>,my.name,<span class="at">sep=</span><span class="st">""</span>), interpolated.results)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">assign</span>(<span class="fu">paste</span>(<span class="st">"overall.results_"</span>,my.name,<span class="at">sep=</span><span class="st">""</span>), overall.results)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="rucker-vs.-deters" class="level2">
+<h2 class="anchored" data-anchor-id="rucker-vs.-deters">Rucker vs.&nbsp;Deters</h2>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>my.year <span class="ot">=</span> <span class="st">"2020"</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>my.race <span class="ot">=</span> <span class="st">"For Prosecuting Attorney"</span> </span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>my.dem <span class="ot">=</span> <span class="st">"Fanon A. Rucker"</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>my.rep <span class="ot">=</span> <span class="st">"Joseph T. Deters"</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>election_data <span class="ot">=</span> election.data<span class="fl">.2020</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>my.map <span class="ot">=</span> map2020</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>my.name <span class="ot">=</span> <span class="st">"Rucker.v.Deters.2020"</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>overall.results <span class="ot">&lt;-</span> <span class="fu">results.df</span>(my.race,my.dem,my.rep,election_data)</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>prec.results <span class="ot">&lt;-</span> <span class="fu">precinct.results.df</span>(my.race,my.dem,my.rep,election_data)</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>mapANDresults <span class="ot">&lt;-</span> <span class="fu">left_join</span>(my.map,prec.results,<span class="at">by=</span><span class="fu">c</span>(<span class="st">"PRECINCT"</span><span class="ot">=</span><span class="st">"precinct"</span>))</span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>interpolated.results <span class="ot">&lt;-</span> <span class="fu">interpolate_pw</span>(</span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">from =</span> <span class="fu">st_make_valid</span>(mapANDresults),</span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">to =</span> <span class="fu">st_make_valid</span>(map),</span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">to_id =</span> <span class="st">"PRECINCT"</span>,</span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">extensive =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">weights =</span> <span class="fu">st_make_valid</span>(block.total),</span>
+<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">weight_column =</span> <span class="st">"total.pop"</span>,</span>
+<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">crs =</span> <span class="fu">st_crs</span>(map)</span>
+<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a>) </span>
+<span id="cb17-23"><a href="#cb17-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-24"><a href="#cb17-24" aria-hidden="true" tabindex="-1"></a>interpolated.results <span class="sc">%&gt;%</span> </span>
+<span id="cb17-25"><a href="#cb17-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">dem.prop =</span> dem.overall<span class="sc">/</span>overall) <span class="sc">%&gt;%</span></span>
+<span id="cb17-26"><a href="#cb17-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">fill=</span>dem.prop)) <span class="sc">+</span></span>
+<span id="cb17-27"><a href="#cb17-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>()<span class="sc">+</span></span>
+<span id="cb17-28"><a href="#cb17-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="fu">paste</span>(my.race,my.year,<span class="at">sep =</span> <span class="st">", "</span>),</span>
+<span id="cb17-29"><a href="#cb17-29" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="fu">paste</span>(my.dem,<span class="st">' ('</span>, overall.results<span class="sc">$</span>Overall[<span class="dv">1</span>],<span class="st">'%) vs '</span>,my.rep,<span class="st">' ('</span>,overall.results<span class="sc">$</span>Overall[<span class="dv">2</span>],<span class="st">'%)'</span>,<span class="at">sep=</span><span class="st">''</span>),</span>
+<span id="cb17-30"><a href="#cb17-30" aria-hidden="true" tabindex="-1"></a>       <span class="at">fill =</span> <span class="st">""</span>, </span>
+<span id="cb17-31"><a href="#cb17-31" aria-hidden="true" tabindex="-1"></a>       <span class="at">caption =</span> <span class="st">""</span>)<span class="sc">+</span></span>
+<span id="cb17-32"><a href="#cb17-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_gradientn</span>(<span class="at">colours=</span><span class="fu">brewer.pal</span>(<span class="at">n=</span><span class="dv">10</span>,<span class="at">name=</span><span class="st">"RdBu"</span>),<span class="at">na.value =</span> <span class="st">"transparent"</span>,</span>
+<span id="cb17-33"><a href="#cb17-33" aria-hidden="true" tabindex="-1"></a>                           <span class="at">breaks=</span><span class="fu">c</span>(<span class="dv">0</span>,.<span class="dv">25</span>,<span class="fl">0.5</span>,.<span class="dv">75</span>,<span class="dv">1</span>),<span class="at">labels=</span><span class="fu">c</span>(<span class="st">"100% Rep"</span>,<span class="st">""</span>,<span class="st">"50%/50%"</span>,<span class="st">""</span>,<span class="st">"100% Dem"</span>),</span>
+<span id="cb17-34"><a href="#cb17-34" aria-hidden="true" tabindex="-1"></a>                           <span class="at">limits=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>))<span class="sc">+</span></span>
+<span id="cb17-35"><a href="#cb17-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="pre_election_files/figure-html/ruckers-v-deters-2020-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(overall.results)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>                 Early Election Overall
+Fanon A. Rucker   57.5       34    47.6
+Joseph T. Deters  42.5       66    52.4</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">assign</span>(<span class="fu">paste</span>(<span class="st">"interpolated.results_"</span>,my.name,<span class="at">sep=</span><span class="st">""</span>), interpolated.results)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">assign</span>(<span class="fu">paste</span>(<span class="st">"overall.results_"</span>,my.name,<span class="at">sep=</span><span class="st">""</span>), overall.results)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+</section>
+<section id="contests-and-candidates-1" class="level1">
+<h1>2022 Contests and Candidates</h1>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="st">"-------2022-------"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "-------2022-------"</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">unique</span>(election.data<span class="fl">.2022</span><span class="sc">$</span>contest))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "For Governor and Lieutenant Governor"                                                               
+ [2] "For Attorney General"                                                                               
+ [3] "For Auditor of State"                                                                               
+ [4] "For Secretary of State"                                                                             
+ [5] "For Treasurer of State"                                                                             
+ [6] "For Chief Justice of the Supreme Court (Full term commencing 1-1-2023)"                             
+ [7] "For Justice of the Supreme Court (Full term commencing 1-1-2023)"                                   
+ [8] "For Justice of the Supreme Court (Full term commencing 1-2-2023)"                                   
+ [9] "For U.S. Senator"                                                                                   
+[10] "For Representative to Congress (1st District)"                                                      
+[11] "For Representative to Congress (8th District)"                                                      
+[12] "For State Senator (7th District)"                                                                   
+[13] "For State Senator (9th District)"                                                                   
+[14] "For State Representative (24th District)"                                                           
+[15] "For State Representative (25th District)"                                                           
+[16] "For State Representative (26th District)"                                                           
+[17] "For State Representative (27th District)"                                                           
+[18] "For State Representative (28th District)"                                                           
+[19] "For State Representative (29th District)"                                                           
+[20] "For State Representative (30th District)"                                                           
+[21] "For Judge of the Court of Appeals (1st District)"                                                   
+[22] "For County Commissioner"                                                                            
+[23] "For County Auditor"                                                                                 
+[24] "For Clerk of the Courts of Common Pleas (Unexpired Term ending 1-5-2025)"                           
+[25] "For Member of State Board of Education (4th District)"                                              
+[26] "For Judge of the Court of Common Pleas (Full term commencing 1-2-2023)"                             
+[27] "For Judge of the Court of Common Pleas (Full term commencing 1-3-2023)"                             
+[28] "For Judge of the Court of Common Pleas (Full term commencing 1-4-2023)"                             
+[29] "For Judge of the Court of Common Pleas (Full term commencing 1-15-2023)"                            
+[30] "For Judge of the Court of Common Pleas (Juvenile Division) (Full term commencing 1-1-2023)"         
+[31] "For Judge of the Court of Common Pleas (Dom Rel) (Full term 1-5-2023)"                              
+[32] "For Judge of the Court of Common Pleas (Dom Rel) (Full term 1-16-2023)"                             
+[33] "Issue 1 To require courts to consider factors like public safety when setting the amount of bail"   
+[34] "Issue 2 To prohibit local government from allowing non-electors to vote"                            
+[35] "3  PROPOSED TAX LEVY (RENEWAL) CINCINNATI CITY SCHOOL DISTRICT"                                     
+[36] "4  PROPOSED TAX LEVY (ADDITIONAL) LOVELAND CITY SCHOOL DISTRICT"                                    
+[37] "5  PROPOSED BOND ISSUE NORTHWEST LOCAL SCHOOL DISTRICT"                                             
+[38] "6  PROPOSED TAX LEVY (ADDITIONAL) WINTON WOODS CITY SCHOOL DISTRICT"                                
+[39] "7  PROPOSED TAX LEVY (ADDITIONAL) LITTLE MIAMI JOINT FIRE AND RESCUE DISTRICT"                      
+[40] "8  PROPOSED TAX LEVY (RENEWAL) HAMILTON CO.: HEALTH &amp; HOSPITALIZATION SERVICES"                     
+[41] "9  PROPOSED TAX LEVY (RENEWAL &amp; INCREASE) HAMILTON CO.: ALCOHOL, DRUG ADD, &amp; MENTAL HEALTH SERVICES"
+[42] "10  PROPOSED TAX LEVY (RENEWAL) HAMILTON CO.:  SENIOR CITIZEN SERVICES"                             
+[43] "11  PROPOSED CHARTER AMENDMENT:  CITY OF CINCINNATI"                                                
+[44] "12  PROPOSED CHARTER AMENDMENTS CITY OF DEER PARK"                                                  
+[45] "13  PROPOSED TAX LEVY (ADDITIONAL) CITY OF MT HEALTHY"                                              
+[46] "14  PROPOSED TAX LEVY (RENEWAL)  CITY OF NORTH COLLEGE HILL"                                        
+[47] "15  LOCAL LIQUOR OPTION FOR SALE OF INTOXICATING LIQUORS ON SUNDAY (BY PETITION) (NORWOOD 1-B)"     
+[48] "16  PROPOSED (RESOLUTION) GAS AGGREGATION TOWNSHIP OF ANDERSON"                                     
+[49] "17  SPECIAL ELECTION BY PETITION LOCAL OPTION ELECTION ON SUNDAY SALE OF LIQUOR (ANDERSON TWP Y)"   
+[50] "18  PROPOSED TAX LEVY (ADDITIONAL) TOWNSHIP OF GREEN"                                               
+[51] "19  PROPOSED TAX LEVY (RENEWAL) TOWNSHIP OF SPRINGFIELD"                                            
+[52] "20  PROPOSED TAX LEVY (RENEWAL) VILLAGE OF CLEVES"                                                  
+[53] "21  PROPOSED TAX LEVY (RENEWAL) VILLAGE OF GLENDALE"                                                
+[54] "22  PROPOSED TAX LEVY (ADDITIONAL) VILLAGE OF GLENDALE"                                             
+[55] "23  PROPOSED TAX LEVY (RENEWAL) VILLAGE OF GOLF MANOR"                                              
+[56] "24  PROPOSED TAX LEVY (RENEWAL) VILLAGE OF GREENHILLS"                                              
+[57] "25  PROPOSED TAX LEVY (RENEWAL) VILLAGE OF MARIEMONT"                                               
+[58] "26  PROPOSED TAX LEVY (RENEWAL) VILLAGE OF WOODLAWN"                                                </code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">unique</span>(election.data<span class="fl">.2022</span><span class="sc">$</span>candidate))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "Mike DeWine and Jon Husted"                  
+ [2] "Nan Whaley and Cheryl L. Stephens"           
+ [3] "Marshall Usher and Shannon Walker (Write-In)"
+ [4] "Timothy Grady and Dayna Bickley (Write-In)"  
+ [5] "Renea Turner and Adina Pelletier (Write-In)" 
+ [6] "Craig Patton and Collin Cook (Write-In)"     
+ [7] "Jeffrey A. Crossman"                         
+ [8] "Dave Yost"                                   
+ [9] "Taylor Sappington"                           
+[10] "Keith Faber"                                 
+[11] "Chelsea Clark"                               
+[12] "Frank LaRose"                                
+[13] "Terpsehore Tore Maras"                       
+[14] "Scott Schertzer"                             
+[15] "Robert Sprague"                              
+[16] "Jennifer Brunner"                            
+[17] "Sharon L. Kennedy"                           
+[18] "Terri Jamison"                               
+[19] "Pat Fischer"                                 
+[20] "Marilyn Zayas"                               
+[21] "Pat DeWine"                                  
+[22] "Tim Ryan"                                    
+[23] "JD Vance"                                    
+[24] "John Cheng (Write-In)"                       
+[25] "Shane Hoffman (Write-In)"                    
+[26] "LaShondra Tinsley (Write-In)"                
+[27] "Stephen Faris (Write-In)"                    
+[28] "Matthew R. Esh (Write-In)"                   
+[29] "Greg Landsman"                               
+[30] "Steve Chabot"                                
+[31] "Warren Davidson"                             
+[32] "Vanessa Enoch"                               
+[33] "David Dallas"                                
+[34] "Steve Wilson"                                
+[35] "Catherine D. Ingram"                         
+[36] "Orlando B. Sonza, Jr."                       
+[37] "Dani Isaacsohn"                              
+[38] "Adam Paul Teague Koehler"                    
+[39] "Cecil Thomas"                                
+[40] "John Breadon"                                
+[41] "Sedrick Denson"                              
+[42] "Rachel Baker"                                
+[43] "Jenn Giroux"                                 
+[44] "Jessica E. Miranda"                          
+[45] "Chris Monzel"                                
+[46] "Cindy Abrams"                                
+[47] "Bill Seitz"                                  
+[48] "Alissa Mayhaus"                              
+[49] "Jennifer Kinsley"                            
+[50] "Robert C. Winkler"                           
+[51] "Stephanie Summerow Dumas"                    
+[52] "Matthew O'Neill"                             
+[53] "Christopher E.C. Smitherman"                 
+[54] "Steve E. Grote (Write-In)"                   
+[55] "Brigid Kelly"                                
+[56] "Tom Brinkman"                                
+[57] "Pavan V. Parikh"                             
+[58] "Steven P. Goodin"                            
+[59] "Katie Hofmann"                               
+[60] "Jenny Kilgore"                               
+[61] "Jody Marie Luebbers"                         
+[62] "Christopher McDowell"                        
+[63] "Pat Dinkelacker"                             
+[64] "Thomas O. Beridon"                           
+[65] "Tom Heekin"                                  
+[66] "Charles J. Kubicki, Jr."                     
+[67] "Megan E. Shanahan"                           
+[68] "Bernard Mundy"                               
+[69] "Stacey DeGraffenreid"                        
+[70] "Rickell Howard Smith"                        
+[71] "Anne B. Flottman"                            
+[72] "Jon H. Sieve"                                
+[73] "Betsy Sundermann"                            
+[74] "Manisha Kotian"                              
+[75] "YES"                                         
+[76] "NO"                                          
+[77] "FOR THE TAX LEVY"                            
+[78] "AGAINST THE TAX LEVY"                        
+[79] "AGAINST THE BOND ISSUE"                      
+[80] "FOR THE BOND ISSUE"                          </code></pre>
+</div>
+</div>
+<section id="ryan-vs.-vance" class="level2">
+<h2 class="anchored" data-anchor-id="ryan-vs.-vance">Ryan vs.&nbsp;Vance</h2>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>my.year <span class="ot">=</span> <span class="st">"2022"</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>my.race <span class="ot">=</span> <span class="st">"For U.S. Senator"</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>my.dem <span class="ot">=</span> <span class="st">"Tim Ryan"</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>my.rep <span class="ot">=</span> <span class="st">"JD Vance"</span></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>election_data <span class="ot">=</span> election.data<span class="fl">.2022</span></span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>my.map <span class="ot">=</span> map2022</span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>my.name <span class="ot">=</span> <span class="st">"Ryan.v.Vance.2022"</span></span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>overall.results <span class="ot">&lt;-</span> <span class="fu">results.df</span>(my.race,my.dem,my.rep,election_data)</span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>prec.results <span class="ot">&lt;-</span> <span class="fu">precinct.results.df</span>(my.race,my.dem,my.rep,election_data)</span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>mapANDresults <span class="ot">&lt;-</span> <span class="fu">left_join</span>(my.map,prec.results,<span class="at">by=</span><span class="fu">c</span>(<span class="st">"NAME"</span><span class="ot">=</span><span class="st">"precinct"</span>))</span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a>interpolated.results <span class="ot">&lt;-</span> <span class="fu">interpolate_pw</span>(</span>
+<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">from =</span> <span class="fu">st_make_valid</span>(mapANDresults),</span>
+<span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">to =</span> <span class="fu">st_make_valid</span>(map),</span>
+<span id="cb27-17"><a href="#cb27-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">to_id =</span> <span class="st">"PRECINCT"</span>,</span>
+<span id="cb27-18"><a href="#cb27-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">extensive =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb27-19"><a href="#cb27-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">weights =</span> <span class="fu">st_make_valid</span>(block.total),</span>
+<span id="cb27-20"><a href="#cb27-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">weight_column =</span> <span class="st">"total.pop"</span>,</span>
+<span id="cb27-21"><a href="#cb27-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">crs =</span> <span class="fu">st_crs</span>(map)</span>
+<span id="cb27-22"><a href="#cb27-22" aria-hidden="true" tabindex="-1"></a>) </span>
+<span id="cb27-23"><a href="#cb27-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-24"><a href="#cb27-24" aria-hidden="true" tabindex="-1"></a>interpolated.results <span class="sc">%&gt;%</span> </span>
+<span id="cb27-25"><a href="#cb27-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">dem.prop =</span> dem.overall<span class="sc">/</span>overall) <span class="sc">%&gt;%</span></span>
+<span id="cb27-26"><a href="#cb27-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">fill=</span>dem.prop)) <span class="sc">+</span></span>
+<span id="cb27-27"><a href="#cb27-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>()<span class="sc">+</span></span>
+<span id="cb27-28"><a href="#cb27-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="fu">paste</span>(my.race,my.year,<span class="at">sep =</span> <span class="st">", "</span>),</span>
+<span id="cb27-29"><a href="#cb27-29" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="fu">paste</span>(my.dem,<span class="st">' ('</span>, overall.results<span class="sc">$</span>Overall[<span class="dv">1</span>],<span class="st">'%) vs '</span>,my.rep,<span class="st">' ('</span>,overall.results<span class="sc">$</span>Overall[<span class="dv">2</span>],<span class="st">'%)'</span>,<span class="at">sep=</span><span class="st">''</span>),</span>
+<span id="cb27-30"><a href="#cb27-30" aria-hidden="true" tabindex="-1"></a>       <span class="at">fill =</span> <span class="st">""</span>, </span>
+<span id="cb27-31"><a href="#cb27-31" aria-hidden="true" tabindex="-1"></a>       <span class="at">caption =</span> <span class="st">""</span>)<span class="sc">+</span></span>
+<span id="cb27-32"><a href="#cb27-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_gradientn</span>(<span class="at">colours=</span><span class="fu">brewer.pal</span>(<span class="at">n=</span><span class="dv">10</span>,<span class="at">name=</span><span class="st">"RdBu"</span>),<span class="at">na.value =</span> <span class="st">"transparent"</span>,</span>
+<span id="cb27-33"><a href="#cb27-33" aria-hidden="true" tabindex="-1"></a>                           <span class="at">breaks=</span><span class="fu">c</span>(<span class="dv">0</span>,.<span class="dv">25</span>,<span class="fl">0.5</span>,.<span class="dv">75</span>,<span class="dv">1</span>),<span class="at">labels=</span><span class="fu">c</span>(<span class="st">"100% Rep"</span>,<span class="st">""</span>,<span class="st">"50%/50%"</span>,<span class="st">""</span>,<span class="st">"100% Dem"</span>),</span>
+<span id="cb27-34"><a href="#cb27-34" aria-hidden="true" tabindex="-1"></a>                           <span class="at">limits=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>))<span class="sc">+</span></span>
+<span id="cb27-35"><a href="#cb27-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="pre_election_files/figure-html/ryan-v-vance-2022-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(overall.results)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>         Early Election Day Overall
+Tim Ryan  68.4         52.6    57.7
+JD Vance  31.6         47.3    42.2</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">assign</span>(<span class="fu">paste</span>(<span class="st">"interpolated.results_"</span>,my.name,<span class="at">sep=</span><span class="st">""</span>), interpolated.results)</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="fu">assign</span>(<span class="fu">paste</span>(<span class="st">"overall.results_"</span>,my.name,<span class="at">sep=</span><span class="st">""</span>), overall.results)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="whaley-vs.-dewine" class="level2">
+<h2 class="anchored" data-anchor-id="whaley-vs.-dewine">Whaley vs.&nbsp;DeWine</h2>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>my.year <span class="ot">=</span> <span class="st">"2022"</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>my.race <span class="ot">=</span> <span class="st">"For Governor and Lieutenant Governor"</span></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>my.dem <span class="ot">=</span> <span class="st">"Nan Whaley and Cheryl L. Stephens"</span></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>my.rep <span class="ot">=</span> <span class="st">"Mike DeWine and Jon Husted"</span></span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>election_data <span class="ot">=</span> election.data<span class="fl">.2022</span></span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>my.map <span class="ot">=</span> map2022</span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>my.name <span class="ot">=</span> <span class="st">"Whaley.v.DeWine.2022"</span></span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a>overall.results <span class="ot">&lt;-</span> <span class="fu">results.df</span>(my.race,my.dem,my.rep,election_data)</span>
+<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a>prec.results <span class="ot">&lt;-</span> <span class="fu">precinct.results.df</span>(my.race,my.dem,my.rep,election_data)</span>
+<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a>mapANDresults <span class="ot">&lt;-</span> <span class="fu">left_join</span>(my.map,prec.results,<span class="at">by=</span><span class="fu">c</span>(<span class="st">"NAME"</span><span class="ot">=</span><span class="st">"precinct"</span>))</span>
+<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-14"><a href="#cb31-14" aria-hidden="true" tabindex="-1"></a>interpolated.results <span class="ot">&lt;-</span> <span class="fu">interpolate_pw</span>(</span>
+<span id="cb31-15"><a href="#cb31-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">from =</span> <span class="fu">st_make_valid</span>(mapANDresults),</span>
+<span id="cb31-16"><a href="#cb31-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">to =</span> <span class="fu">st_make_valid</span>(map),</span>
+<span id="cb31-17"><a href="#cb31-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">to_id =</span> <span class="st">"PRECINCT"</span>,</span>
+<span id="cb31-18"><a href="#cb31-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">extensive =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb31-19"><a href="#cb31-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">weights =</span> <span class="fu">st_make_valid</span>(block.total),</span>
+<span id="cb31-20"><a href="#cb31-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">weight_column =</span> <span class="st">"total.pop"</span>,</span>
+<span id="cb31-21"><a href="#cb31-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">crs =</span> <span class="fu">st_crs</span>(map)</span>
+<span id="cb31-22"><a href="#cb31-22" aria-hidden="true" tabindex="-1"></a>) </span>
+<span id="cb31-23"><a href="#cb31-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-24"><a href="#cb31-24" aria-hidden="true" tabindex="-1"></a>interpolated.results <span class="sc">%&gt;%</span> </span>
+<span id="cb31-25"><a href="#cb31-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">dem.prop =</span> dem.overall<span class="sc">/</span>overall) <span class="sc">%&gt;%</span></span>
+<span id="cb31-26"><a href="#cb31-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">fill=</span>dem.prop)) <span class="sc">+</span></span>
+<span id="cb31-27"><a href="#cb31-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>()<span class="sc">+</span></span>
+<span id="cb31-28"><a href="#cb31-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="fu">paste</span>(my.race,my.year,<span class="at">sep =</span> <span class="st">", "</span>),</span>
+<span id="cb31-29"><a href="#cb31-29" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="fu">paste</span>(my.dem,<span class="st">' ('</span>, overall.results<span class="sc">$</span>Overall[<span class="dv">1</span>],<span class="st">'%) vs '</span>,my.rep,<span class="st">' ('</span>,overall.results<span class="sc">$</span>Overall[<span class="dv">2</span>],<span class="st">'%)'</span>,<span class="at">sep=</span><span class="st">''</span>),</span>
+<span id="cb31-30"><a href="#cb31-30" aria-hidden="true" tabindex="-1"></a>       <span class="at">fill =</span> <span class="st">""</span>, </span>
+<span id="cb31-31"><a href="#cb31-31" aria-hidden="true" tabindex="-1"></a>       <span class="at">caption =</span> <span class="st">""</span>)<span class="sc">+</span></span>
+<span id="cb31-32"><a href="#cb31-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_gradientn</span>(<span class="at">colours=</span><span class="fu">brewer.pal</span>(<span class="at">n=</span><span class="dv">10</span>,<span class="at">name=</span><span class="st">"RdBu"</span>),<span class="at">na.value =</span> <span class="st">"transparent"</span>,</span>
+<span id="cb31-33"><a href="#cb31-33" aria-hidden="true" tabindex="-1"></a>                           <span class="at">breaks=</span><span class="fu">c</span>(<span class="dv">0</span>,.<span class="dv">25</span>,<span class="fl">0.5</span>,.<span class="dv">75</span>,<span class="dv">1</span>),<span class="at">labels=</span><span class="fu">c</span>(<span class="st">"100% Rep"</span>,<span class="st">""</span>,<span class="st">"50%/50%"</span>,<span class="st">""</span>,<span class="st">"100% Dem"</span>),</span>
+<span id="cb31-34"><a href="#cb31-34" aria-hidden="true" tabindex="-1"></a>                           <span class="at">limits=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>))<span class="sc">+</span></span>
+<span id="cb31-35"><a href="#cb31-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="pre_election_files/figure-html/whaley-v-dewine-2022-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(overall.results)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>                                  Early Election Day Overall
+Nan Whaley and Cheryl L. Stephens  58.0         44.3    48.7
+Mike DeWine and Jon Husted         41.9         55.6    51.2</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">assign</span>(<span class="fu">paste</span>(<span class="st">"interpolated.results_"</span>,my.name,<span class="at">sep=</span><span class="st">""</span>), interpolated.results)</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="fu">assign</span>(<span class="fu">paste</span>(<span class="st">"overall.results_"</span>,my.name,<span class="at">sep=</span><span class="st">""</span>), overall.results)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+</section>
+<section id="contest-and-candidates" class="level1">
+<h1>2018 Contest and Candidates</h1>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="st">"-------2018-------"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "-------2018-------"</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">unique</span>(election.data<span class="fl">.2018</span><span class="sc">$</span>contest))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "For Governor and Lieutenant Governor"                                                     
+ [2] "For Attorney General"                                                                     
+ [3] "For Auditor of State"                                                                     
+ [4] "For Secretary of State"                                                                   
+ [5] "For Treasurer of State"                                                                   
+ [6] "For U.S. Senator"                                                                         
+ [7] "For Representative to Congress (1st District)"                                            
+ [8] "For Representative to Congress (2nd District)"                                            
+ [9] "For State Senator (7th District)"                                                         
+[10] "For State Senator (9th District)"                                                         
+[11] "For State Representative (27th District)"                                                 
+[12] "For State Representative (28th District)"                                                 
+[13] "For State Representative (29th District)"                                                 
+[14] "For State Representative (30th District)"                                                 
+[15] "For State Representative (31st District)"                                                 
+[16] "For State Representative (32nd District)"                                                 
+[17] "For State Representative (33rd District)"                                                 
+[18] "For County Commissioner (Full term commencing 1-1-2019)"                                  
+[19] "For County Auditor"                                                                       
+[20] "For Member of State Board of Education (4th District)"                                    
+[21] "For Justice of the Supreme Court (Full term commencing 1-1-2019)"                         
+[22] "For Justice of the Supreme Court (Full term commencing 1-2-2019)"                         
+[23] "For Judge of the Court of Appeals (1st District) (Full term commencing 2-9-2019)"         
+[24] "For Judge of the Court of Appeals (1st District) (Full term commencing 2-10-2019)"        
+[25] "For Judge of the Court of Appeals (1st District) (Full term commencing 2-11-2019)"        
+[26] "For Judge of the Court of Appeals (1st District) (Full term commencing 2-12-2019)"        
+[27] "For Judge of the Court of Common Pleas (Full term commencing 1-1-2019)"                   
+[28] "For Judge of the Court of Common Pleas (Full term commencing 4-1-2019)"                   
+[29] "For Judge of the Court of Common Pleas (Unexpired term ending 2-10-2021)"                 
+[30] "Issue 1 To Reduce Penalties for Crimes of Obtaining, Possessing, and Using Illegal Drugs" 
+[31] "2 PROPOSED TAX LEVY (ADDITIONAL) MARIEMONT CITY SCHOOL DISTRICT"                          
+[32] "3 PROPOSED TAX LEVY (SUBSTITUTE) READING COMMUNITY CITY SCHOOL DISTRICT"                  
+[33] "4 PROPOSED TAX LEVY (RENEWAL AND DECREASE) ST. BERNARD-ELMWOOD PLACE CITY SCHOOL DISTRICT"
+[34] "5 PROPOSED TAX LEVY (SUBSTITUTE) WINTON WOODS CITY SCHOOL DISTRICT"                       
+[35] "6 PROPOSED TAX LEVY (RENEWAL) GREAT OAKS CAREER CAMPUSES"                                 
+[36] "7 PROPOSED TAX LEVY (RENEWAL) COLUMBIA TOWNSHIP WASTE DISPOSAL DISTRICT"                  
+[37] "8 PROPOSED TAX LEVY (RENEWAL) MIAMI TOWNSHIP WASTE DISTRICT"                              
+[38] "9 PROPOSED TAX LEVY (ADDITIONAL) HAMILTON COUNTY CHILDREN'S SERVICES"                     
+[39] "10 PROPOSED CHARTER AMENDMENT - CITY OF CINCINNATI - 2 Year Council Terms"                
+[40] "11 PROPOSED CHARTER AMENDMENT - CITY OF CINCINNATI - Staggered Council Terms"             
+[41] "12 PROPOSED CHARTER AMENDMENT - CITY OF CINCINNATI - Executive Session"                   
+[42] "13 PROPOSED CHARTER AMENDMENT - CITY OF CINCINNATI - Campaign Finance"                    
+[43] "14 PROPOSED CHARTER AMENDMENT - CITY OF CINCINNATI - Veterans Preference"                 
+[44] "15 PROPOSED CHARTER AMENDMENT - CITY OF CINCINNATI - Public Safety Academy"               
+[45] "16 PROPOSED INCOME TAX (INCREASE) CITY OF MADEIRA"                                        
+[46] "17 PROPOSED TAX LEVY (RENEWAL) CITY OF NORTH COLLEGE HILL"                                
+[47] "18 PROPOSED ORDINANCE BY PETITION CITY OF NORWOOD - Marijuana Laws and Penalties"         
+[48] "19 SPECIAL ELECTION BY PETITION LOCAL OPTION - Sunday Sale of Liquor NORWOOD 2-C"         
+[49] "20 PROPOSED TAX LEVY (RENEWAL) VILLAGE OF GLENDALE"                                       
+[50] "21 PROPOSED TAX LEVY (ADDITIONAL) VILLAGE OF GLENDALE"                                    
+[51] "22 PROPOSED TAX LEVY (RENEWAL) VILLAGE OF GOLF MANOR"                                     
+[52] "23 PROPOSED CHARTER AMENDMENT VILLAGE OF GOLF MANOR"                                      
+[53] "24 PROPOSED TAX LEVY (ADDITIONAL) VILLAGE OF GREENHILLS"                                  
+[54] "25 PROPOSED CHARTER AMENDMENT VILLAGE OF LINCOLN HEIGHTS - Filing Deadline"               
+[55] "26 PROPOSED CHARTER AMENDMENT VILLAGE OF LINCOLN HEIGHTS - Qualifications"                
+[56] "27 PROPOSED TAX LEVY (RENEWAL) VILLAGE OF MARIEMONT - Current Operating Expenses"         
+[57] "28 PROPOSED TAX LEVY (RENEWAL) VILLAGE OF MARIEMONT - Recreation"                         
+[58] "29 PROPOSED TAX LEVY (RENEWAL) VILLAGE OF TERRACE PARK"                                   
+[59] "30 PROPOSED MUNICIPAL INCOME TAX (INCREASE) VILLAGE OF WOODLAWN"                          
+[60] "31 PROPOSED TAX LEVY (ADDITIONAL) DELHI TOWNSHIP"                                         
+[61] "32 PROPOSED ZONING PLAN MIAMI TOWNSHIP"                                                   
+[62] "33 PROPOSED TAX LEVY (ADDITIONAL) SYMMES TOWNSHIP"                                        </code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">unique</span>(election.data<span class="fl">.2018</span><span class="sc">$</span>candidate))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "Richard Cordray and Betty Sutton"           
+ [2] "Mike DeWine and Jon Husted"                 
+ [3] "Travis M. Irvine and J. Todd Grayson"       
+ [4] "Constance Gadell-Newton and Brett R. Joseph"
+ [5] "Renea Turner and Keith Colton"              
+ [6] "Rebecca Ayres and Anthony Durgans"          
+ [7] "Richard Duncan and Dennis A. Artino"        
+ [8] "Steve Dettelbach"                           
+ [9] "Dave Yost"                                  
+[10] "Zack Space"                                 
+[11] "Keith Faber"                                
+[12] "Robert C. Coogan"                           
+[13] "Kathleen Clyde"                             
+[14] "Frank LaRose"                               
+[15] "Dustin R. Nanna"                            
+[16] "Michael W. Bradley"                         
+[17] "Rob Richardson"                             
+[18] "Robert Sprague"                             
+[19] "Sherrod Brown"                              
+[20] "Jim Renacci"                                
+[21] "Stephen Faris"                              
+[22] "Aftab Pureval"                              
+[23] "Steve Chabot"                               
+[24] "Dirk Kubala"                                
+[25] "Kiumars Kiani"                              
+[26] "Jill Schiller"                              
+[27] "Brad Wenstrup"                              
+[28] "James J. Condit, Jr."                       
+[29] "David Baker"                                
+[30] "Steve Wilson"                               
+[31] "Sara Bitter"                                
+[32] "Cecil Thomas"                               
+[33] "Tom Chandler"                               
+[34] "Tom Brinkman"                               
+[35] "Christine Fisher"                           
+[36] "Jessica E. Miranda"                         
+[37] "Jonathan Dever"                             
+[38] "Regina A. Collins"                          
+[39] "Louis W. Blessing III"                      
+[40] "Carrie R. Davis"                            
+[41] "William J. Seitz"                           
+[42] "Clayton Adams"                              
+[43] "Brigid Kelly"                               
+[44] "Catherine Ingram"                           
+[45] "Marilyn Tunnat"                             
+[46] "Sedrick Denson"                             
+[47] "Judith Boyce"                               
+[48] "Stephanie Summerow Dumas"                   
+[49] "Chris Monzel"                               
+[50] "Dusty Rhodes"                               
+[51] "Nancy Aichholz"                             
+[52] "Pat Bruns"                                  
+[53] "Jenny Kilgore"                              
+[54] "Michael P. Donnelly"                        
+[55] "Craig Baldwin"                              
+[56] "Melody J. Stewart"                          
+[57] "Mary DeGenaro"                              
+[58] "Pierre Bergeron"                            
+[59] "Charles Miller"                             
+[60] "Marilyn Zayas"                              
+[61] "Dale Stalf"                                 
+[62] "Candace Crouse"                             
+[63] "Dennis Deters"                              
+[64] "Robert C. Winkler"                          
+[65] "Ginger Bock"                                
+[66] "Terry Nestor"                               
+[67] "Steven Martin"                              
+[68] "Lisa Allen"                                 
+[69] "Leslie Ghiz"                                
+[70] "Pavan V. Parikh"                            
+[71] "Arica L. Underwood"                         
+[72] "Thomas O. Beridon"                          
+[73] "Curt C. Hartman"                            
+[74] "NO"                                         
+[75] "YES"                                        
+[76] "FOR THE TAX LEVY"                           
+[77] "AGAINST THE TAX LEVY"                       
+[78] "AGAINST THE INCOME TAX"                     
+[79] "FOR THE INCOME TAX"                         </code></pre>
+</div>
+</div>
+<section id="brown-vs.-renacci" class="level2">
+<h2 class="anchored" data-anchor-id="brown-vs.-renacci">Brown vs.&nbsp;Renacci</h2>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>my.year <span class="ot">=</span> <span class="st">"2018"</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>my.race <span class="ot">=</span> <span class="st">"For U.S. Senator"</span></span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>my.dem <span class="ot">=</span> <span class="st">"Sherrod Brown"</span></span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>my.rep <span class="ot">=</span> <span class="st">"Jim Renacci"</span></span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>election_data <span class="ot">=</span> election.data<span class="fl">.2018</span></span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a>my.map <span class="ot">=</span> map2018</span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a>my.name <span class="ot">=</span> <span class="st">"Brown.v.Renacci.2018"</span></span>
+<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-10"><a href="#cb41-10" aria-hidden="true" tabindex="-1"></a>overall.results <span class="ot">&lt;-</span> <span class="fu">results.df</span>(my.race,my.dem,my.rep,election_data)</span>
+<span id="cb41-11"><a href="#cb41-11" aria-hidden="true" tabindex="-1"></a>prec.results <span class="ot">&lt;-</span> <span class="fu">precinct.results.df</span>(my.race,my.dem,my.rep,election_data)</span>
+<span id="cb41-12"><a href="#cb41-12" aria-hidden="true" tabindex="-1"></a>mapANDresults <span class="ot">&lt;-</span> <span class="fu">left_join</span>(my.map,prec.results,<span class="at">by=</span><span class="fu">c</span>(<span class="st">"PRECINCT"</span><span class="ot">=</span><span class="st">"precinct"</span>))</span>
+<span id="cb41-13"><a href="#cb41-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-14"><a href="#cb41-14" aria-hidden="true" tabindex="-1"></a>interpolated.results <span class="ot">&lt;-</span> <span class="fu">interpolate_pw</span>(</span>
+<span id="cb41-15"><a href="#cb41-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">from =</span> <span class="fu">st_make_valid</span>(mapANDresults),</span>
+<span id="cb41-16"><a href="#cb41-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">to =</span> <span class="fu">st_make_valid</span>(map),</span>
+<span id="cb41-17"><a href="#cb41-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">to_id =</span> <span class="st">"PRECINCT"</span>,</span>
+<span id="cb41-18"><a href="#cb41-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">extensive =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb41-19"><a href="#cb41-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">weights =</span> <span class="fu">st_make_valid</span>(block.total),</span>
+<span id="cb41-20"><a href="#cb41-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">weight_column =</span> <span class="st">"total.pop"</span>,</span>
+<span id="cb41-21"><a href="#cb41-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">crs =</span> <span class="fu">st_crs</span>(map)</span>
+<span id="cb41-22"><a href="#cb41-22" aria-hidden="true" tabindex="-1"></a>) </span>
+<span id="cb41-23"><a href="#cb41-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-24"><a href="#cb41-24" aria-hidden="true" tabindex="-1"></a>interpolated.results <span class="sc">%&gt;%</span> </span>
+<span id="cb41-25"><a href="#cb41-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">dem.prop =</span> dem.overall<span class="sc">/</span>overall) <span class="sc">%&gt;%</span></span>
+<span id="cb41-26"><a href="#cb41-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">fill=</span>dem.prop)) <span class="sc">+</span></span>
+<span id="cb41-27"><a href="#cb41-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>()<span class="sc">+</span></span>
+<span id="cb41-28"><a href="#cb41-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="fu">paste</span>(my.race,my.year,<span class="at">sep =</span> <span class="st">", "</span>),</span>
+<span id="cb41-29"><a href="#cb41-29" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="fu">paste</span>(my.dem,<span class="st">' ('</span>, overall.results<span class="sc">$</span>Overall[<span class="dv">1</span>],<span class="st">'%) vs '</span>,my.rep,<span class="st">' ('</span>,overall.results<span class="sc">$</span>Overall[<span class="dv">2</span>],<span class="st">'%)'</span>,<span class="at">sep=</span><span class="st">''</span>),</span>
+<span id="cb41-30"><a href="#cb41-30" aria-hidden="true" tabindex="-1"></a>       <span class="at">fill =</span> <span class="st">""</span>, </span>
+<span id="cb41-31"><a href="#cb41-31" aria-hidden="true" tabindex="-1"></a>       <span class="at">caption =</span> <span class="st">""</span>)<span class="sc">+</span></span>
+<span id="cb41-32"><a href="#cb41-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_gradientn</span>(<span class="at">colours=</span><span class="fu">brewer.pal</span>(<span class="at">n=</span><span class="dv">10</span>,<span class="at">name=</span><span class="st">"RdBu"</span>),<span class="at">na.value =</span> <span class="st">"transparent"</span>,</span>
+<span id="cb41-33"><a href="#cb41-33" aria-hidden="true" tabindex="-1"></a>                           <span class="at">breaks=</span><span class="fu">c</span>(<span class="dv">0</span>,.<span class="dv">25</span>,<span class="fl">0.5</span>,.<span class="dv">75</span>,<span class="dv">1</span>),<span class="at">labels=</span><span class="fu">c</span>(<span class="st">"100% Rep"</span>,<span class="st">""</span>,<span class="st">"50%/50%"</span>,<span class="st">""</span>,<span class="st">"100% Dem"</span>),</span>
+<span id="cb41-34"><a href="#cb41-34" aria-hidden="true" tabindex="-1"></a>                           <span class="at">limits=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>))<span class="sc">+</span></span>
+<span id="cb41-35"><a href="#cb41-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="pre_election_files/figure-html/brown-v-renacci-2018-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(overall.results)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>              Early Election Overall
+Sherrod Brown  63.2     57.9    59.3
+Jim Renacci    36.8     42.0    40.6</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">assign</span>(<span class="fu">paste</span>(<span class="st">"interpolated.results_"</span>,my.name,<span class="at">sep=</span><span class="st">""</span>), interpolated.results)</span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a><span class="fu">assign</span>(<span class="fu">paste</span>(<span class="st">"overall.results_"</span>,my.name,<span class="at">sep=</span><span class="st">""</span>), overall.results)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+</section>
+<section id="contest-and-candidates-1" class="level1">
+<h1>2023 Contest and Candidates</h1>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="st">"-------2023-------"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "-------2023-------"</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">unique</span>(election.data<span class="fl">.2023</span><span class="sc">$</span>contest))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>  [1] "CITY OF CHEVIOT For Mayor"                                                                                   
+  [2] "CITY OF CHEVIOT For Auditor"                                                                                 
+  [3] "CITY OF CHEVIOT For Director of Law"                                                                         
+  [4] "CITY OF CHEVIOT For Member of Council at Large"                                                              
+  [5] "CITY OF HARRISON For Mayor"                                                                                  
+  [6] "CITY OF HARRISON For Member of Council at Large"                                                             
+  [7] "CITY OF MT HEALTHY For Mayor"                                                                                
+  [8] "CITY OF MT HEALTHY For Member of Council at Large"                                                           
+  [9] "CITY OF NORWOOD For Mayor"                                                                                   
+ [10] "CITY OF NORWOOD For President of Council"                                                                    
+ [11] "CITY OF NORWOOD For Auditor"                                                                                 
+ [12] "CITY OF NORWOOD For Director of Law"                                                                         
+ [13] "CITY OF NORWOOD For Member of Council at Large"                                                              
+ [14] "CITY OF NORWOOD For Member of Council (1st Ward)"                                                            
+ [15] "CITY OF NORWOOD For Member of Council (2nd Ward)"                                                            
+ [16] "CITY OF NORWOOD For Member of Council (3rd Ward)"                                                            
+ [17] "CITY OF NORWOOD For Member of Council (4th Ward)"                                                            
+ [18] "CITY OF READING For Mayor"                                                                                   
+ [19] "CITY OF READING For President of Council"                                                                    
+ [20] "CITY OF READING For Auditor"                                                                                 
+ [21] "CITY OF READING For Director of Law"                                                                         
+ [22] "CITY OF READING For Member of Council at Large"                                                              
+ [23] "CITY OF READING For Member of Council (1st Ward)"                                                            
+ [24] "CITY OF READING For Member of Council (2nd Ward)"                                                            
+ [25] "CITY OF READING For Member of Council (3rd Ward)"                                                            
+ [26] "CITY OF READING For Member of Council (4th Ward)"                                                            
+ [27] "CITY OF SHARONVILLE For Mayor"                                                                               
+ [28] "CITY OF SHARONVILLE For President of Council"                                                                
+ [29] "CITY OF SHARONVILLE For Auditor"                                                                             
+ [30] "CITY OF SHARONVILLE For Director of Law"                                                                     
+ [31] "CITY OF SHARONVILLE For Member of Council at Large"                                                          
+ [32] "CITY OF SHARONVILLE For Member of Council (1st Ward)"                                                        
+ [33] "CITY OF SHARONVILLE For Member of Council (2nd Ward)"                                                        
+ [34] "CITY OF SHARONVILLE For Member of Council (3rd Ward)"                                                        
+ [35] "CITY OF SHARONVILLE For Member of Council (4th Ward)"                                                        
+ [36] "VILLAGE OF CLEVES For Mayor"                                                                                 
+ [37] "VILLAGE OF CLEVES For Member of Council"                                                                     
+ [38] "VILLAGE OF ELMWOOD PLACE For Mayor"                                                                          
+ [39] "VILLAGE OF ELMWOOD PLACE For Clerk-Treasurer"                                                                
+ [40] "VILLAGE OF ELMWOOD PLACE For Member of Council"                                                              
+ [41] "VILLAGE OF GREENHILLS For Member of Council"                                                                 
+ [42] "VILLAGE OF LOCKLAND For Member of Council"                                                                   
+ [43] "VILLAGE OF SILVERTON For Member of Council at Large"                                                         
+ [44] "For Judge of Hamilton County Municipal Court (District 1) Full Term Commencing 1-3-2024"                     
+ [45] "For Judge of Hamilton County Municipal Court (District 2) Full Term Commencing 1-3-2024"                     
+ [46] "For Judge of Hamilton County Municipal Court (District 3) Full Term Commencing 1-3-2024"                     
+ [47] "For Judge of Hamilton County Municipal Court (District 4) Full Term Commencing 1-3-2024"                     
+ [48] "For Judge of Hamilton County Municipal Court (District 5) Full Term Commencing 1-3-2024"                     
+ [49] "For Judge of Hamilton County Municipal Court (District 6) Full Term Commencing 1-3-2024"                     
+ [50] "For Judge of Hamilton County Municipal Court (District 7) Full Term Commencing 1-3-2024"                     
+ [51] "CITY OF CINCINNATI For Member of Council at Large"                                                           
+ [52] "CITY OF BLUE ASH For Member of Council at Large (B)"                                                         
+ [53] "CITY OF BLUE ASH For Member of Council (1st Ward)"                                                           
+ [54] "CITY OF BLUE ASH For Member of Council (3rd Ward)"                                                           
+ [55] "CITY OF BLUE ASH For Member of Council (5th Ward)"                                                           
+ [56] "CITY OF DEER PARK For Mayor"                                                                                 
+ [57] "CITY OF DEER PARK For Member of Council at Large"                                                            
+ [58] "CITY OF FOREST PARK For Member of Council at Large"                                                          
+ [59] "CITY OF INDIAN HILL For Member of Council at Large"                                                          
+ [60] "CITY OF LOVELAND For Member of Council at Large"                                                             
+ [61] "CITY OF MADEIRA For Member of Council at Large"                                                              
+ [62] "CITY OF MILFORD For Member of Council at Large"                                                              
+ [63] "CITY OF MONTGOMERY For Member of Council at Large"                                                           
+ [64] "CITY OF NORTH COLLEGE HILL For Mayor"                                                                        
+ [65] "CITY OF NORTH COLLEGE HILL For Member of Council at Large"                                                   
+ [66] "CITY OF SPRINGDALE For Mayor"                                                                                
+ [67] "CITY OF SPRINGDALE For Member of Council at Large"                                                           
+ [68] "CITY OF WYOMING For Member of Council at Large"                                                              
+ [69] "VILLAGE OF ADDYSTON For Mayor"                                                                               
+ [70] "VILLAGE OF ADDYSTON For Clerk"                                                                               
+ [71] "VILLAGE OF ADDYSTON For Treasurer"                                                                           
+ [72] "VILLAGE OF ADDYSTON For Member of Council"                                                                   
+ [73] "VILLAGE OF ADDYSTON For Member of Board of Trustees of Public Affairs"                                       
+ [74] "VILLAGE OF AMBERLEY For Member of Council at Large"                                                          
+ [75] "VILLAGE OF AMBERLEY For Member of Council (District A)"                                                      
+ [76] "VILLAGE OF AMBERLEY For Member of Council (District B)"                                                      
+ [77] "VILLAGE OF AMBERLEY For Member of Council (District C)"                                                      
+ [78] "VILLAGE OF AMBERLEY For Member of Council (District D)"                                                      
+ [79] "VILLAGE OF AMBERLEY For Member of Council (District E)"                                                      
+ [80] "VILLAGE OF ARLINGTON HEIGHTS For Mayor"                                                                      
+ [81] "VILLAGE OF ARLINGTON HEIGHTS For Member of Council"                                                          
+ [82] "VILLAGE OF EVENDALE For Mayor"                                                                               
+ [83] "VILLAGE OF EVENDALE For Member of Council"                                                                   
+ [84] "VILLAGE OF FAIRFAX For Mayor"                                                                                
+ [85] "VILLAGE OF FAIRFAX For Member of Council"                                                                    
+ [86] "VILLAGE OF GLENDALE For Mayor"                                                                               
+ [87] "VILLAGE OF GLENDALE For Member of Council"                                                                   
+ [88] "VILLAGE OF GOLF MANOR For Mayor"                                                                             
+ [89] "VILLAGE OF GOLF MANOR For Member of Council"                                                                 
+ [90] "VILLAGE OF GOLF MANOR For Member of Council (Unexpired Term ending 11/30/25)"                                
+ [91] "VILLAGE OF LINCOLN HEIGHTS For Member of Council"                                                            
+ [92] "VILLAGE OF MARIEMONT For Mayor"                                                                              
+ [93] "VILLAGE OF MARIEMONT For Member of Council"                                                                  
+ [94] "VILLAGE OF NEWTOWN For Mayor"                                                                                
+ [95] "VILLAGE OF NEWTOWN For Member of Council"                                                                    
+ [96] "VILLAGE OF NORTH BEND For Mayor"                                                                             
+ [97] "VILLAGE OF NORTH BEND For Member of Council"                                                                 
+ [98] "VILLAGE OF ST BERNARD For Mayor"                                                                             
+ [99] "VILLAGE OF ST BERNARD For Vice Mayor and President of Council"                                               
+[100] "VILLAGE OF ST BERNARD For Auditor"                                                                           
+[101] "VILLAGE OF ST BERNARD For Director of Law"                                                                   
+[102] "VILLAGE OF ST BERNARD For Member of Council at Large"                                                        
+[103] "VILLAGE OF TERRACE PARK For Mayor"                                                                           
+[104] "VILLAGE OF TERRACE PARK For Member of Council"                                                               
+[105] "VILLAGE OF WOODLAWN For Mayor"                                                                               
+[106] "VILLAGE OF WOODLAWN For Member of Council"                                                                   
+[107] "TOWNSHIP OF ANDERSON For Township Trustee"                                                                   
+[108] "TOWNSHIP OF ANDERSON For Township Fiscal Officer"                                                            
+[109] "TOWNSHIP OF COLERAIN For Township Trustee"                                                                   
+[110] "TOWNSHIP OF COLERAIN For Township Fiscal Officer"                                                            
+[111] "TOWNSHIP OF COLUMBIA For Township Trustee"                                                                   
+[112] "TOWNSHIP OF COLUMBIA For Fiscal Officer"                                                                     
+[113] "TOWNSHIP OF CROSBY For Township Trustee"                                                                     
+[114] "TOWNSHIP OF CROSBY For Township Fiscal Officer"                                                              
+[115] "TOWNSHIP OF DELHI For Township Trustee"                                                                      
+[116] "TOWNSHIP OF DELHI For Township Fiscal Officer"                                                               
+[117] "TOWNSHIP OF GREEN For Township Trustee"                                                                      
+[118] "TOWNSHIP OF GREEN For Township Fiscal Officer"                                                               
+[119] "TOWNSHIP OF HARRISON For Township Trustee"                                                                   
+[120] "TOWNSHIP OF HARRISON For Township Fiscal Officer"                                                            
+[121] "TOWNSHIP OF MIAMI For Township Trustee"                                                                      
+[122] "TOWNSHIP OF MIAMI For Township Fiscal Officer"                                                               
+[123] "TOWNSHIP OF SPRINGFIELD For Township Trustee"                                                                
+[124] "TOWNSHIP OF SPRINGFIELD For Township Fiscal Officer"                                                         
+[125] "TOWNSHIP OF SYCAMORE For Township Trustee"                                                                   
+[126] "TOWNSHIP OF SYCAMORE For Township Fiscal Officer"                                                            
+[127] "TOWNSHIP OF SYMMES For Township Trustee"                                                                     
+[128] "TOWNSHIP OF SYMMES For Township Fiscal Officer"                                                              
+[129] "TOWNSHIP OF WHITEWATER For Township Trustee"                                                                 
+[130] "TOWNSHIP OF WHITEWATER For Township Fiscal Officer"                                                          
+[131] "HAMILTON COUNTY EDUCATIONAL SERVICE CENTER For Member of Governing Board of Educational Service Ctr"         
+[132] "CINCINNATI CITY SCHOOL DISTRICT For Member of Board of Education"                                            
+[133] "DEER PARK COMMUNITY CITY SCHOOL DISTRICT For Member of Board of Education"                                   
+[134] "DEER PARK COMMUNITY CITY SCHOOL DISTRICT For Member of Board of Education (Unexpired term ending 12-31-2025)"
+[135] "INDIAN HILL EXEMPTED VILLAGE SCHOOL DISTRICT For Member of Board of Education"                               
+[136] "LOVELAND CITY SCHOOL DISTRICT For Member of Board of Education"                                              
+[137] "MADEIRA CITY SCHOOL DISTRICT For Member of Board of Education"                                               
+[138] "MARIEMONT CITY SCHOOL DISTRICT For Member of Board of Education"                                             
+[139] "MILFORD EXEMPTED VILLAGE SCHOOL DISTRICT For Member of Board of Education"                                   
+[140] "MT HEALTHY CITY SCHOOL DISTRICT For Member of Board of Education"                                            
+[141] "NORTH COLLEGE HILL CITY SCHOOL DISTRICT For Member of Board of Education"                                    
+[142] "NORWOOD CITY SCHOOL DISTRICT For Member of Board of Education"                                               
+[143] "PRINCETON CITY SCHOOL DISTRICT For Member of Board of Education"                                             
+[144] "READING COMMUNITY CITY SCHOOL DISTRICT For Member of Board of Education"                                     
+[145] "ST BERNARD - ELMWOOD PLACE CITY SCHOOL DISTRICT For Member of Board of Education"                            
+[146] "SYCAMORE COMMUNITY CITY SCHOOL DISTRICT For Member of Board of Education"                                    
+[147] "WINTON WOODS CITY SCHOOL DISTRICT For Member of Board of Education"                                          
+[148] "WYOMING CITY SCHOOL DISTRICT For Member of Board of Education"                                               
+[149] "WYOMING CITY SCHOOL DISTRICT For Member of Board of Education (Unexpired term ending 12-31-2025)"            
+[150] "FINNEYTOWN LOCAL SCHOOL DISTRICT For Member of Board of Education"                                           
+[151] "FOREST HILLS LOCAL SCHOOL DISTRICT For Member of Board of Education"                                         
+[152] "LOCKLAND LOCAL SCHOOL DISTRICT For Member of Board of Education"                                             
+[153] "NORTHWEST LOCAL SCHOOL DISTRICT For Member of Board of Education"                                            
+[154] "OAK HILLS LOCAL SCHOOL DISTRICT For Member of Board of Education"                                            
+[155] "SOUTHWEST LOCAL SCHOOL DISTRICT For Member of Board of Education"                                            
+[156] "THREE RIVERS LOCAL SCHOOL DISTRICT For Member of Board of Education"                                         
+[157] "1  A SELF-EXECUTING AMENDMENT RELATING TO ABORTION AND OTHER REPRODUCTIVE DECISIONS"                         
+[158] "2  TO COMMERCIALIZE, REGULATE, LEGALIZE, AND TAX THE ADULT USE OF CANNABIS"                                  
+[159] "3  PROPOSED TAX LEVY (ADDITIONAL) VILLAGE OF CLEVES"                                                         
+[160] "4  PROPOSED ORDINANCE GAS AGGREGATION VILLAGE OF FAIRFAX"                                                    
+[161] "5  PROPOSED ORDINANCE ELECTRIC AGGREGATION VILLAGE OF FAIRFAX"                                               
+[162] "6  PROPOSED TAX LEVY (RENEWAL) VILLAGE OF GOLF MANOR"                                                        
+[163] "7  PROPOSED ORDINANCE ELECTRIC AGGREGATION VILLAGE OF LINCOLN HEIGHTS"                                       
+[164] "8  PROPOSED ORDINANCE GAS AGGREGATION VILLAGE OF MARIEMONT"                                                  
+[165] "9  PROPOSED ORDINANCE ELECTRIC AGGREGATION VILLAGE OF MARIEMONT"                                             
+[166] "10  PROPOSED TAX LEVY (RENEWAL) CURRENT OPERATING EXPENSES VILLAGE OF MARIEMONT"                             
+[167] "11  PROPOSED TAX LEVY (RENEWAL) MARIELDERS, INC. VILLAGE OF MARIEMONT"                                       
+[168] "12  PROPOSED TAX LEVY (RENEWAL) VILLAGE OF TERRACE PARK"                                                     
+[169] "13  PROPOSED MUNICIPAL INCOME TAX VILLAGE OF WOODLAWN"                                                       
+[170] "14  PROPOSED TAX LEVY (ADDITIONAL) TOWNSHIP OF COLERAIN"                                                     
+[171] "15  PROPOSED TAX LEVY (ADDITIONAL) TOWNSHIP OF DELHI"                                                        
+[172] "16  PROPOSED TAX LEVY (RENEWAL AND INCREASE) MIAMI TOWNSHIP WASTE DISTRICT"                                  
+[173] "17  PROPOSED TAX LEVY (ADDITIONAL) MILFORD EXEMPTED VILLAGE SCHOOL DISTRICT"                                 
+[174] "18  PROPOSED TAX LEVY (ADDITIONAL) ANDERSON TOWNSHIP PARK DISTRICT"                                          
+[175] "19  PROPOSED TAX LEVY (RENEWAL) ZOO HAMILTON COUNTY"                                                         
+[176] "20  PROPOSED TAX LEVY (RENEWAL) PUBLIC LIBRARY HAMILTON COUNTY"                                              
+[177] "21  PROPOSED TAX LEVY (ADDITIONAL) CITY OF CHEVIOT"                                                          
+[178] "22  PROPOSED ORDINANCE SALE OF CINCINNATI SOUTHERN RAILWAY CITY OF CINCINNATI"                               
+[179] "23  PROPOSED CHARTER AMENDMENT VOTING AND ELECTION REFORMS CITY OF CINCINNATI"                               
+[180] "24  PROPOSED CHARTER AMENDMENT AFFORDABLE HOUSING TAX CITY OF CINCINNATI"                                    
+[181] "25  PROPOSED TAX LEVY (ADDITIONAL) CITY OF MT. HEALTHY"                                                      
+[182] "26  PROPOSED ORDINANCE GAS AGGREGATION CITY OF NORTH COLLEGE HILL"                                           
+[183] "27  PROPOSED ORDINANCE ELECTRIC AGGREGATION CITY OF NORTH COLLEGE HILL"                                      
+[184] "28  PROPOSED TAX LEVY (RENEWAL) CITY OF NORTH COLLEGE HILL"                                                  
+[185] "29  LOCAL LIQUOR OPTION FOR PARTICULAR USE AT BUSINESS LOCATION (BY PETITION) NORWOOD 2-C"                   </code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">unique</span>(election.data<span class="fl">.2023</span><span class="sc">$</span>candidate))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>  [1] "Samuel D. Keller"                   
+  [2] "Brian P. Smyth"                     
+  [3] "Theresa Ciolino-Klein"              
+  [4] "Kimberlee Erdman Rohr"              
+  [5] "Stefanie A. Hawk"                   
+  [6] "Troy Dean Borgmann"                 
+  [7] "Amy Luken-Richter"                  
+  [8] "Matthew Halterman"                  
+  [9] "Matthew Ciambarella"                
+ [10] "Ryan P. Grubbs"                     
+ [11] "Ryan Samuels"                       
+ [12] "Jean L. Wilson"                     
+ [13] "Anthony Egner"                      
+ [14] "Jennifer Moody"                     
+ [15] "Cordel D. George, Jr."              
+ [16] "Joe Roetting"                       
+ [17] "Peggy A. Rissel"                    
+ [18] "Victor Schneider"                   
+ [19] "Joseph S. Geers"                    
+ [20] "Maria Williams"                     
+ [21] "Ken Miracle"                        
+ [22] "Keith D. Moore"                     
+ [23] "Emily K. Franzen"                   
+ [24] "Susan Hoover"                       
+ [25] "Alexis Royse"                       
+ [26] "Jon Atwood"                         
+ [27] "Mary Yeager"                        
+ [28] "Tony Hooks"                         
+ [29] "Sam Bowling"                        
+ [30] "Chris Kelsch"                       
+ [31] "Candace Winterbauer"                
+ [32] "Lisa Russ"                          
+ [33] "Jeff Girton"                        
+ [34] "Robert Hill"                        
+ [35] "John Breadon"                       
+ [36] "Robert P. Bemmes"                   
+ [37] "Robert J. Ashbrock"                 
+ [38] "Kevin M. Mattscheck"                
+ [39] "Dwight Daum"                        
+ [40] "Sabrina A. Smith"                   
+ [41] "David T. Stevenson"                 
+ [42] "Katie Eadicicco"                    
+ [43] "Scott V. Thamann"                   
+ [44] "Shelly Kroeger"                     
+ [45] "Ken Wietmarschen"                   
+ [46] "David A. Powell"                    
+ [47] "Andrew J. Bronner"                  
+ [48] "Anthony J. Gertz"                   
+ [49] "Mark A. Bishop"                     
+ [50] "Robert P. Boehner"                  
+ [51] "James A. Shelton"                   
+ [52] "Kevin M. Hardman"                   
+ [53] "Paul Culter"                        
+ [54] "Ed Cunningham"                      
+ [55] "Charles Lippert"                    
+ [56] "Sue Knight"                         
+ [57] "Amy Sharpshair"                     
+ [58] "V. Glen Lovitt III"                 
+ [59] "Mike Wilson"                        
+ [60] "Robert W. Cox"                      
+ [61] "Daniel E. Kloppenburg"              
+ [62] "Dave Koch"                          
+ [63] "Paul J. Schmidt"                    
+ [64] "Robert D. Tankersley"               
+ [65] "Chuck Birkholtz"                    
+ [66] "Kyle E. Smith"                      
+ [67] "Linda C. Bolton"                    
+ [68] "Geri Meister"                       
+ [69] "Ronald L. Spears, Jr."              
+ [70] "No Valid Petition Filed"            
+ [71] "Thelma Swanson"                     
+ [72] "Daniel J. Snelling"                 
+ [73] "Rachel Hudson"                      
+ [74] "Jeffrey T. Halter"                  
+ [75] "Maria C. Waltherr"                  
+ [76] "Brian Pittman"                      
+ [77] "Kendall R. Glover"                  
+ [78] "Dottie Williams"                    
+ [79] "Mark Quarry"                        
+ [80] "Franklin D. Wilson"                 
+ [81] "Janaya Trotter Bratton"             
+ [82] "Donte Johnson"                      
+ [83] "William Mallory"                    
+ [84] "Samantha Silverstein"               
+ [85] "Curt Kissinger"                     
+ [86] "Brad Greenberg"                     
+ [87] "Bernie Bouchard"                    
+ [88] "Jackie Ginocchio"                   
+ [89] "Jan-Michele Lemon Kearney"          
+ [90] "Meeka D. Owens"                     
+ [91] "Reggie Harris"                      
+ [92] "Victoria Parks"                     
+ [93] "Scotty Johnson"                     
+ [94] "Mark Jeffreys"                      
+ [95] "Anna Albi"                          
+ [96] "Jeff Cramerding"                    
+ [97] "Seth Walsh"                         
+ [98] "Liz Keating"                        
+ [99] "Jill Cole"                          
+[100] "Kathryn E. Schneider"               
+[101] "Pramod Jhaveri"                     
+[102] "Joe Hoelker"                        
+[103] "Marc Sirkin"                        
+[104] "John D. Donnellon"                  
+[105] "Neil Kelly"                         
+[106] "Natasha Kohorst"                    
+[107] "Christine Westmark Hedger"          
+[108] "Shaughn Daily"                      
+[109] "Denise Holt"                        
+[110] "Aharon Brown"                       
+[111] "Reggie Sylvester"                   
+[112] "Wayne Coates"                       
+[113] "Matthew James Robinson (Write-In)"  
+[114] "Elizabeth C. Isphording"            
+[115] "Stephen H. Krehbiel"                
+[116] "Jeffrey G. Gibson"                  
+[117] "Andrew A. Byer"                     
+[118] "Patricia J. Stern"                  
+[119] "Richard J. Hidy"                    
+[120] "Shayne O. Manning"                  
+[121] "Kathy Bailey"                       
+[122] "Andy Bateman"                       
+[123] "Brian Goodyear"                     
+[124] "Deidre Hazelbaker"                  
+[125] "Chad Shaffer"                       
+[126] "Tom Henning"                        
+[127] "Logan Junger"                       
+[128] "Gibson Arling"                      
+[129] "Joseph Leslie Grolmes"              
+[130] "Mark Thompson"                      
+[131] "Ralph Vilardo, Jr."                 
+[132] "Kristopher Parrish"                 
+[133] "Brad Price"                         
+[134] "Ken Suer"                           
+[135] "Craig Margolis"                     
+[136] "Catherine Mills-Reynolds"           
+[137] "Tammy Moore"                        
+[138] "Martha A. Shields"                  
+[139] "Tracie Nichols"                     
+[140] "Mary Jo Zorb"                       
+[141] "Mashalah Alexander"                 
+[142] "Mary Dewald"                        
+[143] "Brandon Davis"                      
+[144] "Luree Blythe"                       
+[145] "Lawrence C. Hawkins III"            
+[146] "David E. Gleaves"                   
+[147] "Michelle McFarland"                 
+[148] "LaVonne L. Webster"                 
+[149] "Joseph Ramirez"                     
+[150] "Katie Wells"                        
+[151] "Tom Hall"                           
+[152] "Carolyn Ghantous"                   
+[153] "Melissa Monich"                     
+[154] "April Robles"                       
+[155] "Daniel M. Driehaus"                 
+[156] "Chris Woodside"                     
+[157] "Cindy Peebles"                      
+[158] "Jodi Woffington"                    
+[159] "Grant T. Hoffman"                   
+[160] "Elena M. Pavel"                     
+[161] "Lisa Mear"                          
+[162] "Al Glick (Write-In)"                
+[163] "Margaret Ann Dozier"                
+[164] "Daniel L. Pillow"                   
+[165] "Catherine L. Nixon-Byess (Write-In)"
+[166] "Jay L. Shatz"                       
+[167] "Keely Paul"                         
+[168] "Ben Hunt"                           
+[169] "Dara L. Wood"                       
+[170] "Adam Frankel"                       
+[171] "Bob Rosen"                          
+[172] "Richard Bardach"                    
+[173] "Steven Crase"                       
+[174] "Douglas R. Carter"                  
+[175] "Kathleen May Davis"                 
+[176] "Ana Maria Gil"                      
+[177] "Richard H. Finan"                   
+[178] "Stiney Vonderhaar"                  
+[179] "Beth McDaniel"                      
+[180] "Christopher Patterson"              
+[181] "Tom Sextro"                         
+[182] "Diane Cunningham Redden"            
+[183] "Sharon Lally"                       
+[184] "Tracy L. Naticchioni"               
+[185] "Mike Besl"                          
+[186] "Marilyn A. Duke"                    
+[187] "Jenny Kilgore"                      
+[188] "Will Kreidler"                      
+[189] "Amy L. Flury"                       
+[190] "Stefan C. Densmore"                 
+[191] "Sharon Chaney"                      
+[192] "Brittney A. Kreimer"                
+[193] "Charlotte Bruewer"                  
+[194] "Minna Fischer"                      
+[195] "Roger Van Harn"                     
+[196] "Melody N. Mayle"                    
+[197] "David Bidnick"                      
+[198] "Ruby Kinsey-Mumphrey"               
+[199] "Phyllis Baber"                      
+[200] "Bill Brown"                         
+[201] "Marcy Lewis"                        
+[202] "Robert Van Stone"                   
+[203] "Mark Kobasuk"                       
+[204] "Tracy Boone"                        
+[205] "Sarah Donohue"                      
+[206] "Chuck Short"                        
+[207] "Douglas M. Sammons, Sr."            
+[208] "David Moorman"                      
+[209] "Frances Reardon Romweber"           
+[210] "Jonathan L. Stuchell"               
+[211] "Bob Hausfeld"                       
+[212] "Steve Asbach"                       
+[213] "Peggy Brickweg"                     
+[214] "Valerie Van Valkenburg-Walden"      
+[215] "Patty Hausfeld"                     
+[216] "Ray Culbertson"                     
+[217] "Christopher Schildmeyer"            
+[218] "John R. Estep"                      
+[219] "Connor Moreton"                     
+[220] "Jeffrey A. Edwards"                 
+[221] "Gus Stuchell"                       
+[222] "Nicole R. Klungle"                  
+[223] "Kurt Brickweg"                      
+[224] "Arthur Butch Abrams"                
+[225] "Gregg Lair (Write-In)"              
+[226] "Tom Tepe, Jr."                      
+[227] "John A. Gaskey"                     
+[228] "Brian K. Poole"                     
+[229] "Aaron L. Tillman III"               
+[230] "Rosemary Brown"                     
+[231] "Esther Boyd"                        
+[232] "Michelle Starr"                     
+[233] "Mary L. Hill"                       
+[234] "Marcus T. Calhoun"                  
+[235] "Garrick Berkhalter"                 
+[236] "Dee Stone"                          
+[237] "Dominic Wolfer"                     
+[238] "Brian M. Johnson"                   
+[239] "Matt Wahlert"                       
+[240] "Theresa Harper Kolodzik"            
+[241] "Chuck Klosterman"                   
+[242] "Jeff Baker"                         
+[243] "Bridgett Brogden"                   
+[244] "Brian Lamar"                        
+[245] "Caroline Heekin"                    
+[246] "Doug A. Lohman"                     
+[247] "Matthew Wallace"                    
+[248] "Rose K. Stertz"                     
+[249] "Todd J. Schimpf"                    
+[250] "Jim Luebbe"                         
+[251] "Tony Rosiello"                      
+[252] "Tom Straus"                         
+[253] "Kenny Fohl"                         
+[254] "Mark Louis"                         
+[255] "Risa C. Dole"                       
+[256] "Timothy Vollrath"                   
+[257] "Rob Schrimpf"                       
+[258] "Cindy L. Oser"                      
+[259] "Sara Braun"                         
+[260] "Kristie Dukes Davis"                
+[261] "Dan J. Berning"                     
+[262] "Tracy Kellums"                      
+[263] "Tom James"                          
+[264] "Jonathan T. Deters"                 
+[265] "Phil Beck"                          
+[266] "Karen Brownlee"                     
+[267] "Joseph C. Grossi"                   
+[268] "Guy G. Schaible"                    
+[269] "James L. Brett"                     
+[270] "Melody Staudt-Dargis"               
+[271] "Fred Hunt"                          
+[272] "Eve Bolton"                         
+[273] "Kendra Mapp"                        
+[274] "Ben Lindy"                          
+[275] "Bryan Cannon"                       
+[276] "Paul Schiele"                       
+[277] "Chris Huster"                       
+[278] "Paul Godwin"                        
+[279] "Kara McCormick"                     
+[280] "Niki Singh"                         
+[281] "Robert Warfel"                      
+[282] "Meghan Cole"                        
+[283] "Tori Frericks"                      
+[284] "Chip Barrett"                       
+[285] "Lynn M. Mangan"                     
+[286] "Christina Jeranek"                  
+[287] "Linda J. Cecil"                     
+[288] "Robert Vanover"                     
+[289] "Bradley T. Cunningham"              
+[290] "Ann Ramos"                          
+[291] "Anita Ortiz Grolmes"                
+[292] "Kim Heath"                          
+[293] "Kelli Neville"                      
+[294] "Nan Dill"                           
+[295] "Myra Powers"                        
+[296] "Rebecca Born"                       
+[297] "Paul J. Chambers"                   
+[298] "Emily Chesnut"                      
+[299] "Kimberly A. Bouldin-Bryant"         
+[300] "Barbara Graves"                     
+[301] "Helen O'Rourke"                     
+[302] "Alice Rericha"                      
+[303] "Debbie Cole"                        
+[304] "Brittany Kelsch"                    
+[305] "Gina Ruffin Moore"                  
+[306] "Susan Elizabeth Wyder"              
+[307] "Jon Myron Simons"                   
+[308] "Cassandra A. Saines"                
+[309] "Amy Thamann"                        
+[310] "Crystal Gee Menner"                 
+[311] "Linda Keith Radtke"                 
+[312] "Rebecca L. Blevins"                 
+[313] "Joseph E. Wheeler"                  
+[314] "Adrienne C. James"                  
+[315] "Victor Harris"                      
+[316] "Brad Comerford"                     
+[317] "Isabel Mendez Pacios"               
+[318] "Zeeshan Pasha"                      
+[319] "Angela G. Knighten"                 
+[320] "Bill Speelman"                      
+[321] "Paula Kuhn"                         
+[322] "Illya Torrance Thomas"              
+[323] "Jeanie Zoller"                      
+[324] "Michael P. Evans"                   
+[325] "Joe Brinkman"                       
+[326] "John Feldmeier"                     
+[327] "James Edward Reeb, Jr."             
+[328] "Seth Plaut"                         
+[329] "Chadwick G. Engleman"               
+[330] "Wendy Strickler Biederman"          
+[331] "Jason Simmons"                      
+[332] "Kenneth Kuhn"                       
+[333] "Kevin Comerford"                    
+[334] "Kris Wahlke"                        
+[335] "Krista Blum"                        
+[336] "Lauren M. Costanzo"                 
+[337] "Nancy Slattery"                     
+[338] "Jim Detzel"                         
+[339] "Christine Colliver"                 
+[340] "Victoria Lowry"                     
+[341] "Matt Tietsort"                      
+[342] "Lisa Ibold"                         
+[343] "Sam Yorgovan"                       
+[344] "Janice Hunter"                      
+[345] "Daniel A. Voynovich"                
+[346] "Jeffrey Paul Biddle"                
+[347] "Chris L. Payne"                     
+[348] "Robert Kief"                        
+[349] "Rodney A. Smith"                    
+[350] "Susan J. Miller"                    
+[351] "Stephanie M. Stafford (Write-In)"   
+[352] "YES"                                
+[353] "NO"                                 
+[354] "AGAINST THE TAX LEVY"               
+[355] "FOR THE TAX LEVY"                   
+[356] "FOR THE INCOME TAX"                 
+[357] "AGAINST THE INCOME TAX"             </code></pre>
+</div>
+</div>
+<section id="issue-1-abortion-and-other-reproductive-rights" class="level2">
+<h2 class="anchored" data-anchor-id="issue-1-abortion-and-other-reproductive-rights">Issue #1 Abortion and other reproductive rights</h2>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>my.year <span class="ot">=</span> <span class="st">"2023"</span></span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>my.race <span class="ot">=</span> <span class="st">"1  A SELF-EXECUTING AMENDMENT RELATING TO ABORTION AND OTHER REPRODUCTIVE DECISIONS"</span></span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>my.dem <span class="ot">=</span> <span class="st">"YES"</span></span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a>my.rep <span class="ot">=</span> <span class="st">"NO"</span></span>
+<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a>election_data <span class="ot">=</span> election.data<span class="fl">.2023</span></span>
+<span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a>my.map <span class="ot">=</span> map2023</span>
+<span id="cb51-7"><a href="#cb51-7" aria-hidden="true" tabindex="-1"></a>my.name <span class="ot">=</span> <span class="st">"Issue1.abortion.2023"</span></span>
+<span id="cb51-8"><a href="#cb51-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-9"><a href="#cb51-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-10"><a href="#cb51-10" aria-hidden="true" tabindex="-1"></a>overall.results <span class="ot">&lt;-</span> <span class="fu">results.df</span>(my.race,my.dem,my.rep,election_data)</span>
+<span id="cb51-11"><a href="#cb51-11" aria-hidden="true" tabindex="-1"></a>prec.results <span class="ot">&lt;-</span> <span class="fu">precinct.results.df</span>(my.race,my.dem,my.rep,election_data)</span>
+<span id="cb51-12"><a href="#cb51-12" aria-hidden="true" tabindex="-1"></a>mapANDresults <span class="ot">&lt;-</span> <span class="fu">left_join</span>(my.map,prec.results,<span class="at">by=</span><span class="fu">c</span>(<span class="st">"NAME"</span><span class="ot">=</span><span class="st">"precinct"</span>))</span>
+<span id="cb51-13"><a href="#cb51-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-14"><a href="#cb51-14" aria-hidden="true" tabindex="-1"></a>interpolated.results <span class="ot">&lt;-</span> <span class="fu">interpolate_pw</span>(</span>
+<span id="cb51-15"><a href="#cb51-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">from =</span> <span class="fu">st_make_valid</span>(mapANDresults),</span>
+<span id="cb51-16"><a href="#cb51-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">to =</span> <span class="fu">st_make_valid</span>(map),</span>
+<span id="cb51-17"><a href="#cb51-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">to_id =</span> <span class="st">"PRECINCT"</span>,</span>
+<span id="cb51-18"><a href="#cb51-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">extensive =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb51-19"><a href="#cb51-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">weights =</span> <span class="fu">st_make_valid</span>(block.total),</span>
+<span id="cb51-20"><a href="#cb51-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">weight_column =</span> <span class="st">"total.pop"</span>,</span>
+<span id="cb51-21"><a href="#cb51-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">crs =</span> <span class="fu">st_crs</span>(map)</span>
+<span id="cb51-22"><a href="#cb51-22" aria-hidden="true" tabindex="-1"></a>) </span>
+<span id="cb51-23"><a href="#cb51-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-24"><a href="#cb51-24" aria-hidden="true" tabindex="-1"></a>interpolated.results <span class="sc">%&gt;%</span> </span>
+<span id="cb51-25"><a href="#cb51-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">dem.prop =</span> dem.overall<span class="sc">/</span>overall) <span class="sc">%&gt;%</span></span>
+<span id="cb51-26"><a href="#cb51-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">fill=</span>dem.prop)) <span class="sc">+</span></span>
+<span id="cb51-27"><a href="#cb51-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>()<span class="sc">+</span></span>
+<span id="cb51-28"><a href="#cb51-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="fu">paste</span>(<span class="st">"ISSUE 1: Reproductive rights"</span>,my.year,<span class="at">sep =</span> <span class="st">", "</span>),</span>
+<span id="cb51-29"><a href="#cb51-29" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span><span class="fu">paste</span>(my.dem,<span class="st">' ('</span>, overall.results<span class="sc">$</span>Overall[<span class="dv">1</span>],<span class="st">'%) vs '</span>,my.rep,<span class="st">' ('</span>,overall.results<span class="sc">$</span>Overall[<span class="dv">2</span>],<span class="st">'%)'</span>,<span class="at">sep=</span><span class="st">''</span>), <span class="co">#paste(my.dem, 'vs',my.rep,sep=' '),</span></span>
+<span id="cb51-30"><a href="#cb51-30" aria-hidden="true" tabindex="-1"></a>       <span class="at">fill =</span> <span class="st">""</span>, </span>
+<span id="cb51-31"><a href="#cb51-31" aria-hidden="true" tabindex="-1"></a>       <span class="at">caption =</span> <span class="st">""</span>)<span class="sc">+</span></span>
+<span id="cb51-32"><a href="#cb51-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_gradientn</span>(<span class="at">colours=</span><span class="fu">brewer.pal</span>(<span class="at">n=</span><span class="dv">10</span>,<span class="at">name=</span><span class="st">"RdBu"</span>),<span class="at">na.value =</span> <span class="st">"transparent"</span>,</span>
+<span id="cb51-33"><a href="#cb51-33" aria-hidden="true" tabindex="-1"></a>                           <span class="at">breaks=</span><span class="fu">c</span>(<span class="dv">0</span>,.<span class="dv">25</span>,<span class="fl">0.5</span>,.<span class="dv">75</span>,<span class="dv">1</span>),<span class="at">labels=</span><span class="fu">c</span>(<span class="st">"100% NO"</span>,<span class="st">""</span>,<span class="st">"50%/50%"</span>,<span class="st">""</span>,<span class="st">"100% YES"</span>),</span>
+<span id="cb51-34"><a href="#cb51-34" aria-hidden="true" tabindex="-1"></a>                           <span class="at">limits=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>))<span class="sc">+</span></span>
+<span id="cb51-35"><a href="#cb51-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="pre_election_files/figure-html/abortion-2023-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(overall.results)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>    Early Election Overall
+YES  75.1     62.4    65.1
+NO   24.9     37.6    34.9</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="fu">assign</span>(<span class="fu">paste</span>(<span class="st">"interpolated.results_"</span>,my.name,<span class="at">sep=</span><span class="st">""</span>), interpolated.results)</span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a><span class="fu">assign</span>(<span class="fu">paste</span>(<span class="st">"overall.results_"</span>,my.name,<span class="at">sep=</span><span class="st">""</span>), overall.results)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="issue-2-cannabis-legalization" class="level2">
+<h2 class="anchored" data-anchor-id="issue-2-cannabis-legalization">Issue #2 Cannabis Legalization</h2>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>my.year <span class="ot">=</span> <span class="st">"2023"</span></span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>my.race <span class="ot">=</span> <span class="st">"2  TO COMMERCIALIZE, REGULATE, LEGALIZE, AND TAX THE ADULT USE OF CANNABIS"</span></span>
+<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a>my.dem <span class="ot">=</span> <span class="st">"YES"</span></span>
+<span id="cb55-4"><a href="#cb55-4" aria-hidden="true" tabindex="-1"></a>my.rep <span class="ot">=</span> <span class="st">"NO"</span></span>
+<span id="cb55-5"><a href="#cb55-5" aria-hidden="true" tabindex="-1"></a>election_data <span class="ot">=</span> election.data<span class="fl">.2023</span></span>
+<span id="cb55-6"><a href="#cb55-6" aria-hidden="true" tabindex="-1"></a>my.map <span class="ot">=</span> map2023</span>
+<span id="cb55-7"><a href="#cb55-7" aria-hidden="true" tabindex="-1"></a>my.name <span class="ot">=</span> <span class="st">"Issue2.cannabis.2023"</span></span>
+<span id="cb55-8"><a href="#cb55-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-9"><a href="#cb55-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-10"><a href="#cb55-10" aria-hidden="true" tabindex="-1"></a>overall.results <span class="ot">&lt;-</span> <span class="fu">results.df</span>(my.race,my.dem,my.rep,election_data)</span>
+<span id="cb55-11"><a href="#cb55-11" aria-hidden="true" tabindex="-1"></a>prec.results <span class="ot">&lt;-</span> <span class="fu">precinct.results.df</span>(my.race,my.dem,my.rep,election_data)</span>
+<span id="cb55-12"><a href="#cb55-12" aria-hidden="true" tabindex="-1"></a>mapANDresults <span class="ot">&lt;-</span> <span class="fu">left_join</span>(my.map,prec.results,<span class="at">by=</span><span class="fu">c</span>(<span class="st">"NAME"</span><span class="ot">=</span><span class="st">"precinct"</span>))</span>
+<span id="cb55-13"><a href="#cb55-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-14"><a href="#cb55-14" aria-hidden="true" tabindex="-1"></a>interpolated.results <span class="ot">&lt;-</span> <span class="fu">interpolate_pw</span>(</span>
+<span id="cb55-15"><a href="#cb55-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">from =</span> <span class="fu">st_make_valid</span>(mapANDresults),</span>
+<span id="cb55-16"><a href="#cb55-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">to =</span> <span class="fu">st_make_valid</span>(map),</span>
+<span id="cb55-17"><a href="#cb55-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">to_id =</span> <span class="st">"PRECINCT"</span>,</span>
+<span id="cb55-18"><a href="#cb55-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">extensive =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb55-19"><a href="#cb55-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">weights =</span> <span class="fu">st_make_valid</span>(block.total),</span>
+<span id="cb55-20"><a href="#cb55-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">weight_column =</span> <span class="st">"total.pop"</span>,</span>
+<span id="cb55-21"><a href="#cb55-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">crs =</span> <span class="fu">st_crs</span>(map)</span>
+<span id="cb55-22"><a href="#cb55-22" aria-hidden="true" tabindex="-1"></a>) </span>
+<span id="cb55-23"><a href="#cb55-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-24"><a href="#cb55-24" aria-hidden="true" tabindex="-1"></a>interpolated.results <span class="sc">%&gt;%</span> </span>
+<span id="cb55-25"><a href="#cb55-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">dem.prop =</span> dem.overall<span class="sc">/</span>overall) <span class="sc">%&gt;%</span></span>
+<span id="cb55-26"><a href="#cb55-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">fill=</span>dem.prop)) <span class="sc">+</span></span>
+<span id="cb55-27"><a href="#cb55-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>()<span class="sc">+</span></span>
+<span id="cb55-28"><a href="#cb55-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="fu">paste</span>(<span class="st">"ISSUE 2: Cannabis legalization"</span>,my.year,<span class="at">sep =</span> <span class="st">", "</span>),</span>
+<span id="cb55-29"><a href="#cb55-29" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="fu">paste</span>(my.dem,<span class="st">' ('</span>, overall.results<span class="sc">$</span>Overall[<span class="dv">1</span>],<span class="st">'%) vs '</span>,my.rep,<span class="st">' ('</span>,overall.results<span class="sc">$</span>Overall[<span class="dv">2</span>],<span class="st">'%)'</span>,<span class="at">sep=</span><span class="st">''</span>), <span class="co">#paste(my.dem, 'vs',my.rep,sep=' '),</span></span>
+<span id="cb55-30"><a href="#cb55-30" aria-hidden="true" tabindex="-1"></a>       <span class="at">fill =</span> <span class="st">""</span>, </span>
+<span id="cb55-31"><a href="#cb55-31" aria-hidden="true" tabindex="-1"></a>       <span class="at">caption =</span> <span class="st">""</span>)<span class="sc">+</span></span>
+<span id="cb55-32"><a href="#cb55-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_gradientn</span>(<span class="at">colours=</span><span class="fu">brewer.pal</span>(<span class="at">n=</span><span class="dv">10</span>,<span class="at">name=</span><span class="st">"RdBu"</span>),<span class="at">na.value =</span> <span class="st">"transparent"</span>,</span>
+<span id="cb55-33"><a href="#cb55-33" aria-hidden="true" tabindex="-1"></a>                           <span class="at">breaks=</span><span class="fu">c</span>(<span class="dv">0</span>,.<span class="dv">25</span>,<span class="fl">0.5</span>,.<span class="dv">75</span>,<span class="dv">1</span>),<span class="at">labels=</span><span class="fu">c</span>(<span class="st">"100% NO"</span>,<span class="st">""</span>,<span class="st">"50%/50%"</span>,<span class="st">""</span>,<span class="st">"100% YES"</span>),</span>
+<span id="cb55-34"><a href="#cb55-34" aria-hidden="true" tabindex="-1"></a>                           <span class="at">limits=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>))<span class="sc">+</span></span>
+<span id="cb55-35"><a href="#cb55-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="pre_election_files/figure-html/cannabis-2023-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(overall.results)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>    Early Election Overall
+YES  67.8     65.2    65.8
+NO   32.2     34.8    34.2</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="fu">assign</span>(<span class="fu">paste</span>(<span class="st">"interpolated.results_"</span>,my.name,<span class="at">sep=</span><span class="st">""</span>), interpolated.results)</span>
+<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a><span class="fu">assign</span>(<span class="fu">paste</span>(<span class="st">"overall.results_"</span>,my.name,<span class="at">sep=</span><span class="st">""</span>), overall.results)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+</section>
+<section id="save-objects-to-file" class="level1">
+<h1>Save objects to file</h1>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a>objects_to_save <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"map"</span>,</span>
+<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a>                     <span class="st">"name.equivalents"</span>,</span>
+<span id="cb59-3"><a href="#cb59-3" aria-hidden="true" tabindex="-1"></a>                     <span class="fu">ls</span>(<span class="at">pattern =</span> <span class="st">"^interpolated.results_"</span>),</span>
+<span id="cb59-4"><a href="#cb59-4" aria-hidden="true" tabindex="-1"></a>                     <span class="fu">ls</span>(<span class="at">pattern =</span> <span class="st">"^overall.results_"</span>))</span>
+<span id="cb59-5"><a href="#cb59-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-6"><a href="#cb59-6" aria-hidden="true" tabindex="-1"></a><span class="fu">save</span>(<span class="at">list =</span> objects_to_save, <span class="at">file =</span> <span class="st">"ElectionNightComparisons.RData"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

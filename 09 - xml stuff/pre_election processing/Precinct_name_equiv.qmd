@@ -1,0 +1,52 @@
+---
+title: "Precinct_name_equiv"
+format: html
+editor: visual
+---
+
+## 
+
+Code to create a dataframe with equivalent precinct ID's and names in the possible formats.
+
+```{r}
+# Load relevant shapefiles
+map2024 <- st_zm(st_read("../data/maps/precincts_2024.shp"))
+map2020 <- st_zm(st_read("../data/maps/precincts_2020.shp"))
+
+
+precinct.name.equiv <- cbind(map2024$PRECINCT,map2024$PCT,map2024$PRC_NAME) 
+  colnames(precinct.name.equiv )  <- c('PRC_ID', 'PRC_ID3','PRC_NAME_long')
+
+temp <- st_drop_geometry(map2020) %>%
+  separate(PRECINCT, into = c("ID", "PRC_NAME_short"), sep = " ", extra = "merge") %>% 
+  cbind(map2020$PRECINCT,.)
+colnames(temp) <- c('PRC_ID_NAME_short', "ID", "PRC_NAME_short")  
+  
+
+poo =  left_join(as.data.frame(precinct.name.equiv),
+                 as.data.frame(temp),
+                 by = c("PRC_ID" = "ID")) %>% 
+  arrange(PRC_ID)
+
+poo %>% filter(if_any(everything(),is.na))
+na_row_indices <- which(apply(poo, 1, function(row) any(is.na(row))))
+print(na_row_indices)
+    # problems in row 229 and 251
+
+poo[225:235,]  
+poo$PRC_ID_NAME_short[229] = "3407 HARR G"
+poo$PRC_NAME_short[229] = "HARR G"
+
+poo[245:255,]  
+poo$PRC_ID_NAME_short[251] = "3901 MILF A"
+poo$PRC_NAME_short[251] = "MILF A"
+
+poo %>% filter(if_any(everything(),is.na))
+na_row_indices <- which(apply(poo, 1, function(row) any(is.na(row))))
+print(na_row_indices)
+
+poo$PRC_ID3_NAME_long = paste(poo$PRC_ID3,poo$PRC_NAME_long,sep=' ')
+
+saveRDS(poo, file = "Precinct_name_id_equiv2024.rds")
+
+```
