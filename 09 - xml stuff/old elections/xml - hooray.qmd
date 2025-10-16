@@ -1,0 +1,156 @@
+---
+title: "xml stuff"
+format: html
+editor: visual
+---
+
+```{r}
+library(dplyr)
+library(tidyr)
+library(xml2)
+library(tidyverse)
+
+
+# Load the XML file
+xml_file <- read_xml("detail 10.xml")
+
+# Extract precinct-level data
+precincts <- xml_file %>%
+  xml_find_all("//Precincts/Precinct")
+
+```
+
+```{r}
+# Extract precinct-level data
+precincts <- xml_file %>%
+  xml_find_all("//Precincts/Precinct")
+
+# Create a data frame
+precinct_df <- data.frame(
+  name = xml_attr(precincts, "name"),
+  totalVoters = as.integer(xml_attr(precincts, "totalVoters")),
+  ballotsCast = as.integer(xml_attr(precincts, "ballotsCast")),
+  voterTurnout = as.numeric(xml_attr(precincts, "voterTurnout")),
+  percentReporting = as.numeric(xml_attr(precincts, "percentReporting")),
+  stringsAsFactors = FALSE
+)
+
+# View the data frame
+print(precinct_df)
+```
+
+```{r}
+# Extract precinct-level data
+# Get all Contest nodes
+contests <- xml_file %>% xml_find_all(".//Contest")
+
+# Function to extract vote data for each contest and candidate
+parse_contest_votes <- function(contest_node) {
+  contest_name <- xml_attr(contest_node, "text")
+
+  # Get all candidate (Choice) nodes
+  choices <- contest_node %>% xml_find_all(".//Choice")
+
+  # Iterate through each candidate
+  map_df(choices, function(choice) {
+    candidate_name <- xml_attr(choice, "text")
+
+    # Get all VoteType nodes (Early, Election)
+    vote_types <- choice %>% xml_find_all(".//VoteType")
+
+    # Iterate through each VoteType and precinct data
+    map_df(vote_types, function(vote_type) {
+      vote_type_name <- xml_attr(vote_type, "name")
+
+      # Extract precincts
+      precincts <- vote_type %>% xml_find_all(".//Precinct")
+
+      # For each precinct, extract the votes and precinct name
+      map_df(precincts, function(precinct) {
+        precinct_name <- xml_attr(precinct, "name")
+        votes <- xml_attr(precinct, "votes") %>% as.numeric()
+
+        tibble(
+          contest = contest_name,
+          candidate = candidate_name,
+          vote_type = vote_type_name,
+          precinct = precinct_name,
+          votes = votes
+        )
+      })
+    })
+  })
+}
+
+# Apply the function to all contests
+election_data <- contests %>% map_df(parse_contest_votes)
+
+
+```
+
+```{r}
+
+# Extract the Contest node for "For President and Vice President"
+contest <- xml_find_first(xml_file, "//Contest[@text='For President and Vice President']")
+
+# Initialize a list to store precinct data
+precinct_data <- list()
+
+# Extract VoteType data for the Contest
+vote_types <- xml_find_all(contest, "VoteType")
+
+# Create a list for VoteType names
+vote_type_names <- sapply(vote_types, function(x) xml_attr(x, "name"))
+
+# Extract Choice nodes for candidates
+choices <- xml_find_all(contest, "Choice")
+
+# Loop through each Choice to get votes by precinct
+for (choice in choices) {
+  choice_name <- xml_attr(choice, "text")  # Candidate name
+  precinct_votes <- list()  # Initialize list for precinct votes
+  
+  # Extract VoteType data for this choice
+  choice_vote_types <- xml_find_all(choice, "VoteType")
+  choice_vote_type_names <- sapply(choice_vote_types, function(x) xml_attr(x, "name"))
+
+  # Initialize a data frame to hold votes for this candidate
+  for (vote_type in choice_vote_types) {
+    votes <- xml_attr(vote_type, "votes")  # Get votes for this VoteType
+    precinct_votes[[xml_attr(vote_type, "name")]] <- as.numeric(votes)  # Store votes by VoteType
+  }
+
+  # Extract precincts associated with this choice
+  precincts <- xml_find_all(choice, "Precinct")
+  
+  # Loop through precincts to get their votes
+  for (precinct in precincts) {
+    precinct_name <- xml_attr(precinct, "name")
+    precinct_votes_df <- data.frame(Precinct = precinct_name)
+    
+    # Add votes for each VoteType to the precinct
+    for (vote_type_name in choice_vote_type_names) {
+      precinct_votes_df[[vote_type_name]] <- as.numeric(precinct_votes[[vote_type_name]])
+    }
+    
+    # Add the precinct data for this choice to the main list
+    precinct_data[[length(precinct_data) + 1]] <- precinct_votes_df
+  }
+}
+
+# Combine precinct data into a single data frame
+final_df <- do.call(rbind, precinct_data)
+
+# Aggregate votes by precinct if necessary
+final_df <- final_df %>%
+  group_by(Precinct) %>%
+  summarise(across(everything(), sum, na.rm = TRUE), .groups = "drop")
+
+# Fill in missing VoteType columns with zeros
+final_df[is.na(final_df)] <- 0
+
+# Display the resulting data frame
+print(final_df)
+
+)
+```

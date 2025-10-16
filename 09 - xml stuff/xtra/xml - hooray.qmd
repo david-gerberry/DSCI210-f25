@@ -1,0 +1,318 @@
+---
+title: "xml stuff"
+format: html
+editor: visual
+---
+
+```{r}
+library(dplyr)
+library(tidyr)
+library(xml2)
+library(tidyverse)
+library(purrr)
+library(sf)
+library(RColorBrewer)
+library(tidycensus)
+census_api_key("fa67b1dbacf4fbbb1b14c875f34437c6cbdaa694")
+
+# Load in the Precinct Name Equivalency files
+precinct.name.equiv <-readRDS("Precinct_name_id_equiv2024.rds")
+
+# Load in relevant precinct maps
+map <- st_make_valid(st_zm(st_read("../data/maps/precincts_2020.shp")))
+map.current <- st_make_valid(st_zm(st_read("../data/maps/precincts_2024.shp")))
+
+# Load the XML file
+xml_file <- read_xml("detail 10.xml")
+```  
+
+
+```{r}  
+block.total <- get_decennial(geography = "block", 
+                 state = "Ohio",
+                 county = "Hamilton",
+                 variables = "P1_001N", 
+                 year = 2020,
+                 sumfile = "dhc",
+                 geometry = TRUE) %>% 
+  select(total.pop = value) %>% 
+  st_transform(crs = st_crs(map.current))
+```
+
+## Get precinct-by-precinct turnout
+
+```{r}
+# Extract precinct-level data
+precincts <- xml_file %>%
+  xml_find_all("//Precincts/Precinct")
+
+# Create a data frame
+turnout.df <- data.frame(
+  name = xml_attr(precincts, "name"),
+  totalVoters = as.integer(xml_attr(precincts, "totalVoters")),
+  ballotsCast = as.integer(xml_attr(precincts, "ballotsCast")),
+  voterTurnout = as.numeric(xml_attr(precincts, "voterTurnout")),
+  percentReporting = as.numeric(xml_attr(precincts, "percentReporting")),
+  stringsAsFactors = FALSE
+)
+
+# View the data frame
+print(turnout.df)
+```
+
+## Parse out election results from XML file
+
+```{r}
+## Get all Contest nodes
+contests <- xml_file %>% xml_find_all(".//Contest")
+
+# Function to extract vote data for each contest and candidate
+parse_contest_votes <- function(contest_node) {
+  contest_name <- xml_attr(contest_node, "text")
+
+  # Get all candidate (Choice) nodes
+  choices <- contest_node %>% xml_find_all(".//Choice")
+
+  # Iterate through each candidate
+  map_df(choices, function(choice) {
+    candidate_name <- xml_attr(choice, "text")
+
+    # Get all VoteType nodes (Early, Election)
+    vote_types <- choice %>% xml_find_all(".//VoteType")
+
+    # Iterate through each VoteType and precinct data
+    map_df(vote_types, function(vote_type) {
+      vote_type_name <- xml_attr(vote_type, "name")
+
+      # Extract precincts
+      precincts <- vote_type %>% xml_find_all(".//Precinct")
+
+      # For each precinct, extract the votes and precinct name
+      map_df(precincts, function(precinct) {
+        precinct_name <- xml_attr(precinct, "name")
+        votes <- xml_attr(precinct, "votes") %>% as.numeric()
+
+        tibble(
+          contest = contest_name,
+          candidate = candidate_name,
+          vote_type = vote_type_name,
+          precinct = precinct_name,
+          votes = votes
+        )
+      })
+    })
+  })
+}
+
+# Apply the function to all contests
+election_data <- contests %>% map_df(parse_contest_votes)
+
+print(unique(election_data$candidate))
+print(unique(election_data$contest))
+
+```
+
+A function to summarize the overall results of a head-to-head race.
+
+```{r}
+contest.df <- function(my.race, my.dem, my.rep) {
+  ## Take the total election results and sum up votes for Presidential candidates
+  vote_sums <- election_data  %>%
+    filter(contest == my.race) %>% 
+    group_by(candidate, vote_type) %>%
+    summarize(total = sum(votes, na.rm = TRUE),.groups="keep") %>% 
+    pivot_wider(names_from = vote_type, values_from = total) %>% 
+    mutate(Overall = rowSums(across(everything()))) %>% 
+    ungroup()
+  
+  column_sums <- vote_sums %>%
+    select(where(is.numeric)) %>%
+    summarize(across(everything(), ~ sum(.x, na.rm = TRUE)))
+  vote_sums <- vote_sums %>%
+    add_row(candidate = "Total", !!!column_sums)
+  
+  ## Pull out the Democratic and Republican candidates and calculate their percentages
+  dem.row = vote_sums %>% filter(candidate == my.dem)
+  rep.row = vote_sums %>% filter(candidate == my.rep)
+  tot.row = vote_sums %>% filter(candidate == 'Total')
+  
+  output = rbind(round(100*dem.row[2:4]/tot.row[2:4],1),round(100*rep.row[2:4]/tot.row[2:4],1))
+  rownames(output) = c(my.dem,my.rep)
+  
+  return(output)
+}
+```
+
+```{r}
+my.race = "For President and Vice President"
+my.dem = "Joseph R. Biden / Kamala D. Harris"
+my.rep = "Donald J. Trump / Michael R. Pence"
+
+contest.df(my.race,my.dem,my.rep)
+```
+
+```{r}
+my.race = "For Prosecuting Attorney" 
+my.dem = "Fanon A. Rucker"
+my.rep = "Joseph T. Deters"
+
+contest.df(my.race,my.dem,my.rep)
+
+```
+
+## Precinct by precinct results
+
+```{r}
+precinct.race.df <- function(my.race, my.dem, my.rep) {
+  ## Get the precinct-by-precinct election results for Democrat and Republican in head-to-head race
+  early <- election_data  %>%
+    filter(contest == my.race,vote_type=='Early') %>% 
+    group_by(precinct) %>%
+    summarize(early = sum(votes, na.rm = TRUE),.groups="keep") 
+  
+  election <- election_data  %>%
+    filter(contest == my.race,vote_type=='Election') %>% 
+    group_by(precinct) %>%
+    summarize(election = sum(votes, na.rm = TRUE),.groups="keep") 
+  
+  overall <- election_data  %>%
+    filter(contest == my.race) %>% 
+    group_by(precinct) %>%
+    summarize(overall = sum(votes, na.rm = TRUE),.groups="keep")   
+ 
+  dem.early <- election_data  %>%
+    filter(contest == my.race,candidate==my.dem,vote_type=='Early') %>% 
+    group_by(precinct) %>%
+    summarize(dem.early = sum(votes, na.rm = TRUE),.groups="keep") 
+  
+  dem.election <- election_data  %>%
+    filter(contest == my.race,candidate==my.dem,vote_type=='Election') %>% 
+    group_by(precinct) %>%
+    summarize(dem.election = sum(votes, na.rm = TRUE),.groups="keep") 
+  
+  dem.overall <- election_data  %>%
+    filter(contest == my.race,candidate==my.dem) %>% 
+    group_by(precinct) %>%
+    summarize(dem.overall = sum(votes, na.rm = TRUE),.groups="keep") 
+  
+  rep.early <- election_data  %>%
+    filter(contest == my.race,candidate==my.rep,vote_type=='Early') %>% 
+    group_by(precinct) %>%
+    summarize(rep.early = sum(votes, na.rm = TRUE),.groups="keep") 
+  
+  rep.election <- election_data  %>%
+    filter(contest == my.race,candidate==my.rep,vote_type=='Election') %>% 
+    group_by(precinct) %>%
+    summarize(rep.election = sum(votes, na.rm = TRUE),.groups="keep") 
+  
+  rep.overall <- election_data  %>%
+    filter(contest == my.race,candidate==my.rep) %>% 
+    group_by(precinct) %>%
+    summarize(rep.overall = sum(votes, na.rm = TRUE),.groups="keep")   
+    
+  output <-
+    left_join(early,election,by='precinct') %>% 
+    left_join(overall,by="precinct") %>% 
+    left_join(dem.early,by="precinct") %>% 
+    left_join(dem.election,by="precinct") %>% 
+    left_join(dem.overall,by="precinct") %>% 
+    left_join(rep.early,by="precinct") %>% 
+    left_join(rep.election,by="precinct") %>% 
+    left_join(rep.overall,by="precinct")
+    
+  return(output)
+  }
+```
+
+```{r}
+
+my.race = "For President and Vice President"
+my.dem = "Joseph R. Biden / Kamala D. Harris"
+my.rep = "Donald J. Trump / Michael R. Pence"
+
+results <- precinct.race.df(my.race,my.dem,my.rep)
+```
+
+
+```{r}
+map <- st_transform(map, crs = st_crs(map.current))
+
+
+
+map %>% 
+  ggplot(aes())+
+  geom_sf()
+
+map.current %>% 
+  ggplot(aes())+
+  geom_sf()
+```
+
+
+
+
+```{r}
+duk <- 
+  left_join(map,precinct.name.equiv,by=c("PRECINCT"="PRC_ID_NAME_short")) 
+
+
+
+  left_join(,results, by = c("PRECINCT" = "precinct"))
+
+
+
+
+
+precinct.race.map <- left_join(map,results,by=c("PRECINCT"="precinct"))
+precinct.race.map <- st_transform(precinct.race.map, crs = st_crs(map.current))
+
+ugh <- st_interpolate_aw(st_make_valid(precinct.race.map[,2:8]),st_make_valid(map.current),extensive = TRUE)
+
+quartz()
+
+map %>% 
+  ggplot(aes())+
+  geom_sf()
+
+
+
+
+
+precincts.total <- interpolate_pw(
+  from = st_make_valid(precinct.race.map),
+  to = st_make_valid(map.current),
+  to_id = "PRECINCT",
+  extensive = TRUE,
+  weights = st_make_valid(block.total),
+  weight_column = "total.pop",
+  crs = st_crs(map.current)
+) 
+
+
+my.year = "2020"
+my.race = "For President and Vice President"
+my.dem = "Joseph R. Biden / Kamala D. Harris"
+my.rep = "Donald J. Trump / Michael R. Pence"
+
+
+precincts.total %>% 
+  mutate(dem.prop = dem.overall/overall) %>%
+  ggplot(aes(fill=dem.prop)) +
+  geom_sf()+
+  labs(title = paste(my.race,my.year,sep = ", "),
+       subtitle = paste(my.dem, 'vs',my.rep,sep=' '),
+       fill = "", 
+       caption = "")+
+  scale_fill_gradientn(colours=brewer.pal(n=10,name="RdBu"),na.value = "transparent",
+                           breaks=c(0,.25,0.5,.75,1),labels=c("100% Rep","","50%/50%","","100% Dem"),
+                           limits=c(0,1))+
+  theme_void()
+```
+
+```{r}
+my.race = "For Prosecuting Attorney" 
+my.dem = "Fanon A. Rucker"
+my.rep = "Joseph T. Deters"
+
+precinct.race.df(my.race,my.dem,my.rep)
+```
