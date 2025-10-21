@@ -4,6 +4,21 @@ library(tidyverse)
 library(dplyr)
 library(sf)
 
+load("data/Elec.RData")
+fix_geometrycollection <- function(x) {
+  st_collection_extract(st_make_valid(x), "POLYGON") %>%
+    st_cast("MULTIPOLYGON", warn = FALSE)
+}
+
+clean_sf <- function(x) {
+  x %>%
+    st_make_valid() %>%
+    st_transform(4269) %>%
+    st_collection_extract("POLYGON") %>%
+    st_cast("MULTIPOLYGON", warn = FALSE) %>%
+    filter(!st_is_empty(.))
+}
+
 # collected data
 acs_data_raw <- get_acs(
   geography = "block group",
@@ -189,8 +204,14 @@ acs_interp_judicial <- acs_interp_j_ext %>%
 
 # cps interpolation
 
+
+
 cps_boundaries <- st_read("shapefiles/cps_boundary.shp")
 cps_precincts <- st_read("shapefiles/cps_precincts.shp")
+
+acs_extensive <- fix_geometrycollection(acs_extensive)
+cps_precincts <- fix_geometrycollection(cps_precincts)
+block.total   <- fix_geometrycollection(block.total)
 
 acs_interp_cps_ext <- interpolate_pw(
   from        = st_make_valid(acs_extensive),
@@ -216,6 +237,13 @@ acs_interp_cps_int <- interpolate_pw(
 
 acs_interp_cps <- acs_interp_cps_ext %>%
   left_join(acs_interp_cps_int, by = "PRECINCT")
+
+##add election data
+acs_interp_cps <- left_join(
+  acs_interp_cps,
+  AvgMap %>% st_drop_geometry(), # drop duplicate geometry
+  by = "PRECINCT"
+)
 
 # cincy interpolation
 cincy_boundaries <- st_read("shapefiles/cincy_boundary.shp")
