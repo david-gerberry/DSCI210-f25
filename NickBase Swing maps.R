@@ -68,10 +68,5 @@ AvgMap %>%
     legend.title = element_text(size = 16)   # bigger legend title
   )
 
-mapsnstuff %>% 
-  ggplot(aes(fill = median_ageE)) +
-  geom_sf()+
-  scale_fill_viridis_c(option = "turbo") +
-  labs(title = "Precent of white pepole in precincte")
-labs(fill = "Percent of K-12 Public Private School")
+
 

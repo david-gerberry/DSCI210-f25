@@ -2,6 +2,8 @@ library(readxl)
 library(tidyverse)
 library(sf)
 library(RColorBrewer)
+
+
 FUXL23 <- read_excel("Data/election results/G23_Official_Canvass.xlsx", 
                                    sheet = 'Boards of Education', skip = 2, n_max = 562)
 
@@ -76,27 +78,7 @@ SmallMap19 <- SmallMap19 %>%
 
 EDrop21 <-  (sum(SmallMap21$`BALLOTS CAST TOTAL`) - (sum(SmallMap21$TOT_SCHOOL_BOARD)/4))/sum(SmallMap21$`BALLOTS CAST TOTAL`)
 EDrop19 <-  (sum(SmallMap19$`BALLOTS CAST TOTAL`) - (sum(SmallMap19$TOT_SCHOOL_BOARD)/4))/sum(SmallMap19$`BALLOTS CAST TOTAL`)
-####graphs####
- SmallMap %>% 
-  ggplot(aes(fill = NEW_PERCENT)) +
-  geom_sf() +
-  scale_fill_viridis_c(option = "turbo") +
-  labs(title = "Voter Turn out By Precinct for 2023 Cincinnati School Board") +
-  labs(fill = "Voter Turn out") 
 
-SmallMap19 %>% 
-  ggplot(aes(fill = NEW_PERCENT)) +
-  geom_sf() +
-  scale_fill_viridis_c(option = "turbo") +
-  labs(title = "Voter Turn out By Precinct for 2019 Cincinnati School Board") +
-  labs(fill = "Voter Turn out") 
-
-SmallMap19 %>% 
-  ggplot(aes(fill = dropOffestimate)) +
-  geom_sf() +
-  scale_fill_viridis_c(option = "turbo") +
-  labs(title = "drop off By Precinct for 2019 Cincinnati School Board") +
-  labs(fill = "drop off") 
 
 ##getting precent proxy
   SmallMap <- SmallMap %>% 
@@ -104,7 +86,7 @@ SmallMap19 %>%
   
   
   SmallMap19 <- SmallMap19 %>% 
-    mutate(PrecentPorxy = `Carolyn Jones`/`BALLOTS CAST TOTAL`)
+    mutate(PrecentPorxy = `Ben Lindy`/`BALLOTS CAST TOTAL`)
   
   AvgMap <- SmallMap %>%
     select(PRECINCT, PrecentPorxy) %>% 
@@ -137,7 +119,8 @@ SmallMap19 %>%
   AvgMap <- AvgMap %>% 
     mutate(AvgProx = (PrecentPorxy23 + PrecentPorxy19)/2) %>% 
     mutate(AvgDrop = (dropOffestimate21 + dropOffestimate19)/2) %>% 
-    mutate(AvgTurn = (turnout19 + turnout21)/2)
+    mutate(AvgTurn = ((turnout19 + turnout21)/2)*100)
+  
   #turn out
   AvgMap %>% 
     replace(is.na(.), 0) %>% 
@@ -162,3 +145,31 @@ SmallMap19 %>%
       legend.title = element_text(size = 16)   # bigger legend title
     )
   
+  
+  
+  ####graphs####
+  SmallMap %>% 
+    ggplot(aes(fill = NEW_PERCENT)) +
+    geom_sf() +
+    scale_fill_viridis_c(option = "turbo") +
+    labs(title = "Voter Turn out By Precinct for 2023 Cincinnati School Board") +
+    labs(fill = "Voter Turn out") 
+  
+  SmallMap19 %>% 
+    ggplot(aes(fill = NEW_PERCENT)) +
+    geom_sf() +
+    scale_fill_viridis_c(option = "turbo") +
+    labs(title = "Voter Turn out By Precinct for 2019 Cincinnati School Board") +
+    labs(fill = "Voter Turn out") 
+  
+  SmallMap19 %>% 
+    ggplot(aes(fill = dropOffestimate)) +
+    geom_sf() +
+    scale_fill_viridis_c(option = "turbo") +
+    labs(title = "drop off By Precinct for 2019 Cincinnati School Board") +
+    labs(fill = "drop off") 
+  
+  
+  
+  
+

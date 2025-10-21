@@ -3,6 +3,7 @@ library(tidycensus)
 library(tidyverse)
 library(dplyr)
 library(sf)
+load("data/Elec.RData")
 
 # collected data
 acs_data_raw <- get_acs(
@@ -191,6 +192,80 @@ acs_interp_judicial <- acs_interp_j_ext %>%
 
 cps_boundaries <- st_read("shapefiles/cps_boundary.shp")
 cps_precincts <- st_read("shapefiles/cps_precincts.shp")
+
+####adding election data ####
+FUXL23 <- read_excel("Data/election results/G23_Official_Canvass.xlsx", 
+                     sheet = 'Boards of Education', skip = 2, n_max = 562)
+
+
+FUXL21 <- read_excel("Data/election results/G21_Official_Canvass.xlsx", 
+                     sheet = 'Boards of Education', skip = 2, n_max = 564)
+
+
+FUXL19 <- read_excel("Data/election results/G19_Official_Canvass.xlsx", 
+                     sheet = 'Boards of Education', skip = 2, n_max=563)
+
+
+
+
+
+schoolPrecincts <- st_read("shapefiles/cps_precincts.shp")
+schoolBoundry <- st_read("shapefiles/cps_boundary.shp")
+
+##I love the new shape files so much here is some data cleaning to make them useable
+FUXL23$PRECINCT <- substr(FUXL23$PRECINCT, 1, 4)
+FUXL21$PRECINCT <- substr(FUXL21$PRECINCT, 1, 4)
+FUXL19$PRECINCT <- substr(FUXL19$PRECINCT, 1, 4)
+
+schoolBoundry <- st_set_crs(schoolBoundry, 4269)
+schoolPrecincts <- st_set_crs(schoolPrecincts, 4269)
+
+schoolPrecincts %>% 
+  ggplot(aes()) +
+  geom_sf()
+
+MapWResults23 <- left_join(schoolPrecincts, FUXL23, by = c("PRECINCT" = "PRECINCT"))
+MapWResults21 <- left_join(schoolPrecincts, FUXL21, by = c("PRECINCT" = "PRECINCT"))
+MapWResults19 <- left_join(schoolPrecincts, FUXL19, by = c("PRECINCT" = "PRECINCT"))
+
+#TIME FOR DATA WRANGLE
+SmallMap <- MapWResults23 %>% 
+  mutate(NEW_PERCENT = `BALLOTS CAST TOTAL`/ `REGISTERED VOTERS TOTAL`) %>% 
+  select(PRECINCT, `REGISTERED VOTERS TOTAL`, `BALLOTS CAST TOTAL`, NEW_PERCENT, 
+         `Eve           Bolton`, `Bryan        Cannon`, `Ben             Lindy`,
+         `Kendra        Mapp`, `Paul         Schiele`) %>% 
+  mutate(TOT_SCHOOL_BOARD =  `Eve           Bolton` + `Bryan        Cannon` + 
+           `Ben             Lindy` + `Kendra        Mapp` + `Paul         Schiele`) %>%  
+  filter(TOT_SCHOOL_BOARD != 0)
+
+SmallMap21 <- MapWResults21 %>% 
+  mutate(NEW_PERCENT = `BALLOTS CAST TOTAL`/ `REGISTERED VOTERS TOTAL`) %>% 
+  select(PRECINCT, `REGISTERED VOTERS TOTAL`, PRECINCT, `REGISTERED VOTERS TOTAL`, `BALLOTS CAST TOTAL`, NEW_PERCENT, geometry,
+         `Pamela F. Bowers`, `Brandon Craig`, `Gary      Favors`, `Kareem T. Moffett`, `Mike    Moroski`, `Mary Wineberg`) %>% 
+  mutate(TOT_SCHOOL_BOARD = `Pamela F. Bowers`+ `Brandon Craig`+ `Gary      Favors`+ `Kareem T. Moffett`+ `Mike    Moroski`+ `Mary Wineberg`) %>%  
+  filter(TOT_SCHOOL_BOARD != 0)
+
+
+SmallMap19 <- MapWResults19 %>% 
+  mutate(NEW_PERCENT = `BALLOTS CAST TOTAL`/ `REGISTERED VOTERS TOTAL`) %>% 
+  select(PRECINCT, `REGISTERED VOTERS TOTAL`, PRECINCT, `REGISTERED VOTERS TOTAL`, `BALLOTS CAST TOTAL`, NEW_PERCENT, geometry,
+         `Eve Bolton`, `Marlena Brookfield`, `Heather M. Couch`, `Ozie Davis III (Write-In)`, `Carolyn Jones`, `Ben Lindy`) %>% 
+  mutate(TOT_SCHOOL_BOARD = `Eve Bolton` + `Marlena Brookfield` + `Heather M. Couch` + `Ozie Davis III (Write-In)` + `Carolyn Jones` + `Ben Lindy`) %>%  
+  filter(TOT_SCHOOL_BOARD != 0)
+
+
+BallotSum23 = sum(FUXL23$`BALLOTS CAST TOTAL`, na.rm = T)
+BallotSum21 = sum(FUXL21$`BALLOTS CAST TOTAL`, na.rm = T)
+BallotSum19 = sum(FUXL19$`BALLOTS CAST TOTAL`, na.rm = T)
+
+VoteSum21 = sum(FUXL21$`REGISTERED VOTERS TOTAL`)
+VoteSum19 = sum(FUXL19$`REGISTERED VOTERS TOTAL`)
+#drop off calculation
+SmallMap21 <- SmallMap21 %>% 
+  mutate(dropOffestimate = (`BALLOTS CAST TOTAL` - (TOT_SCHOOL_BOARD/4))/`BALLOTS CAST TOTAL`)
+SmallMap19 <- SmallMap19 %>% 
+  mutate(dropOffestimate = (`BALLOTS CAST TOTAL` - (TOT_SCHOOL_BOARD/4))/`BALLOTS CAST TOTAL`)
+###end of that####
 
 acs_interp_cps_ext <- interpolate_pw(
   from        = st_make_valid(acs_extensive),

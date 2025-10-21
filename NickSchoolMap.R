@@ -58,7 +58,7 @@ schoolBoundry <- st_set_crs(schoolBoundry, 4269)
 schoolPrecincts <- st_set_crs(schoolPrecincts, 4269)
 
 
-s
+
 
 
 ##make the data wide
