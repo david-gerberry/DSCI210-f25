@@ -1,0 +1,345 @@
+#### Libraries ####
+
+library(tidyverse)
+
+#### Data #### 
+
+hamilton_df <- read_csv("data/AbsenteeListExport-68f0f2f025fea.csv")
+
+hamilton_df2 <- read_csv("data/AbsenteeListExport-68f6d43fbaa62.csv")
+
+#### Creating Data Frames ####
+
+judge_df <- hamilton_df %>% 
+  filter(Judicial == "JDMC04")
+
+cps_df <- hamilton_df %>% 
+  filter(School == "SCCISD")
+
+council_df <- hamilton_df %>% 
+  filter(grepl("^CIN", PrecinctName, ignore.case = TRUE))
+
+judge_df2 <- hamilton_df2 %>% 
+  filter(Judicial == "JDMC04")
+
+cps_df2 <- hamilton_df2 %>% 
+  filter(School == "SCCISD")
+
+council_df2 <- hamilton_df2 %>% 
+  filter(grepl("^CIN", PrecinctName, ignore.case = TRUE))
+
+
+#### Adding Rows ####
+
+hamilton_df <- hamilton_df %>% 
+  mutate(voted = if_else(!is.na(`Return Ballot Date`), 1, 0))
+
+cps_df <- cps_df %>% 
+  mutate(voted = if_else(!is.na(`Return Ballot Date`), 1, 0))
+
+judge_df <- judge_df %>% 
+  mutate(voted = if_else(!is.na(`Return Ballot Date`), 1, 0))
+
+council_df <- council_df %>% 
+  mutate(voted = if_else(!is.na(`Return Ballot Date`), 1, 0))
+
+
+
+hamilton_df2 <- hamilton_df2 %>% 
+  mutate(voted = if_else(!is.na(`Return Ballot Date`), 1, 0))
+
+cps_df2 <- cps_df2 %>% 
+  mutate(voted = if_else(!is.na(`Return Ballot Date`), 1, 0))
+
+judge_df2 <- judge_df2 %>% 
+  mutate(voted = if_else(!is.na(`Return Ballot Date`), 1, 0))
+
+council_df2 <- council_df2 %>% 
+  mutate(voted = if_else(!is.na(`Return Ballot Date`), 1, 0))
+
+#### Current "Turnout" ####
+
+votes_cast_ham <- sum(hamilton_df$voted)
+votes_cast_cps <- sum(cps_df$voted)
+votes_cast_judge <- sum(judge_df$voted)
+votes_cast_council <- sum(council_df$voted)
+
+votes_cast_ham_R <- hamilton_df %>%
+  filter(VoterParty == "R") %>%
+  summarise(total_votes = sum(voted, na.rm = TRUE)) %>%
+  pull(total_votes)
+votes_cast_cps_R <- cps_df %>%
+  filter(VoterParty == "R") %>%
+  summarise(total_votes = sum(voted, na.rm = TRUE)) %>%
+  pull(total_votes)
+votes_cast_judge_R <- judge_df %>%
+  filter(VoterParty == "R") %>%
+  summarise(total_votes = sum(voted, na.rm = TRUE)) %>%
+  pull(total_votes)
+votes_cast_council_R <- council_df %>%
+  filter(VoterParty == "R") %>%
+  summarise(total_votes = sum(voted, na.rm = TRUE)) %>%
+  pull(total_votes)
+
+votes_cast_ham_D <- hamilton_df %>%
+  filter(VoterParty == "D") %>%
+  summarise(total_votes = sum(voted, na.rm = TRUE)) %>%
+  pull(total_votes)
+votes_cast_cps_D <- cps_df %>%
+  filter(VoterParty == "D") %>%
+  summarise(total_votes = sum(voted, na.rm = TRUE)) %>%
+  pull(total_votes)
+votes_cast_judge_D <- judge_df %>%
+  filter(VoterParty == "D") %>%
+  summarise(total_votes = sum(voted, na.rm = TRUE)) %>%
+  pull(total_votes)
+votes_cast_council_D <- council_df %>%
+  filter(VoterParty == "D") %>%
+  summarise(total_votes = sum(voted, na.rm = TRUE)) %>%
+  pull(total_votes)
+
+votes_cast_ham_U <- hamilton_df %>%
+  filter(VoterParty == "U") %>%
+  summarise(total_votes = sum(voted, na.rm = TRUE)) %>%
+  pull(total_votes)
+votes_cast_cps_U <- cps_df %>%
+  filter(VoterParty == "U") %>%
+  summarise(total_votes = sum(voted, na.rm = TRUE)) %>%
+  pull(total_votes)
+votes_cast_judge_U <- judge_df %>%
+  filter(VoterParty == "U") %>%
+  summarise(total_votes = sum(voted, na.rm = TRUE)) %>%
+  pull(total_votes)
+votes_cast_council_U <- council_df %>%
+  filter(VoterParty == "U") %>%
+  summarise(total_votes = sum(voted, na.rm = TRUE)) %>%
+  pull(total_votes)
+
+# This data was collected on Oct 16
+
+votes_cast_ham2 <- sum(hamilton_df2$voted)
+votes_cast_cps2 <- sum(cps_df2$voted)
+votes_cast_judge2 <- sum(judge_df2$voted)
+votes_cast_council2 <- sum(council_df2$voted)
+
+votes_cast_ham_R2 <- hamilton_df2 %>%
+  filter(VoterParty == "R") %>%
+  summarise(total_votes = sum(voted, na.rm = TRUE)) %>%
+  pull(total_votes)
+votes_cast_cps_R2 <- cps_df2 %>%
+  filter(VoterParty == "R") %>%
+  summarise(total_votes = sum(voted, na.rm = TRUE)) %>%
+  pull(total_votes)
+votes_cast_judge_R2 <- judge_df2 %>%
+  filter(VoterParty == "R") %>%
+  summarise(total_votes = sum(voted, na.rm = TRUE)) %>%
+  pull(total_votes)
+votes_cast_council_R2 <- council_df2 %>%
+  filter(VoterParty == "R") %>%
+  summarise(total_votes = sum(voted, na.rm = TRUE)) %>%
+  pull(total_votes)
+
+votes_cast_ham_D2 <- hamilton_df2 %>%
+  filter(VoterParty == "D") %>%
+  summarise(total_votes = sum(voted, na.rm = TRUE)) %>%
+  pull(total_votes)
+votes_cast_cps_D2 <- cps_df2 %>%
+  filter(VoterParty == "D") %>%
+  summarise(total_votes = sum(voted, na.rm = TRUE)) %>%
+  pull(total_votes)
+votes_cast_judge_D2 <- judge_df2 %>%
+  filter(VoterParty == "D") %>%
+  summarise(total_votes = sum(voted, na.rm = TRUE)) %>%
+  pull(total_votes)
+votes_cast_council_D2 <- council_df2 %>%
+  filter(VoterParty == "D") %>%
+  summarise(total_votes = sum(voted, na.rm = TRUE)) %>%
+  pull(total_votes)
+
+votes_cast_ham_U2 <- hamilton_df2 %>%
+  filter(VoterParty == "U") %>%
+  summarise(total_votes = sum(voted, na.rm = TRUE)) %>%
+  pull(total_votes)
+votes_cast_cps_U2 <- cps_df2 %>%
+  filter(VoterParty == "U") %>%
+  summarise(total_votes = sum(voted, na.rm = TRUE)) %>%
+  pull(total_votes)
+votes_cast_judge_U2 <- judge_df2 %>%
+  filter(VoterParty == "U") %>%
+  summarise(total_votes = sum(voted, na.rm = TRUE)) %>%
+  pull(total_votes)
+votes_cast_council_U2 <- council_df2 %>%
+  filter(VoterParty == "U") %>%
+  summarise(total_votes = sum(voted, na.rm = TRUE)) %>%
+  pull(total_votes)
+
+# This data was collected on Oct 20
+
+turnout_ham <- votes_cast_ham/nrow(hamilton_df)
+turnout_ham2 <- votes_cast_ham2/nrow(hamilton_df2)
+turnout_cps <- votes_cast_cps/nrow(cps_df)
+turnout_cps2 <- votes_cast_cps2/nrow(cps_df2)
+turnout_judge <- votes_cast_judge/nrow(judge_df)
+turnout_judge2 <- votes_cast_judge2/nrow(judge_df2)
+turnout_council <- votes_cast_council/nrow(council_df)
+turnout_council2 <- votes_cast_council2/nrow(council_df2)
+
+turnout_ham_U <- votes_cast_ham_U/nrow(hamilton_df)
+turnout_ham2_U <- votes_cast_ham_U2/nrow(hamilton_df2)
+turnout_cps_U <- votes_cast_cps_U/nrow(cps_df)
+turnout_cps2_U <- votes_cast_cps_U2/nrow(cps_df2)
+turnout_judge_U <- votes_cast_judge_U/nrow(judge_df)
+turnout_judge2_U <- votes_cast_judge_U2/nrow(judge_df2)
+turnout_council_U <- votes_cast_council_U/nrow(council_df)
+turnout_council2_U <- votes_cast_council_U2/nrow(council_df2)
+
+turnout_ham_R <- votes_cast_ham_R/nrow(hamilton_df)
+turnout_ham2_R <- votes_cast_ham_R2/nrow(hamilton_df2)
+turnout_cps_R <- votes_cast_cps_R/nrow(cps_df)
+turnout_cps2_R <- votes_cast_cps_R2/nrow(cps_df2)
+turnout_judge_R <- votes_cast_judge_R/nrow(judge_df)
+turnout_judge2_R <- votes_cast_judge_R2/nrow(judge_df2)
+turnout_council_R <- votes_cast_council_R/nrow(council_df)
+turnout_council2_R <- votes_cast_council_R2/nrow(council_df2)
+
+turnout_ham_D <- votes_cast_ham_D/nrow(hamilton_df)
+turnout_ham2_D <- votes_cast_ham_D2/nrow(hamilton_df2)
+turnout_cps_D <- votes_cast_cps_D/nrow(cps_df)
+turnout_cps2_D <- votes_cast_cps_D2/nrow(cps_df2)
+turnout_judge_D <- votes_cast_judge_D/nrow(judge_df)
+turnout_judge2_D <- votes_cast_judge_D2/nrow(judge_df2)
+turnout_council_D <- votes_cast_council_D/nrow(council_df)
+turnout_council2_D <- votes_cast_council_D2/nrow(council_df2)
+
+#### Making Data Frame ####
+
+dates <- as.Date(c("2025-10-16", "2025-10-20"))
+
+cps_turnout <- c(turnout_cps, turnout_cps2)
+council_turnout <- c(turnout_council, turnout_council2)
+judge_turnout <- c(turnout_judge, turnout_judge2)
+hamilton_turnout <- c(turnout_ham, turnout_ham2)
+
+cps_turnout_R <- c(turnout_cps_R, turnout_cps2_R)
+council_turnout_R <- c(turnout_council_R, turnout_council2_R)
+judge_turnout_R <- c(turnout_judge_R, turnout_judge2_R)
+hamilton_turnout_R <- c(turnout_ham_R, turnout_ham2_R)
+
+cps_turnout_D <- c(turnout_cps_D, turnout_cps2)
+council_turnout_D <- c(turnout_council_D, turnout_council2_D)
+judge_turnout_D <- c(turnout_judge_D, turnout_judge2_D)
+hamilton_turnout_D <- c(turnout_ham_D, turnout_ham2_D)
+
+cps_turnout_U <- c(turnout_cps_U, turnout_cps2_U)
+council_turnout_U <- c(turnout_council_U, turnout_council2_U)
+judge_turnout_U <- c(turnout_judge_U, turnout_judge2_U)
+hamilton_turnout_U <- c(turnout_ham_U, turnout_ham2_U)
+
+df <- data.frame(
+  date = dates,
+  cps_turnout = cps_turnout,
+  council_turnout = council_turnout,
+  judge_turnout = judge_turnout,
+  hamilton_turnout = hamilton_turnout,
+  
+  cps_turnout_R = cps_turnout_R,
+  council_turnout_R = council_turnout_R,
+  judge_turnout_R = judge_turnout_R,
+  hamilton_turnout_R = hamilton_turnout_R,
+  
+  cps_turnout_D = cps_turnout_D,
+  council_turnout_D = council_turnout_D,
+  judge_turnout_D = judge_turnout_D,
+  hamilton_turnout_D = hamilton_turnout_D,
+  
+  cps_turnout_U = cps_turnout_U,
+  council_turnout_U = council_turnout_U,
+  judge_turnout_U = judge_turnout_U,
+  hamilton_turnout_U = hamilton_turnout_U
+)
+
+#### Graphs ####
+
+
+# Shows overall turnout so far
+ggplot(df, aes(x = dates, y = hamilton_turnout)) +
+  geom_line(color = "blue", size = 1.2) +
+  geom_point(color = "darkblue") +
+  labs(
+    title = "Absentee Voter Turnout Over Time",
+    x = "Date",
+    y = "Absentee Turnout"
+  ) +
+  # Set clean minimal theme
+  theme_minimal() +
+  # Y-axis from 0 to 1
+  ylim(0.2, 1) +
+  # Extend x-axis to include Election Day (Nov 4)
+  scale_x_date(
+    limits = c(min(df$date, na.rm = TRUE), as.Date("2025-11-04")),
+    date_breaks = "1 week",
+    date_labels = "%b %d"
+  ) +
+  geom_vline(
+    xintercept = as.numeric(as.Date("2025-11-04")),
+    linetype = "dashed",
+    color = "red",
+    size = 1
+  ) +
+  annotate(
+    "text",
+    x = as.Date("2025-11-04"),
+    y = 1,
+    label = "",
+    vjust = -0.5,
+    color = "red",
+    fontface = "bold"
+  )
+
+
+# Compares all 3 parties turnouts
+
+ggplot(df, aes(x = date)) +
+  geom_line(aes(y = hamilton_turnout_R, color = "Republican"), size = 1.2) +
+  geom_line(aes(y = hamilton_turnout_D, color = "Democrat"), size = 1.2) +
+  geom_line(aes(y = hamilton_turnout_U, color = "Undecided"), size = 1.2) +
+  labs(
+    title = "Absentee Voter Turnout Over Time by Party",
+    x = "Date",
+    y = "Absentee Turnout",
+    color = "Party"
+  ) +
+  theme_minimal() +
+  ylim(0, .5) +
+  scale_x_date(
+    limits = c(min(df$date, na.rm = TRUE), as.Date("2025-11-04")),
+    date_breaks = "1 week",
+    date_labels = "%b %d"
+  ) +
+  geom_vline(
+    xintercept = as.numeric(as.Date("2025-11-04")),
+    linetype = "dashed",
+    color = "red",
+    size = 1
+  ) +
+  annotate(
+    "text",
+    x = as.Date("2025-11-04"),
+    y = 1,
+    label = "",
+    vjust = -0.5,
+    color = "red",
+    fontface = "bold"
+  )
+
+
+
+
+
+
+
+
+
+
+
+
