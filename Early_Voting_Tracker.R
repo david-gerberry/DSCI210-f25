@@ -8,6 +8,8 @@ hamilton_df <- read_csv("data/AbsenteeListExport-68f0f2f025fea.csv")
 
 hamilton_df2 <- read_csv("data/AbsenteeListExport-68f6d43fbaa62.csv")
 
+hamilton_df_2021 <- read_csv("data/AbsenteeListExport-68f77d75ec2da.csv")
+
 #### Creating Data Frames ####
 
 judge_df <- hamilton_df %>% 
@@ -26,6 +28,15 @@ cps_df2 <- hamilton_df2 %>%
   filter(School == "SCCISD")
 
 council_df2 <- hamilton_df2 %>% 
+  filter(grepl("^CIN", PrecinctName, ignore.case = TRUE))
+
+judge_df_2021 <- data_2021 %>% 
+  filter(Judicial == "JDMC04")
+
+cps_df_2021 <- data_2021 %>% 
+  filter(School == "SCCISD")
+
+council_df_2021 <- data_2021 %>% 
   filter(grepl("^CIN", PrecinctName, ignore.case = TRUE))
 
 
@@ -55,6 +66,20 @@ judge_df2 <- judge_df2 %>%
   mutate(voted = if_else(!is.na(`Return Ballot Date`), 1, 0))
 
 council_df2 <- council_df2 %>% 
+  mutate(voted = if_else(!is.na(`Return Ballot Date`), 1, 0))
+
+
+
+hamilton_df_2021 <- hamilton_df_2021 %>% 
+  mutate(voted = if_else(!is.na(`Return Ballot Date`), 1, 0))
+
+cps_df_2021 <- cps_df_2021 %>% 
+  mutate(voted = if_else(!is.na(`Return Ballot Date`), 1, 0))
+
+judge_df_2021 <- judge_df_2021 %>% 
+  mutate(voted = if_else(!is.na(`Return Ballot Date`), 1, 0))
+
+council_df_2021 <- council_df_2021 %>% 
   mutate(voted = if_else(!is.na(`Return Ballot Date`), 1, 0))
 
 #### Current "Turnout" ####
@@ -260,9 +285,8 @@ df <- data.frame(
 
 #### Graphs ####
 
-
 # Shows overall turnout so far
-ggplot(df, aes(x = dates, y = hamilton_turnout)) +
+ggplot(df, aes(x = dates, y = judge_turnout)) +
   geom_line(color = "blue", size = 1.2) +
   geom_point(color = "darkblue") +
   labs(
@@ -300,15 +324,16 @@ ggplot(df, aes(x = dates, y = hamilton_turnout)) +
 # Compares all 3 parties turnouts
 
 ggplot(df, aes(x = date)) +
-  geom_line(aes(y = hamilton_turnout_R, color = "Republican"), size = 1.2) +
-  geom_line(aes(y = hamilton_turnout_D, color = "Democrat"), size = 1.2) +
-  geom_line(aes(y = hamilton_turnout_U, color = "Undecided"), size = 1.2) +
-  labs(
-    title = "Absentee Voter Turnout Over Time by Party",
-    x = "Date",
-    y = "Absentee Turnout",
-    color = "Party"
+  geom_line(aes(y = hamilton_turnout_D, color = "Democrat"), size = 1) +
+  geom_line(aes(y = hamilton_turnout_R, color = "Republican"), size = 1) +
+  geom_line(aes(y = hamilton_turnout_U, color = "Undecided"), size = 1) +
+  scale_color_manual(
+    name = "Party",
+    values = c("Democrat" = "blue",
+               "Republican" = "red",
+               "Undecided" = "green")
   ) +
+  labs(x = "Year", y = "Turnout") +
   theme_minimal() +
   ylim(0, .5) +
   scale_x_date(
