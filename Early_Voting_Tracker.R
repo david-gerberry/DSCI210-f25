@@ -4,9 +4,7 @@ library(tidyverse)
 
 #### Data #### 
 
-hamilton_df <- read_csv("data/AbsenteeListExport-68f0f2f025fea.csv")
-
-hamilton_df2 <- read_csv("data/AbsenteeListExport-68f6d43fbaa62.csv")
+hamilton_df <- read_csv("data/AbsenteeListExport-68f6d43fbaa62.csv")
 
 hamilton_df_2021 <- read_csv("data/AbsenteeListExport-68f77d75ec2da.csv")
 
@@ -236,6 +234,53 @@ turnout_judge2_D <- votes_cast_judge_D2/nrow(judge_df2)
 turnout_council_D <- votes_cast_council_D/nrow(council_df)
 turnout_council2_D <- votes_cast_council_D2/nrow(council_df2)
 
+
+#### Actually Good Code ####
+
+hamilton_df <- hamilton_df %>%
+  filter(!(`Return Ballot Date` %in% c("2025-10-02", "2025-10-03")))
+
+hamilton_df_2021 <- hamilton_df_2021 %>%
+  filter(!(`Return Ballot Date` > (as.Date("2021-11-2"))))
+
+hamilton_df <- hamilton_df %>%
+  mutate(days_before = as.numeric(as.Date("2025-11-04") - `Return Ballot Date`))
+
+hamilton_df_2021 <- hamilton_df_2021 %>%
+  mutate(days_before = as.numeric(as.Date("2021-11-02") - `Return Ballot Date`))
+
+
+
+
+# This will give the turnout based on how many days before the election the
+# "date" is.
+
+days_2025 <- c(18:28)
+
+turnout_by_date_2025 <- function(date=28){
+  
+  df <- hamilton_df %>%
+    filter(days_before >= !!date)
+  
+  votes_cast <- nrow(df)
+  
+  turnout <- votes_cast/nrow(hamilton_df)
+    
+  return(turnout)
+  
+}
+
+days_2021 <- c(15:0)
+
+turnout_by_date_2021 <- function(date){
+  
+  
+  
+}
+
+turnout_by_date_2025(18)
+
+
 #### Making Data Frame ####
 
 dates <- as.Date(c("2025-10-16", "2025-10-20"))
@@ -282,6 +327,7 @@ df <- data.frame(
   judge_turnout_U = judge_turnout_U,
   hamilton_turnout_U = hamilton_turnout_U
 )
+
 
 #### Graphs ####
 
