@@ -4,9 +4,9 @@ library(tidyverse)
 
 #### Data #### 
 
-hamilton_df <- read_csv("data/AbsenteeListExport-68f0f2f025fea.csv")
+hamilton_df <- read_csv("data/AbsenteeListExport-68f6d43fbaa62.csv")
 
-hamilton_df2 <- read_csv("data/AbsenteeListExport-68f6d43fbaa62.csv")
+hamilton_df_2021 <- read_csv("data/AbsenteeListExport-68f77d75ec2da.csv")
 
 #### Creating Data Frames ####
 
@@ -26,6 +26,15 @@ cps_df2 <- hamilton_df2 %>%
   filter(School == "SCCISD")
 
 council_df2 <- hamilton_df2 %>% 
+  filter(grepl("^CIN", PrecinctName, ignore.case = TRUE))
+
+judge_df_2021 <- data_2021 %>% 
+  filter(Judicial == "JDMC04")
+
+cps_df_2021 <- data_2021 %>% 
+  filter(School == "SCCISD")
+
+council_df_2021 <- data_2021 %>% 
   filter(grepl("^CIN", PrecinctName, ignore.case = TRUE))
 
 
@@ -55,6 +64,20 @@ judge_df2 <- judge_df2 %>%
   mutate(voted = if_else(!is.na(`Return Ballot Date`), 1, 0))
 
 council_df2 <- council_df2 %>% 
+  mutate(voted = if_else(!is.na(`Return Ballot Date`), 1, 0))
+
+
+
+hamilton_df_2021 <- hamilton_df_2021 %>% 
+  mutate(voted = if_else(!is.na(`Return Ballot Date`), 1, 0))
+
+cps_df_2021 <- cps_df_2021 %>% 
+  mutate(voted = if_else(!is.na(`Return Ballot Date`), 1, 0))
+
+judge_df_2021 <- judge_df_2021 %>% 
+  mutate(voted = if_else(!is.na(`Return Ballot Date`), 1, 0))
+
+council_df_2021 <- council_df_2021 %>% 
   mutate(voted = if_else(!is.na(`Return Ballot Date`), 1, 0))
 
 #### Current "Turnout" ####
@@ -211,126 +234,120 @@ turnout_judge2_D <- votes_cast_judge_D2/nrow(judge_df2)
 turnout_council_D <- votes_cast_council_D/nrow(council_df)
 turnout_council2_D <- votes_cast_council_D2/nrow(council_df2)
 
+
+#### Actually Good Code ####
+
+hamilton_df <- hamilton_df %>%
+  filter(!(`Return Ballot Date` %in% c("2025-10-02", "2025-10-03")))
+
+hamilton_df_2021 <- hamilton_df_2021 %>%
+  filter(is.na(`Return Ballot Date`) | !(`Return Ballot Date` > as.Date("2021-11-2")))
+
+hamilton_df <- hamilton_df %>%
+  mutate(days_before = as.numeric(as.Date("2025-11-04") - `Return Ballot Date`))
+
+hamilton_df_2021 <- hamilton_df_2021 %>%
+  mutate(days_before = as.numeric(as.Date("2021-11-02") - `Return Ballot Date`))
+
+
+# This will give the turnout based on how many days before the election the
+# "date" is.
+
+turnout_by_date_2025 <- function(date=28){
+  
+  df <- hamilton_df %>%
+    filter(days_before >= !!date)
+  
+  votes_cast <- nrow(df)
+  
+  turnout <- votes_cast/nrow(hamilton_df)
+    
+  return(turnout)
+  
+}
+
+
+turnout_by_date_2021 <- function(date){
+  
+  df <- hamilton_df_2021 %>%
+    filter(days_before >= !!date)
+  
+  votes_cast <- nrow(df)
+  
+  turnout <- votes_cast/nrow(hamilton_df_2021)
+  
+  return(turnout)
+}
+
 #### Making Data Frame ####
 
-dates <- as.Date(c("2025-10-16", "2025-10-20"))
+days_2025 <- c(18:28)
 
-cps_turnout <- c(turnout_cps, turnout_cps2)
-council_turnout <- c(turnout_council, turnout_council2)
-judge_turnout <- c(turnout_judge, turnout_judge2)
-hamilton_turnout <- c(turnout_ham, turnout_ham2)
+days_2021 <- c(15:0)
 
-cps_turnout_R <- c(turnout_cps_R, turnout_cps2_R)
-council_turnout_R <- c(turnout_council_R, turnout_council2_R)
-judge_turnout_R <- c(turnout_judge_R, turnout_judge2_R)
-hamilton_turnout_R <- c(turnout_ham_R, turnout_ham2_R)
-
-cps_turnout_D <- c(turnout_cps_D, turnout_cps2)
-council_turnout_D <- c(turnout_council_D, turnout_council2_D)
-judge_turnout_D <- c(turnout_judge_D, turnout_judge2_D)
-hamilton_turnout_D <- c(turnout_ham_D, turnout_ham2_D)
-
-cps_turnout_U <- c(turnout_cps_U, turnout_cps2_U)
-council_turnout_U <- c(turnout_council_U, turnout_council2_U)
-judge_turnout_U <- c(turnout_judge_U, turnout_judge2_U)
-hamilton_turnout_U <- c(turnout_ham_U, turnout_ham2_U)
+dates <- c(
+  seq(as.Date("2025-10-07"), as.Date("2025-10-17"), by = "day"),
+  seq(as.Date("2021-10-18"), as.Date("2021-11-02"), by = "day"))
 
 df <- data.frame(
   date = dates,
-  cps_turnout = cps_turnout,
-  council_turnout = council_turnout,
-  judge_turnout = judge_turnout,
-  hamilton_turnout = hamilton_turnout,
-  
-  cps_turnout_R = cps_turnout_R,
-  council_turnout_R = council_turnout_R,
-  judge_turnout_R = judge_turnout_R,
-  hamilton_turnout_R = hamilton_turnout_R,
-  
-  cps_turnout_D = cps_turnout_D,
-  council_turnout_D = council_turnout_D,
-  judge_turnout_D = judge_turnout_D,
-  hamilton_turnout_D = hamilton_turnout_D,
-  
-  cps_turnout_U = cps_turnout_U,
-  council_turnout_U = council_turnout_U,
-  judge_turnout_U = judge_turnout_U,
-  hamilton_turnout_U = hamilton_turnout_U
+  turnout = NA_real_
 )
+
+i <- 11
+
+for(date in days_2025){
+
+  turnout_curr <- turnout_by_date_2025(date)
+  
+  df$turnout[i] <- turnout_curr
+  
+  i <- i-1
+  
+}
+
+i <- 12
+
+for(date in days_2021){
+  
+  turnout_curr <- turnout_by_date_2021(date)
+  
+  df$turnout[i] <- turnout_curr
+  
+  i <- i+1
+  
+}
+
+
+
+
+df <- df %>%
+  mutate(is_2025 = ifelse(date > as.Date("2024-12-31"), 1, 0))
+
+df <- df %>%
+  mutate(days_before = ifelse(is_2025, 
+                              as.numeric(as.Date("2025-11-04") - date),
+                              as.numeric(as.Date("2021-11-02") - date)))
+
 
 #### Graphs ####
 
-
-# Shows overall turnout so far
-ggplot(df, aes(x = dates, y = hamilton_turnout)) +
-  geom_line(color = "blue", size = 1.2) +
-  geom_point(color = "darkblue") +
+ggplot(df, aes(x = days_before, y = turnout, color = factor(is_2025))) +
+  geom_line(size = 1) +
+  scale_x_reverse(
+    breaks = seq(0, max(df$days_before, na.rm = TRUE), by = 5),  # tick marks every 5 days
+    labels = function(x) ifelse(x == 0, "Election Day", x)       # rename 0
+  ) +
   labs(
-    title = "Absentee Voter Turnout Over Time",
-    x = "Date",
-    y = "Absentee Turnout"
+    color = "Election Year",
+    x = "Days Before Election",
+    y = "Absentee Ballot Return Rate"
   ) +
-  # Set clean minimal theme
-  theme_minimal() +
-  # Y-axis from 0 to 1
-  ylim(0.2, 1) +
-  # Extend x-axis to include Election Day (Nov 4)
-  scale_x_date(
-    limits = c(min(df$date, na.rm = TRUE), as.Date("2025-11-04")),
-    date_breaks = "1 week",
-    date_labels = "%b %d"
+  scale_color_manual(
+    values = c("0" = "blue", "1" = "red"),
+    labels = c("2021", "2025")
   ) +
-  geom_vline(
-    xintercept = as.numeric(as.Date("2025-11-04")),
-    linetype = "dashed",
-    color = "red",
-    size = 1
-  ) +
-  annotate(
-    "text",
-    x = as.Date("2025-11-04"),
-    y = 1,
-    label = "",
-    vjust = -0.5,
-    color = "red",
-    fontface = "bold"
-  )
-
-
-# Compares all 3 parties turnouts
-
-ggplot(df, aes(x = date)) +
-  geom_line(aes(y = hamilton_turnout_R, color = "Republican"), size = 1.2) +
-  geom_line(aes(y = hamilton_turnout_D, color = "Democrat"), size = 1.2) +
-  geom_line(aes(y = hamilton_turnout_U, color = "Undecided"), size = 1.2) +
-  labs(
-    title = "Absentee Voter Turnout Over Time by Party",
-    x = "Date",
-    y = "Absentee Turnout",
-    color = "Party"
-  ) +
-  theme_minimal() +
-  ylim(0, .5) +
-  scale_x_date(
-    limits = c(min(df$date, na.rm = TRUE), as.Date("2025-11-04")),
-    date_breaks = "1 week",
-    date_labels = "%b %d"
-  ) +
-  geom_vline(
-    xintercept = as.numeric(as.Date("2025-11-04")),
-    linetype = "dashed",
-    color = "red",
-    size = 1
-  ) +
-  annotate(
-    "text",
-    x = as.Date("2025-11-04"),
-    y = 1,
-    label = "",
-    vjust = -0.5,
-    color = "red",
-    fontface = "bold"
-  )
+  theme_minimal()
 
 
 
