@@ -8,8 +8,12 @@ library(dplyr)
 df_2013 <- read.csv("data/2013_Cincinnati_city_council_wide.csv")
 
 df_2013 <- df_2013 %>% 
-  mutate(Total_votes_for = rowSums(across(2:177))) %>% 
-  select(1, Total_votes_for, everything())
+  mutate(Total_votes_for = rowSums(across(2:176))) %>% 
+  select(1, Total_votes_for, everything()) 
+
+
+df_2013 <- df_2013[-1,]
+write.csv(df_2013, "data/2013_Cincinnati_city_council_wide.csv", row.names = FALSE)
 
 df_2017 <- read.csv("data/2017_Cincinnati_city_council_wide.csv")
 
@@ -120,22 +124,30 @@ simulate_election <- function(candidates_df = candidates_df, race = "City Counci
     #final number of ballots in given election
     Ballots <- 215985
     
-    #people who vote for six candidates
-    six_votes_on_ballot <- trunc(Ballots * .86)
+    Total_Ballots <- Ballots * percentage_of_ballots_cast
     
-    #people who vote for seven candidates
-    seven_votes_on_ballot <- trunc(Ballots * .14)
+    #vote probabiliy 
+    
+    vote_prob <- c(0.00, 0.00, 0.01, 0.02, 0.03, 0.10, 0.15, 0.25, 0.25, 0.19)
+    
+    vote_prob <- vote_prob / sum(vote_prob) 
     
     
-    Total_ballots <- seven_votes_on_ballot + six_votes_on_ballot
-    ballots <- vector("list", Total_ballots)
+    sum(0:9 * vote_prob)
     
-    for (i in 1:six_votes_on_ballot) {
-      ballots[[i]] <- sample(candidates_df$Name, 7, prob = candidates_df$weight)
-    }
+    ballots <- vector("list", Total_Ballots)
     
-    for (i in (six_votes_on_ballot + 1):Total_ballots) {
-      ballots[[i]] <- sample(candidates_df$Name, 8, prob = candidates_df$weight)
+    for(i in 1:Total_Ballots){
+      num_votes <- sample(0:9, size = 1, replace = TRUE, prob = vote_prob)
+      
+      
+      if(num_votes > 0){
+        ballots[[i]] <- sample(candidates_df$Name, num_votes, prob = candidates_df$weight)
+        
+      }
+      else{
+        ballots[[i]] <- character[0]
+      }
     }
     
     
@@ -280,6 +292,7 @@ simulate_election <- function(candidates_df = candidates_df, race = "City Counci
 }
 
 
+
 election_with_no_bias <- simulate_election(candidates_df = slate_2013, race = "City Council")
 
 write.csv(election_with_no_bias, "data/election_with_no_bias.csv")
@@ -325,22 +338,30 @@ simulate_election_with_bias <- function(candidates_df = candidates_df, race = "C
     #final number of ballots in given election
     Ballots <- 215985
     
-    #people who vote for six candidates
-    six_votes_on_ballot <- trunc(Ballots * .86)
+    Total_Ballots <- Ballots * percentage_of_ballots_cast
     
-    #people who vote for seven candidates
-    seven_votes_on_ballot <- trunc(Ballots * .14)
+    #vote probabiliy 
+    
+    vote_prob <- c(0.00, 0.00, 0.01, 0.02, 0.03, 0.10, 0.15, 0.25, 0.25, 0.19)
+    
+    vote_prob <- vote_prob / sum(vote_prob) 
     
     
-    Total_ballots <- seven_votes_on_ballot + six_votes_on_ballot
-    ballots <- vector("list", Total_ballots)
+    sum(0:9 * vote_prob)
     
-    for (i in 1:six_votes_on_ballot) {
-      ballots[[i]] <- sample(candidates_df$Name, 7, prob = candidates_df$weight)
-    }
+    ballots <- vector("list", Total_Ballots)
     
-    for (i in (six_votes_on_ballot + 1):Total_ballots) {
-      ballots[[i]] <- sample(candidates_df$Name, 8, prob = candidates_df$weight)
+    for(i in 1:Total_Ballots){
+      num_votes <- sample(0:9, size = 1, replace = TRUE, prob = vote_prob)
+      
+      
+      if(num_votes > 0){
+        ballots[[i]] <- sample(candidates_df$Name, num_votes, prob = candidates_df$weight)
+        
+      }
+      else{
+        ballots[[i]] <- character[0]
+      }
     }
     
     
@@ -489,3 +510,16 @@ simulate_election_with_bias <- function(candidates_df = candidates_df, race = "C
 simulated_election_with_bias <- simulate_election_with_bias(candidates_df = slate_2013, race = "City Council")
 
 write.csv(simulated_election_with_bias, "data/simulated_election_with_bias.csv")
+
+
+
+#### Merging Things ####
+
+merged_df <- merge(simulated_election_with_bias, slate_2013, by = "Name")
+
+merged_df[18, 1] <- "Timothy Joseph Dornbusch"
+
+df_2013 <- df_2013 %>%
+  left_join(merged_df, by = c("Candidate" = "Name")) %>%
+  select(1, Votes, Incumbancy_Status, Party_Affiliation, everything())
+  
