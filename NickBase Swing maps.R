@@ -4,53 +4,49 @@ ThresholdStrong = magic_number_average * 2
 ThresholdsSwing = magic_number_average * .8
 max_support = max(AvgMap$AvgProx, na.rm = T)
 
-leaf_mapN = function() {
-  pal <- colorFactor(
-    palette = c(
-      "Residual" = "red",
-      "Swing" = "gold",
-      "Base" = "blue",
-      "Strong Base" = "darkblue"
-    ),
-    levels = c("Residual", "Swing", "Base", "Strong Base")
+
+leaf_mapN = function(df) {
+  pal <- colorNumeric(
+    palette = brewer.pal(n = 10, name = "RdBu"),
+    domain = c(0, max_support),
+    na.color = "transparent"
   )
   
-  # Create the map
-  AvgMap %>%
-    mutate(BaseSwing = cut(
-      AvgProx,
-      breaks = c(-0.001, ThresholdsSwing, ThresholdsRes, ThresholdStrong, 1),
-      labels = c('Residual', 'Swing', 'Base', 'Strong Base')
-    )) %>%
-    st_transform(4326) %>%  # Transform to WGS84 for leaflet
-    leaflet() %>%
-    addProviderTiles(providers$CartoDB.Positron) %>%  # Add a base map
+  # Create the leaflet map
+  leaflet(df) %>%
+    addProviderTiles(providers$CartoDB.Positron) %>%
     addPolygons(
-      fillColor = ~pal(BaseSwing),
+      fillColor = ~pal(AvgProx),
       fillOpacity = 0.7,
-      color = "white",
+      color = "#444444",
       weight = 1,
-      label = ~BaseSwing,
+      smoothFactor = 0.5,
       highlightOptions = highlightOptions(
         weight = 2,
         color = "#666",
         fillOpacity = 0.9,
         bringToFront = TRUE
-      )
+      ),
+      label = ~paste0("Support: ", round(AvgProx * 100, 1), "%"),
+      layerId = ~PRECINCT  # Use formula notation, not AvgMap$PRECINCT
     ) %>%
     addLegend(
-      position = "bottomright",
       pal = pal,
-      values = ~BaseSwing,
-      title = "BaseSwing",
-      opacity = 0.7
+      values = ~AvgProx,
+      opacity = 0.7,
+      title = "Support Level",
+      position = "bottomright",
+      labFormat = labelFormat(
+        suffix = "%",
+        transform = function(x) x * 100
+      )
     )
 }
 
 
 
 
-save(AvgMap, ThresholdsSwing, ThresholdStrong, ThresholdsRes, leaf_mapN, file = "data/Elec.RData")
+save(AvgMap, ThresholdsSwing, ThresholdStrong, ThresholdsRes, max_support, leaf_mapN, ourMap, file = "data/Elec.RData")
 
 SmallMap %>% 
   ggplot(aes(fill = PrecentPorxy)) +
@@ -107,7 +103,7 @@ AvgMap %>%
   scale_fill_gradientn(colours=brewer.pal(n=10,name="RdBu"),na.value = "transparent",
                        values = c(0,ThresholdsSwing, ThresholdsRes, max_support),
                        breaks = c(0, ThresholdsSwing, ThresholdsRes, max_support), 
-                       labels = c("0%", "24%", "44%", "76%"),
+                       labels = c("0%", "24%", "44%", "56%"),
                        name = "Support Level",
                        limits=c(0,1)) +
   theme(

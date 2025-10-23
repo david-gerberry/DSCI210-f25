@@ -4,6 +4,7 @@ library(shinycssloaders)
 library(leaflet)
 library(sf)
 library(tidycensus)
+library(RColorBrewer)
 load("data/acs_data.RData")
 load("data/Elec.RData")
 
@@ -11,6 +12,7 @@ acs_interp_cps <- acs_interp_cps %>%
   mutate(FANCY_PRECINCT = PRECINCT)
 acs_interp_cps <- acs_interp_cps %>% 
   mutate(PRECINCT = substr(acs_interp_cps$PRECINCT, 1, 4))
+
 
 ##add precent white for the map
 acs_interp_cps <- acs_interp_cps %>% 
@@ -29,6 +31,10 @@ acs_interp_cps <- left_join(
   by = "PRECINCT",
 )
 
+#with data join reset the precincte names and shit. 
+acs_interp_cps <- acs_interp_cps %>% 
+  mutate(PRECINCT = FANCY_PRECINCT)
+####maps ####
 #' Creates a map
 #' @param shpFile what map we're going to use ( all caps! )
 #'    "CPS" = cincinatti public school
@@ -45,7 +51,8 @@ shiny.map <- function(shpFile = "CIT", colType = "age"){
   
   # Check if we're doing base swing visualization
   if (colType == "base" & shpFile == "CPS") {
-    leaf_mapN()
+    ourMap <- acs_interp_cps
+    return(leaf_mapN(ourMap))
   }
   else {
   # NORMAL CODE (existing code for other colTypes)
@@ -372,7 +379,7 @@ precinct_name <- function(district="MUN",code="0101 CIN 1-A"){
   df_row <- df %>% 
     filter(PRECINCT == code)
   
-  word <- df_row$FANCY_PRECINCT
+  word <- df_row$PRECINCT
   
   result <- substring(word, 6)
   
@@ -579,20 +586,6 @@ return_median_pre <- function(district="MUN",code="0101 CIN 1-A", data="age"){
 
 return_median_pre("CPS","2203 CIN 22-C","race")
 ####Shiny code ####
-test = function(map) {
-  if (map == "CPS") {
-  hist(starwars$mass, breaks = 100)
-  }
-else if (map == "MUN") {
-  hist(starwars$birth_year)
-}
-else {
-  hist(starwars$height)
-}
-  
-}
-
-
 ui <- fluidPage(
   
   titlePanel("Demographic Map"),
@@ -611,12 +604,22 @@ ui <- fluidPage(
     column(
       width = 3,
       selectInput(inputId = "data_dropdown", 
-                  label = "Choose a Pramater", 
+                  label = "Choose a Map Pramater", 
                   choices = c("Age" = "age",
                               "Income" = "income",
                               "Race" = "race",
                               "Turn Out" = "turnout",
                               "Base and Swing" = "base"),
+                  selected = "age") 
+    ),
+    column(
+      width = 3,
+      selectInput(inputId = "hist_dropdown", 
+                  label = "Choose a Graph Pramater", 
+                  choices = c("Age" = "age",
+                              "Income" = "income",
+                              "Race" = "race"
+                              ),
                   selected = "age") 
     )
   ),
@@ -682,7 +685,7 @@ server <- function(input, output, session) {
   
   # district-level plot
   output$test1 <- renderPlot({
-    make_histogram_dist(input$map_dropdown, input$data_dropdown)
+    make_histogram_dist(input$map_dropdown, input$hist_dropdown)
   })
   
   # precinct-level plot (uses clicked precinct if valid; otherwise uses a sensible default)
@@ -715,7 +718,7 @@ server <- function(input, output, session) {
     }
     
     # Now draw the precinct histogram
-    make_histogram_pre(input$map_dropdown, Pre, input$data_dropdown)
+    make_histogram_pre(input$map_dropdown, Pre, input$hist_dropdown)
   })
 }
 
