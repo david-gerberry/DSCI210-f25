@@ -8,231 +8,7 @@ hamilton_df <- read_csv("data/AbsenteeListExport-68f6d43fbaa62.csv")
 
 hamilton_df_2021 <- read_csv("data/AbsenteeListExport-68f77d75ec2da.csv")
 
-#### Creating Data Frames ####
-
-judge_df <- hamilton_df %>% 
-  filter(Judicial == "JDMC04")
-
-cps_df <- hamilton_df %>% 
-  filter(School == "SCCISD")
-
-council_df <- hamilton_df %>% 
-  filter(grepl("^CIN", PrecinctName, ignore.case = TRUE))
-
-judge_df2 <- hamilton_df2 %>% 
-  filter(Judicial == "JDMC04")
-
-cps_df2 <- hamilton_df2 %>% 
-  filter(School == "SCCISD")
-
-council_df2 <- hamilton_df2 %>% 
-  filter(grepl("^CIN", PrecinctName, ignore.case = TRUE))
-
-judge_df_2021 <- data_2021 %>% 
-  filter(Judicial == "JDMC04")
-
-cps_df_2021 <- data_2021 %>% 
-  filter(School == "SCCISD")
-
-council_df_2021 <- data_2021 %>% 
-  filter(grepl("^CIN", PrecinctName, ignore.case = TRUE))
-
-
-#### Adding Rows ####
-
-hamilton_df <- hamilton_df %>% 
-  mutate(voted = if_else(!is.na(`Return Ballot Date`), 1, 0))
-
-cps_df <- cps_df %>% 
-  mutate(voted = if_else(!is.na(`Return Ballot Date`), 1, 0))
-
-judge_df <- judge_df %>% 
-  mutate(voted = if_else(!is.na(`Return Ballot Date`), 1, 0))
-
-council_df <- council_df %>% 
-  mutate(voted = if_else(!is.na(`Return Ballot Date`), 1, 0))
-
-
-
-hamilton_df2 <- hamilton_df2 %>% 
-  mutate(voted = if_else(!is.na(`Return Ballot Date`), 1, 0))
-
-cps_df2 <- cps_df2 %>% 
-  mutate(voted = if_else(!is.na(`Return Ballot Date`), 1, 0))
-
-judge_df2 <- judge_df2 %>% 
-  mutate(voted = if_else(!is.na(`Return Ballot Date`), 1, 0))
-
-council_df2 <- council_df2 %>% 
-  mutate(voted = if_else(!is.na(`Return Ballot Date`), 1, 0))
-
-
-
-hamilton_df_2021 <- hamilton_df_2021 %>% 
-  mutate(voted = if_else(!is.na(`Return Ballot Date`), 1, 0))
-
-cps_df_2021 <- cps_df_2021 %>% 
-  mutate(voted = if_else(!is.na(`Return Ballot Date`), 1, 0))
-
-judge_df_2021 <- judge_df_2021 %>% 
-  mutate(voted = if_else(!is.na(`Return Ballot Date`), 1, 0))
-
-council_df_2021 <- council_df_2021 %>% 
-  mutate(voted = if_else(!is.na(`Return Ballot Date`), 1, 0))
-
-#### Current "Turnout" ####
-
-votes_cast_ham <- sum(hamilton_df$voted)
-votes_cast_cps <- sum(cps_df$voted)
-votes_cast_judge <- sum(judge_df$voted)
-votes_cast_council <- sum(council_df$voted)
-
-votes_cast_ham_R <- hamilton_df %>%
-  filter(VoterParty == "R") %>%
-  summarise(total_votes = sum(voted, na.rm = TRUE)) %>%
-  pull(total_votes)
-votes_cast_cps_R <- cps_df %>%
-  filter(VoterParty == "R") %>%
-  summarise(total_votes = sum(voted, na.rm = TRUE)) %>%
-  pull(total_votes)
-votes_cast_judge_R <- judge_df %>%
-  filter(VoterParty == "R") %>%
-  summarise(total_votes = sum(voted, na.rm = TRUE)) %>%
-  pull(total_votes)
-votes_cast_council_R <- council_df %>%
-  filter(VoterParty == "R") %>%
-  summarise(total_votes = sum(voted, na.rm = TRUE)) %>%
-  pull(total_votes)
-
-votes_cast_ham_D <- hamilton_df %>%
-  filter(VoterParty == "D") %>%
-  summarise(total_votes = sum(voted, na.rm = TRUE)) %>%
-  pull(total_votes)
-votes_cast_cps_D <- cps_df %>%
-  filter(VoterParty == "D") %>%
-  summarise(total_votes = sum(voted, na.rm = TRUE)) %>%
-  pull(total_votes)
-votes_cast_judge_D <- judge_df %>%
-  filter(VoterParty == "D") %>%
-  summarise(total_votes = sum(voted, na.rm = TRUE)) %>%
-  pull(total_votes)
-votes_cast_council_D <- council_df %>%
-  filter(VoterParty == "D") %>%
-  summarise(total_votes = sum(voted, na.rm = TRUE)) %>%
-  pull(total_votes)
-
-votes_cast_ham_U <- hamilton_df %>%
-  filter(VoterParty == "U") %>%
-  summarise(total_votes = sum(voted, na.rm = TRUE)) %>%
-  pull(total_votes)
-votes_cast_cps_U <- cps_df %>%
-  filter(VoterParty == "U") %>%
-  summarise(total_votes = sum(voted, na.rm = TRUE)) %>%
-  pull(total_votes)
-votes_cast_judge_U <- judge_df %>%
-  filter(VoterParty == "U") %>%
-  summarise(total_votes = sum(voted, na.rm = TRUE)) %>%
-  pull(total_votes)
-votes_cast_council_U <- council_df %>%
-  filter(VoterParty == "U") %>%
-  summarise(total_votes = sum(voted, na.rm = TRUE)) %>%
-  pull(total_votes)
-
-# This data was collected on Oct 16
-
-votes_cast_ham2 <- sum(hamilton_df2$voted)
-votes_cast_cps2 <- sum(cps_df2$voted)
-votes_cast_judge2 <- sum(judge_df2$voted)
-votes_cast_council2 <- sum(council_df2$voted)
-
-votes_cast_ham_R2 <- hamilton_df2 %>%
-  filter(VoterParty == "R") %>%
-  summarise(total_votes = sum(voted, na.rm = TRUE)) %>%
-  pull(total_votes)
-votes_cast_cps_R2 <- cps_df2 %>%
-  filter(VoterParty == "R") %>%
-  summarise(total_votes = sum(voted, na.rm = TRUE)) %>%
-  pull(total_votes)
-votes_cast_judge_R2 <- judge_df2 %>%
-  filter(VoterParty == "R") %>%
-  summarise(total_votes = sum(voted, na.rm = TRUE)) %>%
-  pull(total_votes)
-votes_cast_council_R2 <- council_df2 %>%
-  filter(VoterParty == "R") %>%
-  summarise(total_votes = sum(voted, na.rm = TRUE)) %>%
-  pull(total_votes)
-
-votes_cast_ham_D2 <- hamilton_df2 %>%
-  filter(VoterParty == "D") %>%
-  summarise(total_votes = sum(voted, na.rm = TRUE)) %>%
-  pull(total_votes)
-votes_cast_cps_D2 <- cps_df2 %>%
-  filter(VoterParty == "D") %>%
-  summarise(total_votes = sum(voted, na.rm = TRUE)) %>%
-  pull(total_votes)
-votes_cast_judge_D2 <- judge_df2 %>%
-  filter(VoterParty == "D") %>%
-  summarise(total_votes = sum(voted, na.rm = TRUE)) %>%
-  pull(total_votes)
-votes_cast_council_D2 <- council_df2 %>%
-  filter(VoterParty == "D") %>%
-  summarise(total_votes = sum(voted, na.rm = TRUE)) %>%
-  pull(total_votes)
-
-votes_cast_ham_U2 <- hamilton_df2 %>%
-  filter(VoterParty == "U") %>%
-  summarise(total_votes = sum(voted, na.rm = TRUE)) %>%
-  pull(total_votes)
-votes_cast_cps_U2 <- cps_df2 %>%
-  filter(VoterParty == "U") %>%
-  summarise(total_votes = sum(voted, na.rm = TRUE)) %>%
-  pull(total_votes)
-votes_cast_judge_U2 <- judge_df2 %>%
-  filter(VoterParty == "U") %>%
-  summarise(total_votes = sum(voted, na.rm = TRUE)) %>%
-  pull(total_votes)
-votes_cast_council_U2 <- council_df2 %>%
-  filter(VoterParty == "U") %>%
-  summarise(total_votes = sum(voted, na.rm = TRUE)) %>%
-  pull(total_votes)
-
-# This data was collected on Oct 20
-
-turnout_ham <- votes_cast_ham/nrow(hamilton_df)
-turnout_ham2 <- votes_cast_ham2/nrow(hamilton_df2)
-turnout_cps <- votes_cast_cps/nrow(cps_df)
-turnout_cps2 <- votes_cast_cps2/nrow(cps_df2)
-turnout_judge <- votes_cast_judge/nrow(judge_df)
-turnout_judge2 <- votes_cast_judge2/nrow(judge_df2)
-turnout_council <- votes_cast_council/nrow(council_df)
-turnout_council2 <- votes_cast_council2/nrow(council_df2)
-
-turnout_ham_U <- votes_cast_ham_U/nrow(hamilton_df)
-turnout_ham2_U <- votes_cast_ham_U2/nrow(hamilton_df2)
-turnout_cps_U <- votes_cast_cps_U/nrow(cps_df)
-turnout_cps2_U <- votes_cast_cps_U2/nrow(cps_df2)
-turnout_judge_U <- votes_cast_judge_U/nrow(judge_df)
-turnout_judge2_U <- votes_cast_judge_U2/nrow(judge_df2)
-turnout_council_U <- votes_cast_council_U/nrow(council_df)
-turnout_council2_U <- votes_cast_council_U2/nrow(council_df2)
-
-turnout_ham_R <- votes_cast_ham_R/nrow(hamilton_df)
-turnout_ham2_R <- votes_cast_ham_R2/nrow(hamilton_df2)
-turnout_cps_R <- votes_cast_cps_R/nrow(cps_df)
-turnout_cps2_R <- votes_cast_cps_R2/nrow(cps_df2)
-turnout_judge_R <- votes_cast_judge_R/nrow(judge_df)
-turnout_judge2_R <- votes_cast_judge_R2/nrow(judge_df2)
-turnout_council_R <- votes_cast_council_R/nrow(council_df)
-turnout_council2_R <- votes_cast_council_R2/nrow(council_df2)
-
-turnout_ham_D <- votes_cast_ham_D/nrow(hamilton_df)
-turnout_ham2_D <- votes_cast_ham_D2/nrow(hamilton_df2)
-turnout_cps_D <- votes_cast_cps_D/nrow(cps_df)
-turnout_cps2_D <- votes_cast_cps_D2/nrow(cps_df2)
-turnout_judge_D <- votes_cast_judge_D/nrow(judge_df)
-turnout_judge2_D <- votes_cast_judge_D2/nrow(judge_df2)
-turnout_council_D <- votes_cast_council_D/nrow(council_df)
-turnout_council2_D <- votes_cast_council_D2/nrow(council_df2)
+hamilton_df_2023 <- read_csv("data/AbsenteeListExport-68f96ba1604c8.csv")
 
 
 #### Actually Good Code ####
@@ -249,34 +25,145 @@ hamilton_df <- hamilton_df %>%
 hamilton_df_2021 <- hamilton_df_2021 %>%
   mutate(days_before = as.numeric(as.Date("2021-11-02") - `Return Ballot Date`))
 
+hamilton_df_2023 <- hamilton_df_2023 %>%
+  filter(is.na(`Return Ballot Date`) | !(`Return Ballot Date` > as.Date("2023-11-7")))
 
-# This will give the turnout based on how many days before the election the
-# "date" is.
+hamilton_df_2023 <- hamilton_df_2023 %>%
+  mutate(days_before = as.numeric(as.Date("2023-11-07") - `Return Ballot Date`))
 
-turnout_by_date_2025 <- function(date=28){
+
+#### Functions ####
+
+turnout_by_date_2025 <- function(date, party = NULL) {
   
-  df <- hamilton_df %>%
-    filter(days_before >= !!date)
+  if (!is.null(party) && party == "R") {
+    df <- hamilton_df %>%
+      filter(days_before >= !!date, VoterParty == "R")
+  } else if (!is.null(party) && party == "U") {
+    df <- hamilton_df %>%
+      filter(days_before >= !!date, VoterParty == "U")
+  } else if (!is.null(party) && party == "D") {
+    df <- hamilton_df %>%
+      filter(days_before >= !!date, VoterParty == "D")
+  } else {
+    df <- hamilton_df %>% 
+      filter(days_before >= !!date)
+  }
+  
+  votes_cast <- nrow(df)
+  turnout <- votes_cast / nrow(hamilton_df)
+  
+  return(turnout)
+}
+
+turnout_by_date_2023 <- function(date, party = NULL) {
+  
+  if (!is.null(party) && party == "R") {
+    df <- hamilton_df_2023 %>%
+      filter(days_before >= !!date, VoterParty == "R")
+  } else if (!is.null(party) && party == "U") {
+    df <- hamilton_df_2023 %>%
+      filter(days_before >= !!date, VoterParty == "U")
+  } else if (!is.null(party) && party == "D") {
+    df <- hamilton_df_2023 %>%
+      filter(days_before >= !!date, VoterParty == "D")
+  } else {
+    df <- hamilton_df_2023 %>% 
+      filter(days_before >= !!date)
+  }
+  
+  votes_cast <- nrow(df)
+  turnout <- votes_cast / nrow(hamilton_df_2023)
+  
+  return(turnout)
+}
+
+turnout_by_date_2021 <- function(date, party = NULL) {
+  
+  if (!is.null(party) && party == "R") {
+    df <- hamilton_df_2021 %>%
+      filter(days_before >= !!date, VoterParty == "R")
+  } else if (!is.null(party) && party == "U") {
+    df <- hamilton_df_2021 %>%
+      filter(days_before >= !!date, VoterParty == "U")
+  } else if (!is.null(party) && party == "D") {
+    df <- hamilton_df_2021 %>%
+      filter(days_before >= !!date, VoterParty == "D")
+  } else {
+    df <- hamilton_df_2021 %>% 
+      filter(days_before >= !!date)
+  }
+  
+  votes_cast <- nrow(df)
+  turnout <- votes_cast / nrow(hamilton_df_2021)
+  
+  return(turnout)
+}
+
+total_votes_2025 <- function(date,party = NULL){
+  
+  if (!is.null(party) && party == "R") {
+    df <- hamilton_df %>%
+      filter(days_before >= !!date, VoterParty == "R")
+  } else if (!is.null(party) && party == "U") {
+    df <- hamilton_df %>%
+      filter(days_before >= !!date, VoterParty == "U")
+  } else if (!is.null(party) && party == "D") {
+    df <- hamilton_df %>%
+      filter(days_before >= !!date, VoterParty == "D")
+  } else {
+    df <- hamilton_df %>% 
+      filter(days_before >= !!date)
+  }
   
   votes_cast <- nrow(df)
   
-  turnout <- votes_cast/nrow(hamilton_df)
-    
-  return(turnout)
+  return(votes_cast)
   
 }
 
-
-turnout_by_date_2021 <- function(date){
+total_votes_2023 <- function(date,party = NULL){
   
-  df <- hamilton_df_2021 %>%
-    filter(days_before >= !!date)
+  if (!is.null(party) && party == "R") {
+    df <- hamilton_df_2023 %>%
+      filter(days_before >= !!date, VoterParty == "R")
+  } else if (!is.null(party) && party == "U") {
+    df <- hamilton_df_2023 %>%
+      filter(days_before >= !!date, VoterParty == "U")
+  } else if (!is.null(party) && party == "D") {
+    df <- hamilton_df_2023 %>%
+      filter(days_before >= !!date, VoterParty == "D")
+  } else {
+    df <- hamilton_df_2023 %>% 
+      filter(days_before >= !!date)
+  }
   
   votes_cast <- nrow(df)
   
-  turnout <- votes_cast/nrow(hamilton_df_2021)
+  return(votes_cast)
   
-  return(turnout)
+}
+
+total_votes_2021 <- function(date,party = NULL){
+  
+  if (!is.null(party) && party == "R") {
+    df <- hamilton_df_2021 %>%
+      filter(days_before >= !!date, VoterParty == "R")
+  } else if (!is.null(party) && party == "U") {
+    df <- hamilton_df_2021 %>%
+      filter(days_before >= !!date, VoterParty == "U")
+  } else if (!is.null(party) && party == "D") {
+    df <- hamilton_df_2021 %>%
+      filter(days_before >= !!date, VoterParty == "D")
+  } else {
+    df <- hamilton_df_2021 %>% 
+      filter(days_before >= !!date)
+  }
+  
+  votes_cast <- nrow(df)
+  
+  return(votes_cast)
+  
 }
 
 #### Making Data Frame ####
@@ -285,78 +172,713 @@ days_2025 <- c(18:28)
 
 days_2021 <- c(15:0)
 
+days_2023 <- c(33:0)
+
 dates <- c(
   seq(as.Date("2025-10-07"), as.Date("2025-10-17"), by = "day"),
+  seq(as.Date("2023-10-05"), as.Date("2023-11-07"), by = "day"),
   seq(as.Date("2021-10-18"), as.Date("2021-11-02"), by = "day"))
 
 df <- data.frame(
   date = dates,
-  turnout = NA_real_
+  turnout = NA_real_,
+  turnout_R = NA_real_,
+  turnout_D = NA_real_,
+  turnout_U = NA_real_,
+  total_R = NA_real_,
+  total_D = NA_real_,
+  total_U = NA_real_
 )
 
-i <- 11
+#### Turnout Creator ####
 
-for(date in days_2025){
+  i <- 11
+  for (date in days_2025) {
+    df$turnout[i]    <- turnout_by_date_2025(date)
+    df$turnout_R[i]  <- turnout_by_date_2025(date, "R")
+    df$turnout_D[i]  <- turnout_by_date_2025(date, "D")
+    df$turnout_U[i]  <- turnout_by_date_2025(date, "U")
+    df$total_R[i]  <- total_votes_2025(date, "R")
+    df$total_D[i]  <- total_votes_2025(date, "D")
+    df$total_U[i]  <- total_votes_2025(date, "U")
+    i <- i - 1
+  }
+  
+  i <- 12
+  for (date in days_2023) {
+    df$turnout[i]    <- turnout_by_date_2023(date)
+    df$turnout_R[i]  <- turnout_by_date_2023(date, "R")
+    df$turnout_D[i]  <- turnout_by_date_2023(date, "D")
+    df$turnout_U[i]  <- turnout_by_date_2023(date, "U")
+    df$total_R[i]  <- total_votes_2023(date, "R")
+    df$total_D[i]  <- total_votes_2023(date, "D")
+    df$total_U[i]  <- total_votes_2023(date, "U")
+    i <- i + 1
+  }
+  
+  i <- 46
+  for (date in days_2021) {
+    df$turnout[i]    <- turnout_by_date_2021(date)
+    df$turnout_R[i]  <- turnout_by_date_2021(date, "R")
+    df$turnout_D[i]  <- turnout_by_date_2021(date, "D")
+    df$turnout_U[i]  <- turnout_by_date_2021(date, "U")
+    df$total_R[i]  <- total_votes_2021(date, "R")
+    df$total_D[i]  <- total_votes_2021(date, "D")
+    df$total_U[i]  <- total_votes_2021(date, "U")
+    i <- i + 1
+  }
 
-  turnout_curr <- turnout_by_date_2025(date)
-  
-  df$turnout[i] <- turnout_curr
-  
-  i <- i-1
-  
-}
 
-i <- 12
-
-for(date in days_2021){
-  
-  turnout_curr <- turnout_by_date_2021(date)
-  
-  df$turnout[i] <- turnout_curr
-  
-  i <- i+1
-  
-}
-
-
-
+#### Adding Rows ####
 
 df <- df %>%
-  mutate(is_2025 = ifelse(date > as.Date("2024-12-31"), 1, 0))
+  mutate(election_year = case_when(
+    format(date, "%Y") == "2025" ~ 0,
+    format(date, "%Y") == "2023" ~ 1,
+    format(date, "%Y") == "2021" ~ 2,
+    TRUE ~ NA_real_  # for dates outside those years
+  ))
 
 df <- df %>%
-  mutate(days_before = ifelse(is_2025, 
-                              as.numeric(as.Date("2025-11-04") - date),
-                              as.numeric(as.Date("2021-11-02") - date)))
+  mutate(days_before = case_when(
+    format(date, "%Y") == "2025" ~ as.numeric(as.Date("2025-11-04") - date),
+    format(date, "%Y") == "2023" ~ as.numeric(as.Date("2023-11-07") - date),
+    format(date, "%Y") == "2021" ~ as.numeric(as.Date("2021-11-02") - date),
+    TRUE ~ NA_real_  # for any other years
+  ))
 
+#### Total Comparison Graph ####
 
-#### Graphs ####
-
-ggplot(df, aes(x = days_before, y = turnout, color = factor(is_2025))) +
-  geom_line(size = 1) +
+ggplot(df, aes(x = days_before, y = turnout, linetype = factor(election_year))) +
+  geom_line(size = 1.2, color = "black") +
+  geom_vline(xintercept = 0, linetype = "dashed", color = "gray40", size = 0.7) +
+  annotate("text", x = 0, y = max(df$turnout, na.rm = TRUE) * 1.02,
+           label = "Election Day", hjust = 1.1, vjust = 0, color = "gray20", size = 3.5) +
   scale_x_reverse(
-    breaks = seq(0, max(df$days_before, na.rm = TRUE), by = 5),  # tick marks every 5 days
-    labels = function(x) ifelse(x == 0, "Election Day", x)       # rename 0
+    breaks = seq(0, max(df$days_before, na.rm = TRUE), by = 5),
+    labels = function(x) ifelse(x == 0, "Election Day", x),
+    expand = c(0.01, 0)
+  ) +
+  # Explicit, named mapping so labels can't get mixed up:
+  scale_linetype_manual(
+    name = "Election Year",
+    values = c("0" = "solid",    # election_year == 0 -> 2025 -> solid
+               "1" = "longdash", # election_year == 1 -> 2023 -> longdash
+               "2" = "dotted"),  # election_year == 2 -> 2021 -> dotted
+    labels = c("2" = "2021", "1" = "2023", "0" = "2025"),  # order labels chronologically
+    breaks = c("2", "1", "0")  # ensures legend order: 2021, 2023, 2025
   ) +
   labs(
-    color = "Election Year",
     x = "Days Before Election",
-    y = "Absentee Ballot Return Rate"
+    y = "Absentee Ballot Return Rate",
+    title = "Absentee Ballot Return Rates by Election Year",
+    subtitle = "Comparison of daily return rates leading up to Election Day"
   ) +
+  theme_minimal(base_size = 13) +
+  theme(
+    plot.title = element_text(face = "bold", size = 16, hjust = 0.5),
+    plot.subtitle = element_text(size = 12, hjust = 0.5, color = "gray30"),
+    axis.title = element_text(face = "bold"),
+    axis.text = element_text(color = "gray25"),
+    legend.position = "top",
+    legend.title = element_text(face = "bold"),
+    panel.grid.minor = element_blank(),
+    panel.grid.major.x = element_line(color = "gray90"),
+    panel.grid.major.y = element_line(color = "gray85"),
+    plot.margin = margin(10, 20, 10, 20)
+  )
+
+#### All Party Proportion Affiliation Graph ####
+
+ggplot() +
+  # 2025 solid
+  geom_line(data = subset(df, election_year == 0),
+            aes(x = days_before, y = turnout_R, color = "Republican", linetype = "2025"), size = 1.2) +
+  geom_line(data = subset(df, election_year == 0),
+            aes(x = days_before, y = turnout_D, color = "Democrat", linetype = "2025"), size = 1.2) +
+  geom_line(data = subset(df, election_year == 0),
+            aes(x = days_before, y = turnout_U, color = "Undecided", linetype = "2025"), size = 1.2) +
+  
+  # 2023 dashed
+  geom_line(data = subset(df, election_year == 1),
+            aes(x = days_before, y = turnout_R, color = "Republican", linetype = "2023"), size = 1.2) +
+  geom_line(data = subset(df, election_year == 1),
+            aes(x = days_before, y = turnout_D, color = "Democrat", linetype = "2023"), size = 1.2) +
+  geom_line(data = subset(df, election_year == 1),
+            aes(x = days_before, y = turnout_U, color = "Undecided", linetype = "2023"), size = 1.2) +
+  
+  # 2021 dotted
+  geom_line(data = subset(df, election_year == 2),
+            aes(x = days_before, y = turnout_R, color = "Republican", linetype = "2021"), size = 1.2) +
+  geom_line(data = subset(df, election_year == 2),
+            aes(x = days_before, y = turnout_D, color = "Democrat", linetype = "2021"), size = 1.2) +
+  geom_line(data = subset(df, election_year == 2),
+            aes(x = days_before, y = turnout_U, color = "Undecided", linetype = "2021"), size = 1.2) +
+  
+  # Reverse x-axis (Election Day on the right)
+  scale_x_reverse(
+    breaks = seq(0, max(df$days_before, na.rm = TRUE), by = 5),
+    labels = function(x) ifelse(x == 0, "Election Day", x)
+  ) +
+  
+  # Custom color palette for parties
   scale_color_manual(
-    values = c("0" = "blue", "1" = "red"),
-    labels = c("2021", "2025")
+    name = "Party",
+    values = c("Republican" = "#D73027", "Democrat" = "#4575B4", "Undecided" = "#1A9850")
   ) +
-  theme_minimal()
+  
+  # Line styles for years
+  scale_linetype_manual(
+    name = "Election Year",
+    values = c("2021" = "dotted", "2023" = "dashed", "2025" = "solid")
+  ) +
+  
+  # Fancy labels and theme
+  labs(
+    x = "Days Before Election",
+    y = "Absentee Ballot Return Rate",
+    title = "Absentee Ballot Return Rates by Party and Election Year",
+    subtitle = "Comparison across 2021, 2023, and 2025 elections"
+  ) +
+  theme_minimal(base_family = "Helvetica", base_size = 15) +
+  theme(
+    plot.title = element_text(hjust = 0.5, face = "bold", size = 18),
+    plot.subtitle = element_text(hjust = 0.5, size = 13, color = "gray30"),
+    legend.position = "bottom",
+    legend.box = "horizontal",
+    legend.title = element_text(face = "bold"),
+    panel.grid.major = element_line(color = "gray85", linewidth = 0.3),
+    panel.grid.minor = element_blank(),
+    panel.background = element_rect(fill = "gray98", color = NA),
+    plot.background = element_rect(fill = "white", color = NA),
+    axis.text = element_text(color = "gray20"),
+    axis.title = element_text(face = "bold", color = "gray20")
+  ) +
+  guides(
+    color = guide_legend(order = 1, override.aes = list(size = 2)),
+    linetype = guide_legend(order = 2)
+  )
+
+#### Comparing All Parties this Year ####
+
+ggplot() +
+  # 2025 solid
+  geom_line(data = subset(df, election_year == 0),
+            aes(x = days_before, y = turnout_R, color = "Republican", linetype = "2025"), size = 1.2) +
+  geom_line(data = subset(df, election_year == 0),
+            aes(x = days_before, y = turnout_D, color = "Democrat", linetype = "2025"), size = 1.2) +
+  geom_line(data = subset(df, election_year == 0),
+            aes(x = days_before, y = turnout_U, color = "Undecided", linetype = "2025"), size = 1.2) +
+  
+  # Reverse x-axis (Election Day on the right)
+  scale_x_reverse(
+    breaks = seq(0, max(df$days_before, na.rm = TRUE), by = 5),
+    labels = function(x) ifelse(x == 0, "Election Day", x)
+  ) +
+  
+  # Custom color palette for parties
+  scale_color_manual(
+    name = "Party",
+    values = c("Republican" = "#D73027", "Democrat" = "#4575B4", "Undecided" = "#1A9850")
+  ) +
+  
+  # Line styles for years
+  scale_linetype_manual(
+    name = "Election Year",
+    values = c("2021" = "dotted", "2023" = "dashed", "2025" = "solid")
+  ) +
+  
+  # Fancy labels and theme
+  labs(
+    x = "Days Before Election",
+    y = "Absentee Ballot Return Rate",
+    title = "Absentee Ballot Return Rates by Party and Election Year",
+    subtitle = "Comparison across 2021, 2023, and 2025 elections"
+  ) +
+  theme_minimal(base_family = "Helvetica", base_size = 15) +
+  theme(
+    plot.title = element_text(hjust = 0.5, face = "bold", size = 18),
+    plot.subtitle = element_text(hjust = 0.5, size = 13, color = "gray30"),
+    legend.position = "bottom",
+    legend.box = "horizontal",
+    legend.title = element_text(face = "bold"),
+    panel.grid.major = element_line(color = "gray85", linewidth = 0.3),
+    panel.grid.minor = element_blank(),
+    panel.background = element_rect(fill = "gray98", color = NA),
+    plot.background = element_rect(fill = "white", color = NA),
+    axis.text = element_text(color = "gray20"),
+    axis.title = element_text(face = "bold", color = "gray20")
+  ) +
+  guides(
+    color = guide_legend(order = 1, override.aes = list(size = 2)),
+    linetype = guide_legend(order = 2)
+  )
+
+#### Comparing Single Parties by Year - Republican ####
+
+ggplot() +
+  # 2025 solid
+  geom_line(data = subset(df, election_year == 0),
+            aes(x = days_before, y = turnout_R, color = "Republican", linetype = "2025"), size = 1.2) +
+  # 2023 dashed
+  geom_line(data = subset(df, election_year == 1),
+            aes(x = days_before, y = turnout_R, color = "Republican", linetype = "2023"), size = 1.2) +
+  # 2021 dotted
+  geom_line(data = subset(df, election_year == 2),
+            aes(x = days_before, y = turnout_R, color = "Republican", linetype = "2021"), size = 1.2) +
+  # Reverse x-axis (Election Day on the right)
+  scale_x_reverse(
+    breaks = seq(0, max(df$days_before, na.rm = TRUE), by = 5),
+    labels = function(x) ifelse(x == 0, "Election Day", x)
+  ) +
+  
+  # Custom color palette for parties
+  scale_color_manual(
+    name = "Party",
+    values = c("Republican" = "#D73027", "Democrat" = "#4575B4", "Undecided" = "#1A9850")
+  ) +
+  
+  # Line styles for years
+  scale_linetype_manual(
+    name = "Election Year",
+    values = c("2021" = "dotted", "2023" = "dashed", "2025" = "solid")
+  ) +
+  
+  # Fancy labels and theme
+  labs(
+    x = "Days Before Election",
+    y = "Absentee Ballot Return Rate",
+    title = "Absentee Ballot Return Rates by Party and Election Year",
+    subtitle = "Comparison across 2021, 2023, and 2025 elections"
+  ) +
+  theme_minimal(base_family = "Helvetica", base_size = 15) +
+  theme(
+    plot.title = element_text(hjust = 0.5, face = "bold", size = 18),
+    plot.subtitle = element_text(hjust = 0.5, size = 13, color = "gray30"),
+    legend.position = "bottom",
+    legend.box = "horizontal",
+    legend.title = element_text(face = "bold"),
+    panel.grid.major = element_line(color = "gray85", linewidth = 0.3),
+    panel.grid.minor = element_blank(),
+    panel.background = element_rect(fill = "gray98", color = NA),
+    plot.background = element_rect(fill = "white", color = NA),
+    axis.text = element_text(color = "gray20"),
+    axis.title = element_text(face = "bold", color = "gray20")
+  ) +
+  guides(
+    color = guide_legend(order = 1, override.aes = list(size = 2)),
+    linetype = guide_legend(order = 2)
+  )
+
+#### Comparing Single Parties by Year - Democrat ####
+
+ggplot() +
+  # 2025 solid
+  geom_line(data = subset(df, election_year == 0),
+            aes(x = days_before, y = turnout_D, color = "Democrat", linetype = "2025"), size = 1.2) +
+  
+  # 2023 dashed
+  geom_line(data = subset(df, election_year == 1),
+            aes(x = days_before, y = turnout_D, color = "Democrat", linetype = "2023"), size = 1.2) +
+  
+  # 2021 dotted
+  geom_line(data = subset(df, election_year == 2),
+            aes(x = days_before, y = turnout_D, color = "Democrat", linetype = "2021"), size = 1.2) +
+  
+  # Reverse x-axis (Election Day on the right)
+  scale_x_reverse(
+    breaks = seq(0, max(df$days_before, na.rm = TRUE), by = 5),
+    labels = function(x) ifelse(x == 0, "Election Day", x)
+  ) +
+  
+  # Custom color palette for parties
+  scale_color_manual(
+    name = "Party",
+    values = c("Republican" = "#D73027", "Democrat" = "#4575B4", "Undecided" = "#1A9850")
+  ) +
+  
+  # Line styles for years
+  scale_linetype_manual(
+    name = "Election Year",
+    values = c("2021" = "dotted", "2023" = "dashed", "2025" = "solid")
+  ) +
+  
+  # Fancy labels and theme
+  labs(
+    x = "Days Before Election",
+    y = "Absentee Ballot Return Rate",
+    title = "Absentee Ballot Return Rates by Party and Election Year",
+    subtitle = "Comparison across 2021, 2023, and 2025 elections"
+  ) +
+  theme_minimal(base_family = "Helvetica", base_size = 15) +
+  theme(
+    plot.title = element_text(hjust = 0.5, face = "bold", size = 18),
+    plot.subtitle = element_text(hjust = 0.5, size = 13, color = "gray30"),
+    legend.position = "bottom",
+    legend.box = "horizontal",
+    legend.title = element_text(face = "bold"),
+    panel.grid.major = element_line(color = "gray85", linewidth = 0.3),
+    panel.grid.minor = element_blank(),
+    panel.background = element_rect(fill = "gray98", color = NA),
+    plot.background = element_rect(fill = "white", color = NA),
+    axis.text = element_text(color = "gray20"),
+    axis.title = element_text(face = "bold", color = "gray20")
+  ) +
+  guides(
+    color = guide_legend(order = 1, override.aes = list(size = 2)),
+    linetype = guide_legend(order = 2)
+  )
+
+#### Comparing Single Parties by Year - Unaffiliated ####
+
+ggplot() +
+  # 2025 solid
+  geom_line(data = subset(df, election_year == 0),
+            aes(x = days_before, y = turnout_U, color = "Undecided", linetype = "2025"), size = 1.2) +
+  
+  # 2023 dashed
+  geom_line(data = subset(df, election_year == 1),
+            aes(x = days_before, y = turnout_U, color = "Undecided", linetype = "2023"), size = 1.2) +
+  
+  # 2021 dotted
+  geom_line(data = subset(df, election_year == 2),
+            aes(x = days_before, y = turnout_U, color = "Undecided", linetype = "2021"), size = 1.2) +
+  
+  # Reverse x-axis (Election Day on the right)
+  scale_x_reverse(
+    breaks = seq(0, max(df$days_before, na.rm = TRUE), by = 5),
+    labels = function(x) ifelse(x == 0, "Election Day", x)
+  ) +
+  
+  # Custom color palette for parties
+  scale_color_manual(
+    name = "Party",
+    values = c("Republican" = "#D73027", "Democrat" = "#4575B4", "Undecided" = "#1A9850")
+  ) +
+  
+  # Line styles for years
+  scale_linetype_manual(
+    name = "Election Year",
+    values = c("2021" = "dotted", "2023" = "dashed", "2025" = "solid")
+  ) +
+  
+  # Fancy labels and theme
+  labs(
+    x = "Days Before Election",
+    y = "Absentee Ballot Return Rate",
+    title = "Absentee Ballot Return Rates by Party and Election Year",
+    subtitle = "Comparison across 2021, 2023, and 2025 elections"
+  ) +
+  theme_minimal(base_family = "Helvetica", base_size = 15) +
+  theme(
+    plot.title = element_text(hjust = 0.5, face = "bold", size = 18),
+    plot.subtitle = element_text(hjust = 0.5, size = 13, color = "gray30"),
+    legend.position = "bottom",
+    legend.box = "horizontal",
+    legend.title = element_text(face = "bold"),
+    panel.grid.major = element_line(color = "gray85", linewidth = 0.3),
+    panel.grid.minor = element_blank(),
+    panel.background = element_rect(fill = "gray98", color = NA),
+    plot.background = element_rect(fill = "white", color = NA),
+    axis.text = element_text(color = "gray20"),
+    axis.title = element_text(face = "bold", color = "gray20")
+  ) +
+  guides(
+    color = guide_legend(order = 1, override.aes = list(size = 2)),
+    linetype = guide_legend(order = 2)
+  )
+
+#### Total Vote by Party All Year ####
+
+ggplot() +
+  # 2025 solid
+  geom_line(data = subset(df, election_year == 0),
+            aes(x = days_before, y = total_R, color = "Republican", linetype = "2025"), size = 1.2) +
+  geom_line(data = subset(df, election_year == 0),
+            aes(x = days_before, y = total_D, color = "Democrat", linetype = "2025"), size = 1.2) +
+  geom_line(data = subset(df, election_year == 0),
+            aes(x = days_before, y = total_U, color = "Undecided", linetype = "2025"), size = 1.2) +
+  
+  # 2023 dashed
+  geom_line(data = subset(df, election_year == 1),
+            aes(x = days_before, y = total_R, color = "Republican", linetype = "2023"), size = 1.2) +
+  geom_line(data = subset(df, election_year == 1),
+            aes(x = days_before, y = total_D, color = "Democrat", linetype = "2023"), size = 1.2) +
+  geom_line(data = subset(df, election_year == 1),
+            aes(x = days_before, y = total_U, color = "Undecided", linetype = "2023"), size = 1.2) +
+  
+  # 2021 dotted
+  geom_line(data = subset(df, election_year == 2),
+            aes(x = days_before, y = total_R, color = "Republican", linetype = "2021"), size = 1.2) +
+  geom_line(data = subset(df, election_year == 2),
+            aes(x = days_before, y = total_D, color = "Democrat", linetype = "2021"), size = 1.2) +
+  geom_line(data = subset(df, election_year == 2),
+            aes(x = days_before, y = total_U, color = "Undecided", linetype = "2021"), size = 1.2) +
+  
+  # Reverse x-axis (Election Day on the right)
+  scale_x_reverse(
+    breaks = seq(0, max(df$days_before, na.rm = TRUE), by = 5),
+    labels = function(x) ifelse(x == 0, "Election Day", x)
+  ) +
+  
+  # Custom color palette for parties
+  scale_color_manual(
+    name = "Party",
+    values = c("Republican" = "#D73027", "Democrat" = "#4575B4", "Undecided" = "#1A9850")
+  ) +
+  
+  # Line styles for years
+  scale_linetype_manual(
+    name = "Election Year",
+    values = c("2021" = "dotted", "2023" = "dashed", "2025" = "solid")
+  ) +
+  
+  # Fancy labels and theme
+  labs(
+    x = "Days Before Election",
+    y = "Absentee Ballot Return Rate",
+    title = "Absentee Ballot Return Rates by Party and Election Year",
+    subtitle = "Comparison across 2021, 2023, and 2025 elections"
+  ) +
+  theme_minimal(base_family = "Helvetica", base_size = 15) +
+  theme(
+    plot.title = element_text(hjust = 0.5, face = "bold", size = 18),
+    plot.subtitle = element_text(hjust = 0.5, size = 13, color = "gray30"),
+    legend.position = "bottom",
+    legend.box = "horizontal",
+    legend.title = element_text(face = "bold"),
+    panel.grid.major = element_line(color = "gray85", linewidth = 0.3),
+    panel.grid.minor = element_blank(),
+    panel.background = element_rect(fill = "gray98", color = NA),
+    plot.background = element_rect(fill = "white", color = NA),
+    axis.text = element_text(color = "gray20"),
+    axis.title = element_text(face = "bold", color = "gray20")
+  ) +
+  guides(
+    color = guide_legend(order = 1, override.aes = list(size = 2)),
+    linetype = guide_legend(order = 2)
+  )
+
+#### Comparing Total Votes - Republican ####
+
+ggplot() +
+  # 2025 solid
+  geom_line(data = subset(df, election_year == 0),
+            aes(x = days_before, y = total_R, color = "Republican", linetype = "2025"), size = 1.2) +
+  # 2023 dashed
+  geom_line(data = subset(df, election_year == 1),
+            aes(x = days_before, y = total_R, color = "Republican", linetype = "2023"), size = 1.2) +
+  # 2021 dotted
+  geom_line(data = subset(df, election_year == 2),
+            aes(x = days_before, y = total_R, color = "Republican", linetype = "2021"), size = 1.2) +
+  # Reverse x-axis (Election Day on the right)
+  scale_x_reverse(
+    breaks = seq(0, max(df$days_before, na.rm = TRUE), by = 5),
+    labels = function(x) ifelse(x == 0, "Election Day", x)
+  ) +
+  
+  # Custom color palette for parties
+  scale_color_manual(
+    name = "Party",
+    values = c("Republican" = "#D73027", "Democrat" = "#4575B4", "Undecided" = "#1A9850")
+  ) +
+  
+  # Line styles for years
+  scale_linetype_manual(
+    name = "Election Year",
+    values = c("2021" = "dotted", "2023" = "dashed", "2025" = "solid")
+  ) +
+  
+  # Fancy labels and theme
+  labs(
+    x = "Days Before Election",
+    y = "Absentee Ballot Return Rate",
+    title = "Absentee Ballot Return Rates by Party and Election Year",
+    subtitle = "Comparison across 2021, 2023, and 2025 elections"
+  ) +
+  theme_minimal(base_family = "Helvetica", base_size = 15) +
+  theme(
+    plot.title = element_text(hjust = 0.5, face = "bold", size = 18),
+    plot.subtitle = element_text(hjust = 0.5, size = 13, color = "gray30"),
+    legend.position = "bottom",
+    legend.box = "horizontal",
+    legend.title = element_text(face = "bold"),
+    panel.grid.major = element_line(color = "gray85", linewidth = 0.3),
+    panel.grid.minor = element_blank(),
+    panel.background = element_rect(fill = "gray98", color = NA),
+    plot.background = element_rect(fill = "white", color = NA),
+    axis.text = element_text(color = "gray20"),
+    axis.title = element_text(face = "bold", color = "gray20")
+  ) +
+  guides(
+    color = guide_legend(order = 1, override.aes = list(size = 2)),
+    linetype = guide_legend(order = 2)
+  )
 
 
+#### Comparing Total Votes - Democrat ####
 
+ggplot() +
+  # 2025 solid
+  geom_line(data = subset(df, election_year == 0),
+            aes(x = days_before, y = total_D, color = "Democrat", linetype = "2025"), size = 1.2) +
+  geom_line(data = subset(df, election_year == 1),
+            aes(x = days_before, y = total_D, color = "Democrat", linetype = "2023"), size = 1.2) +
+  geom_line(data = subset(df, election_year == 2),
+            aes(x = days_before, y = total_D, color = "Democrat", linetype = "2021"), size = 1.2) +
+  
+  # Reverse x-axis (Election Day on the right)
+  scale_x_reverse(
+    breaks = seq(0, max(df$days_before, na.rm = TRUE), by = 5),
+    labels = function(x) ifelse(x == 0, "Election Day", x)
+  ) +
+  
+  # Custom color palette for parties
+  scale_color_manual(
+    name = "Party",
+    values = c("Republican" = "#D73027", "Democrat" = "#4575B4", "Undecided" = "#1A9850")
+  ) +
+  
+  # Line styles for years
+  scale_linetype_manual(
+    name = "Election Year",
+    values = c("2021" = "dotted", "2023" = "dashed", "2025" = "solid")
+  ) +
+  
+  # Fancy labels and theme
+  labs(
+    x = "Days Before Election",
+    y = "Absentee Ballot Return Rate",
+    title = "Absentee Ballot Return Rates by Party and Election Year",
+    subtitle = "Comparison across 2021, 2023, and 2025 elections"
+  ) +
+  theme_minimal(base_family = "Helvetica", base_size = 15) +
+  theme(
+    plot.title = element_text(hjust = 0.5, face = "bold", size = 18),
+    plot.subtitle = element_text(hjust = 0.5, size = 13, color = "gray30"),
+    legend.position = "bottom",
+    legend.box = "horizontal",
+    legend.title = element_text(face = "bold"),
+    panel.grid.major = element_line(color = "gray85", linewidth = 0.3),
+    panel.grid.minor = element_blank(),
+    panel.background = element_rect(fill = "gray98", color = NA),
+    plot.background = element_rect(fill = "white", color = NA),
+    axis.text = element_text(color = "gray20"),
+    axis.title = element_text(face = "bold", color = "gray20")
+  ) +
+  guides(
+    color = guide_legend(order = 1, override.aes = list(size = 2)),
+    linetype = guide_legend(order = 2)
+  )
 
+#### Comparing Total Votes - Unaffiliated ####
 
+ggplot() +
+  # 2025 solid
+  geom_line(data = subset(df, election_year == 0),
+            aes(x = days_before, y = total_U, color = "Undecided", linetype = "2025"), size = 1.2) +
+  # 2023 dashed
+  geom_line(data = subset(df, election_year == 1),
+            aes(x = days_before, y = total_U, color = "Undecided", linetype = "2023"), size = 1.2) +
+  # 2021 dotted
+  geom_line(data = subset(df, election_year == 2),
+            aes(x = days_before, y = total_U, color = "Undecided", linetype = "2021"), size = 1.2) +
+  
+  # Reverse x-axis (Election Day on the right)
+  scale_x_reverse(
+    breaks = seq(0, max(df$days_before, na.rm = TRUE), by = 5),
+    labels = function(x) ifelse(x == 0, "Election Day", x)
+  ) +
+  
+  # Custom color palette for parties
+  scale_color_manual(
+    name = "Party",
+    values = c("Republican" = "#D73027", "Democrat" = "#4575B4", "Undecided" = "#1A9850")
+  ) +
+  
+  # Line styles for years
+  scale_linetype_manual(
+    name = "Election Year",
+    values = c("2021" = "dotted", "2023" = "dashed", "2025" = "solid")
+  ) +
+  
+  # Fancy labels and theme
+  labs(
+    x = "Days Before Election",
+    y = "Absentee Ballot Return Rate",
+    title = "Absentee Ballot Return Rates by Party and Election Year",
+    subtitle = "Comparison across 2021, 2023, and 2025 elections"
+  ) +
+  theme_minimal(base_family = "Helvetica", base_size = 15) +
+  theme(
+    plot.title = element_text(hjust = 0.5, face = "bold", size = 18),
+    plot.subtitle = element_text(hjust = 0.5, size = 13, color = "gray30"),
+    legend.position = "bottom",
+    legend.box = "horizontal",
+    legend.title = element_text(face = "bold"),
+    panel.grid.major = element_line(color = "gray85", linewidth = 0.3),
+    panel.grid.minor = element_blank(),
+    panel.background = element_rect(fill = "gray98", color = NA),
+    plot.background = element_rect(fill = "white", color = NA),
+    axis.text = element_text(color = "gray20"),
+    axis.title = element_text(face = "bold", color = "gray20")
+  ) +
+  guides(
+    color = guide_legend(order = 1, override.aes = list(size = 2)),
+    linetype = guide_legend(order = 2)
+  )
 
+#### Total Votes by Party 2025 ####
 
-
-
-
-
+ggplot() +
+  # 2025 solid
+  geom_line(data = subset(df, election_year == 0),
+            aes(x = days_before, y = total_R, color = "Republican", linetype = "2025"), size = 1.2) +
+  geom_line(data = subset(df, election_year == 0),
+            aes(x = days_before, y = total_D, color = "Democrat", linetype = "2025"), size = 1.2) +
+  geom_line(data = subset(df, election_year == 0),
+            aes(x = days_before, y = total_U, color = "Undecided", linetype = "2025"), size = 1.2) +
+  # Reverse x-axis (Election Day on the right)
+  scale_x_reverse(
+    breaks = seq(0, max(df$days_before, na.rm = TRUE), by = 5),
+    labels = function(x) ifelse(x == 0, "Election Day", x)
+  ) +
+  
+  # Custom color palette for parties
+  scale_color_manual(
+    name = "Party",
+    values = c("Republican" = "#D73027", "Democrat" = "#4575B4", "Undecided" = "#1A9850")
+  ) +
+  
+  # Line styles for years
+  scale_linetype_manual(
+    name = "Election Year",
+    values = c("2021" = "dotted", "2023" = "dashed", "2025" = "solid")
+  ) +
+  
+  # Fancy labels and theme
+  labs(
+    x = "Days Before Election",
+    y = "Absentee Ballot Return Rate",
+    title = "Absentee Ballot Return Rates by Party and Election Year",
+    subtitle = "Comparison across 2021, 2023, and 2025 elections"
+  ) +
+  theme_minimal(base_family = "Helvetica", base_size = 15) +
+  theme(
+    plot.title = element_text(hjust = 0.5, face = "bold", size = 18),
+    plot.subtitle = element_text(hjust = 0.5, size = 13, color = "gray30"),
+    legend.position = "bottom",
+    legend.box = "horizontal",
+    legend.title = element_text(face = "bold"),
+    panel.grid.major = element_line(color = "gray85", linewidth = 0.3),
+    panel.grid.minor = element_blank(),
+    panel.background = element_rect(fill = "gray98", color = NA),
+    plot.background = element_rect(fill = "white", color = NA),
+    axis.text = element_text(color = "gray20"),
+    axis.title = element_text(face = "bold", color = "gray20")
+  ) +
+  guides(
+    color = guide_legend(order = 1, override.aes = list(size = 2)),
+    linetype = guide_legend(order = 2)
+  )
 
