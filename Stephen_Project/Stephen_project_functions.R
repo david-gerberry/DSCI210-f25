@@ -7,7 +7,7 @@ library(tidyverse)
 #### Votes_Function ####
 
 
-simulate_election <- function(candidates_df, race) {
+simulate_election <- function(candidates_df = candidates_df, race = "City Council") {
   
   if (race == "City Council"){
     
@@ -242,8 +242,9 @@ add_candidate <- function(candidates_df){
 #### Candidates and candidates_df combined ####
 
 
-create_race_slate <- function(number_of_candidates){
+create_race_slate <- function(){
   
+  number_of_candidates <- readline(promp = "Enter the Number of Candidates in your Race: ")
   
   # make the Candidate Data Frame
     candidates_df <- data.frame(Name = character(), 
@@ -270,10 +271,10 @@ create_race_slate <- function(number_of_candidates){
     }
     
   
-  candidates_df <<- candidates_df
+  return(candidates_df)
 }
 
-
+candidates_df <- create_race_slate()
 
 
 
