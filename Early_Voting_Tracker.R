@@ -31,6 +31,15 @@ hamilton_df_2023 <- hamilton_df_2023 %>%
 hamilton_df_2023 <- hamilton_df_2023 %>%
   mutate(days_before = as.numeric(as.Date("2023-11-07") - `Return Ballot Date`))
 
+hamilton_df <- hamilton_df %>% 
+  mutate(in_person = ifelse(`Request Application Date` == `Return Ballot Date`,1,0))
+
+hamilton_df_2023 <- hamilton_df_2023 %>% 
+  mutate(in_person = ifelse(`Request Application Date` == `Return Ballot Date`,1,0))
+
+hamilton_df_2021 <- hamilton_df_2021 %>% 
+  mutate(in_person = ifelse(`Request Application Date` == `Return Ballot Date`,1,0))
+
 
 #### Functions ####
 
@@ -190,6 +199,8 @@ df <- data.frame(
   total_U = NA_real_
 )
 
+rm(dates)
+
 #### Turnout Creator ####
 
   i <- 11
@@ -227,6 +238,13 @@ df <- data.frame(
     df$total_U[i]  <- total_votes_2021(date, "U")
     i <- i + 1
   }
+  
+  rm(date)
+  rm(days_2021)
+  rm(days_2023)
+  rm(days_2025)
+  rm(i)
+  
 
 
 #### Adding Rows ####
