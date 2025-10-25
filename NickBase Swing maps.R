@@ -5,6 +5,49 @@ ThresholdsSwing = magic_number_average * .8
 max_support = max(AvgMap$AvgProx, na.rm = T)
 
 
+leaf_mapN = function(df) {
+  pal <- colorNumeric(
+    palette = brewer.pal(n = 10, name = "RdBu"),
+    domain = c(0, max_support),
+    na.color = "transparent"
+  )
+  
+  # Create the leaflet map
+  leaflet(df) %>%
+    addProviderTiles(providers$CartoDB.Positron) %>%
+    addPolygons(
+      fillColor = ~pal(AvgProx),
+      fillOpacity = 0.7,
+      color = "#444444",
+      weight = 1,
+      smoothFactor = 0.5,
+      highlightOptions = highlightOptions(
+        weight = 2,
+        color = "#666",
+        fillOpacity = 0.9,
+        bringToFront = TRUE
+      ),
+      label = ~paste0("Support: ", round(AvgProx * 100, 1), "%"),
+      layerId = ~PRECINCT  # Use formula notation, not AvgMap$PRECINCT
+    ) %>%
+    addLegend(
+      pal = pal,
+      values = ~AvgProx,
+      opacity = 0.7,
+      title = "Support Level",
+      position = "bottomright",
+      labFormat = labelFormat(
+        suffix = "%",
+        transform = function(x) x * 100
+      )
+    )
+}
+
+
+
+
+save(AvgMap, ThresholdsSwing, ThresholdStrong, ThresholdsRes, max_support, leaf_mapN, ourMap, file = "data/Elec.RData")
+
 SmallMap %>% 
   ggplot(aes(fill = PrecentPorxy)) +
   geom_sf() +
@@ -60,7 +103,7 @@ AvgMap %>%
   scale_fill_gradientn(colours=brewer.pal(n=10,name="RdBu"),na.value = "transparent",
                        values = c(0,ThresholdsSwing, ThresholdsRes, max_support),
                        breaks = c(0, ThresholdsSwing, ThresholdsRes, max_support), 
-                       labels = c("0%", "24%", "44%", "76%"),
+                       labels = c("0%", "24%", "44%", "56%"),
                        name = "Support Level",
                        limits=c(0,1)) +
   theme(
@@ -68,10 +111,5 @@ AvgMap %>%
     legend.title = element_text(size = 16)   # bigger legend title
   )
 
-mapsnstuff %>% 
-  ggplot(aes(fill = median_ageE)) +
-  geom_sf()+
-  scale_fill_viridis_c(option = "turbo") +
-  labs(title = "Precent of white pepole in precincte")
-labs(fill = "Percent of K-12 Public Private School")
+
 
