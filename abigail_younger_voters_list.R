@@ -58,3 +58,5 @@ colnames(sm_reach)[colnames(sm_reach) == "DATE_OF_BIRTH"] <- "AGE"
 
 sm_reach <- sm_reach %>%
   filter(AGE <= 29, CITY.y == "NORWOOD CITY")
+
+write.csv(sm_reach, "sm_reach.csv", row.names = FALSE)
