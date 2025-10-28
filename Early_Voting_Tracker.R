@@ -4,7 +4,7 @@ library(tidyverse)
 
 #### Data #### 
 
-hamilton_df <- read_csv("data/AbsenteeListExport-68f6d43fbaa62.csv")
+hamilton_df <- read_csv("data/AbsenteeListExport-690008c1dfd9c.csv")
 
 hamilton_df_2021 <- read_csv("data/AbsenteeListExport-68f77d75ec2da.csv")
 
@@ -30,6 +30,15 @@ hamilton_df_2023 <- hamilton_df_2023 %>%
 
 hamilton_df_2023 <- hamilton_df_2023 %>%
   mutate(days_before = as.numeric(as.Date("2023-11-07") - `Return Ballot Date`))
+
+hamilton_df <- hamilton_df %>% 
+  mutate(in_person = ifelse(`Request Application Date` == `Return Ballot Date`,1,0))
+
+hamilton_df_2023 <- hamilton_df_2023 %>% 
+  mutate(in_person = ifelse(`Request Application Date` == `Return Ballot Date`,1,0))
+
+hamilton_df_2021 <- hamilton_df_2021 %>% 
+  mutate(in_person = ifelse(`Request Application Date` == `Return Ballot Date`,1,0))
 
 
 #### Functions ####
@@ -168,14 +177,14 @@ total_votes_2021 <- function(date,party = NULL){
 
 #### Making Data Frame ####
 
-days_2025 <- c(18:28)
+days_2025 <- c(11:28)
 
 days_2021 <- c(15:0)
 
 days_2023 <- c(33:0)
 
 dates <- c(
-  seq(as.Date("2025-10-07"), as.Date("2025-10-17"), by = "day"),
+  seq(as.Date("2025-10-07"), as.Date("2025-10-27"), by = "day"),
   seq(as.Date("2023-10-05"), as.Date("2023-11-07"), by = "day"),
   seq(as.Date("2021-10-18"), as.Date("2021-11-02"), by = "day"))
 
@@ -190,9 +199,11 @@ df <- data.frame(
   total_U = NA_real_
 )
 
+rm(dates)
+
 #### Turnout Creator ####
 
-  i <- 11
+  i <- 21
   for (date in days_2025) {
     df$turnout[i]    <- turnout_by_date_2025(date)
     df$turnout_R[i]  <- turnout_by_date_2025(date, "R")
@@ -204,7 +215,7 @@ df <- data.frame(
     i <- i - 1
   }
   
-  i <- 12
+  i <- 22
   for (date in days_2023) {
     df$turnout[i]    <- turnout_by_date_2023(date)
     df$turnout_R[i]  <- turnout_by_date_2023(date, "R")
@@ -216,7 +227,7 @@ df <- data.frame(
     i <- i + 1
   }
   
-  i <- 46
+  i <- 56
   for (date in days_2021) {
     df$turnout[i]    <- turnout_by_date_2021(date)
     df$turnout_R[i]  <- turnout_by_date_2021(date, "R")
@@ -227,6 +238,13 @@ df <- data.frame(
     df$total_U[i]  <- total_votes_2021(date, "U")
     i <- i + 1
   }
+  
+  rm(date)
+  rm(days_2021)
+  rm(days_2023)
+  rm(days_2025)
+  rm(i)
+  
 
 
 #### Adding Rows ####
@@ -881,4 +899,45 @@ ggplot() +
     color = guide_legend(order = 1, override.aes = list(size = 2)),
     linetype = guide_legend(order = 2)
   )
+
+
+
+
+#### Mailer List ####
+
+cool_df <- hamilton_df %>%
+  filter(is.na(`Return Ballot Date`)) %>%
+  filter(VoterParty == "R") %>%
+  filter(Judicial == "JDMC04") %>%
+  filter(Zip %in% c(45255, 45226, 45230, 45244, 45254))
+
+write.csv(cool_df, "mailer_list_berkowitz.csv", row.names = FALSE)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

@@ -110,7 +110,6 @@ predict_data <- subset(predict_data, select = -LOCATION.1)
 write.csv(predict_data, "data/predict_data.csv", row.names = FALSE)
 
 
-
 #### MODEL 1 ####
 
 
