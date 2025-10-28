@@ -128,7 +128,7 @@ simulate_election <- function(candidates_df = candidates_df, race = "City Counci
     
     #vote probabiliy 
     
-    vote_prob <- c(0.00, 0.00, 0.01, 0.02, 0.03, 0.10, 0.15, 0.25, 0.25, 0.19)
+    vote_prob <- c(0.00, 0.00, 0.01, 0.02, 0.03, 0.09, 0.13, 0.25, 0.27, 0.20)
     
     vote_prob <- vote_prob / sum(vote_prob) 
     
@@ -342,7 +342,7 @@ simulate_election_with_bias <- function(candidates_df = candidates_df, race = "C
     
     #vote probabiliy 
     
-    vote_prob <- c(0.00, 0.00, 0.01, 0.02, 0.03, 0.10, 0.15, 0.25, 0.25, 0.19)
+    vote_prob <- c(0.00, 0.00, 0.01, 0.02, 0.03, 0.09, 0.13, 0.25, 0.27, 0.20)
     
     vote_prob <- vote_prob / sum(vote_prob) 
     
