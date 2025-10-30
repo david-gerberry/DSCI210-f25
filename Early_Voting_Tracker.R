@@ -4,7 +4,7 @@ library(tidyverse)
 
 #### Data #### 
 
-hamilton_df <- read_csv("data/AbsenteeListExport-690008c1dfd9c.csv")
+hamilton_df <- read_csv("data/AbsenteeListExport-690356c640169.csv")
 
 hamilton_df_2021 <- read_csv("data/AbsenteeListExport-68f77d75ec2da.csv")
 
@@ -177,14 +177,14 @@ total_votes_2021 <- function(date,party = NULL){
 
 #### Making Data Frame ####
 
-days_2025 <- c(11:28)
+days_2025 <- c(6:28)
 
 days_2021 <- c(15:0)
 
 days_2023 <- c(33:0)
 
 dates <- c(
-  seq(as.Date("2025-10-07"), as.Date("2025-10-27"), by = "day"),
+  seq(as.Date("2025-10-07"), as.Date("2025-10-29"), by = "day"),
   seq(as.Date("2023-10-05"), as.Date("2023-11-07"), by = "day"),
   seq(as.Date("2021-10-18"), as.Date("2021-11-02"), by = "day"))
 
@@ -196,14 +196,15 @@ df <- data.frame(
   turnout_U = NA_real_,
   total_R = NA_real_,
   total_D = NA_real_,
-  total_U = NA_real_
+  total_U = NA_real_,
+  total = NA_real_
 )
 
 rm(dates)
 
 #### Turnout Creator ####
 
-  i <- 21
+  i <- 23
   for (date in days_2025) {
     df$turnout[i]    <- turnout_by_date_2025(date)
     df$turnout_R[i]  <- turnout_by_date_2025(date, "R")
@@ -212,10 +213,11 @@ rm(dates)
     df$total_R[i]  <- total_votes_2025(date, "R")
     df$total_D[i]  <- total_votes_2025(date, "D")
     df$total_U[i]  <- total_votes_2025(date, "U")
+    df$total[i]  <- total_votes_2025(date)
     i <- i - 1
   }
   
-  i <- 22
+  i <- 24
   for (date in days_2023) {
     df$turnout[i]    <- turnout_by_date_2023(date)
     df$turnout_R[i]  <- turnout_by_date_2023(date, "R")
@@ -224,10 +226,11 @@ rm(dates)
     df$total_R[i]  <- total_votes_2023(date, "R")
     df$total_D[i]  <- total_votes_2023(date, "D")
     df$total_U[i]  <- total_votes_2023(date, "U")
+    df$total[i]  <- total_votes_2025(date)
     i <- i + 1
   }
   
-  i <- 56
+  i <- 58
   for (date in days_2021) {
     df$turnout[i]    <- turnout_by_date_2021(date)
     df$turnout_R[i]  <- turnout_by_date_2021(date, "R")
@@ -236,6 +239,7 @@ rm(dates)
     df$total_R[i]  <- total_votes_2021(date, "R")
     df$total_D[i]  <- total_votes_2021(date, "D")
     df$total_U[i]  <- total_votes_2021(date, "U")
+    df$total[i]  <- total_votes_2025(date)
     i <- i + 1
   }
   
@@ -901,7 +905,55 @@ ggplot() +
   )
 
 
+#### Total Vote by Year ####
 
+ggplot() +
+  geom_line(
+    data = subset(df, election_year == 0),
+    aes(x = days_before, y = total, linetype = "2025"),
+    color = "black", size = 1.2
+  ) +
+  geom_line(
+    data = subset(df, election_year == 1),
+    aes(x = days_before, y = total, linetype = "2023"),
+    color = "black", size = 1.2
+  ) +
+  # Reverse x-axis (Election Day on the right)
+  scale_x_reverse(
+    breaks = seq(0, max(df$days_before, na.rm = TRUE), by = 5),
+    labels = function(x) ifelse(x == 0, "Election Day", x)
+  ) +
+  
+  # Custom line styles for each year
+  scale_linetype_manual(
+    name = "Election Year",
+    values = c("2021" = "dotted", "2023" = "dashed", "2025" = "solid")
+  ) +
+  
+  # Fancy labels and theme
+  labs(
+    x = "Days Before Election",
+    y = "Total Early Voting",
+    title = "Absentee Ballot Return Rates by Election Year",
+    subtitle = "Comparison across 2021, 2023, and 2025 elections"
+  ) +
+  theme_minimal(base_family = "Helvetica", base_size = 15) +
+  theme(
+    plot.title = element_text(hjust = 0.5, face = "bold", size = 18),
+    plot.subtitle = element_text(hjust = 0.5, size = 13, color = "gray30"),
+    legend.position = "bottom",
+    legend.box = "horizontal",
+    legend.title = element_text(face = "bold"),
+    panel.grid.major = element_line(color = "gray85", linewidth = 0.3),
+    panel.grid.minor = element_blank(),
+    panel.background = element_rect(fill = "gray98", color = NA),
+    plot.background = element_rect(fill = "white", color = NA),
+    axis.text = element_text(color = "gray20"),
+    axis.title = element_text(face = "bold", color = "gray20")
+  ) +
+  guides(
+    linetype = guide_legend(order = 1, override.aes = list(size = 1.5))
+  )
 
 #### Mailer List ####
 
