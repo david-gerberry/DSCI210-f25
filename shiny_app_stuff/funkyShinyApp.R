@@ -4,8 +4,37 @@ library(shinycssloaders)
 library(leaflet)
 library(sf)
 library(tidycensus)
+library(RColorBrewer)
 load("data/acs_data.RData")
+load("data/Elec.RData")
 
+acs_interp_cps <- acs_interp_cps %>% 
+  mutate(FANCY_PRECINCT = PRECINCT)
+acs_interp_cps <- acs_interp_cps %>% 
+  mutate(PRECINCT = substr(acs_interp_cps$PRECINCT, 1, 4))
+
+
+##add precent white for the map
+acs_interp_cps <- acs_interp_cps %>% 
+  mutate(PreWhite = (whiteE/pop_totalE)*100)
+acs_interp_cincy <- acs_interp_cincy %>% 
+  mutate(PreWhite = (whiteE/pop_totalE)*100)
+acs_interp_judicial <- acs_interp_judicial %>% 
+  mutate(PreWhite = (whiteE/pop_totalE)*100)
+
+
+
+
+acs_interp_cps <- left_join(
+  acs_interp_cps,
+  AvgMap %>% st_drop_geometry(), # drop duplicate geometry
+  by = "PRECINCT",
+)
+
+#with data join reset the precincte names and shit. 
+acs_interp_cps <- acs_interp_cps %>% 
+  mutate(PRECINCT = FANCY_PRECINCT)
+####maps ####
 #' Creates a map
 #' @param shpFile what map we're going to use ( all caps! )
 #'    "CPS" = cincinatti public school
@@ -18,81 +47,84 @@ load("data/acs_data.RData")
 #'    "race" =
 #' @note make sure you load acs_data.RData in DSCI210-f25/data
 #' 
-shiny.map <- function(shpFile = "CIT",colType = "age"){
+shiny.map <- function(shpFile = "CIT", colType = "age"){
   
+  # Check if we're doing base swing visualization
+  if (colType == "base" & shpFile == "CPS") {
+    ourMap <- acs_interp_cps
+    return(leaf_mapN(ourMap))
+  }
+  else {
+  # NORMAL CODE (existing code for other colTypes)
   # LETS GET OUR DATA READY
   mapDict = c(
-    "CPS" = "acs_interp_cps", #cincinatti public school
-    "MUN" = "acs_interp_judicial", #municipal court
-    "CIT" = "acs_interp_cincy" #city council!
+    "CPS" = "acs_interp_cps",
+    "MUN" = "acs_interp_judicial",
+    "CIT" = "acs_interp_cincy"
   )
   columnId = c(
-    "age" = "median_ageE", #cincinatti public school
-    "income" = "med_incomeE", #municipal court
-    "race" = "pop_totalE" #city council!
+    "age" = "median_ageE", 
+    "income" = "med_incomeE", 
+    "race" = "PreWhite", 
+    "turnout" = "AvgTurn"
   )
   
-  colName = columnId[colType] # get our actual column
+  colName = columnId[colType]
   
-  ourMap = get( mapDict[shpFile] ) %>%  # get our dataset and set it up for maps
+  ourMap = get(mapDict[shpFile]) %>%
     st_zm() %>% 
     st_as_sf(4269)
   
-  
   # PREPARE VISUALS FOR THE GRAPH
   palette <- colorNumeric(
-    palette = "plasma", # purple to yellow color scale
+    palette = "plasma",
     domain = ourMap[[colName]]
   )
   
-  ourClr = ~palette( ourMap[[colName]] ) # get our colors
+  ourClr = ~palette(ourMap[[colName]])
   
-  
-  mapFullName = c( # get the full name of the place we're looking for
+  mapFullName = c(
     "CPS" = "Cincinatti Public Schools",
     "MUN" = "Municipal Court District 4", 
     "CIT" = "City Council" 
   )[shpFile]
   
-  columnFullName = c( # get the full name for the variable we're showing
+  columnFullName = c(
     "age" = "Median Age", 
     "income" = "Median Income", 
-    "race" = "Total Population"
+    "race" = "Precent White",
+    "turnout" = "Turn Out"
   )[colType]
   
-  # for specifying unit type
   displayPrefix = c(
     "age" = "",
     "income" = "$",
-    "race" = ""
+    "race" = "",
+    "turnout" = ""
   )[colType]
   displaySuffix = c(
     "age" = " years old",
     "income" = "",
-    "race" = ""
+    "race" = "%",
+    "turnout" = "%"
   )[colType]
   
   # MAKE THE MAP!
   leaflet() %>% 
-    # BASE MAP
     addProviderTiles(providers$CartoDB.Positron) %>%
-    
-    # COLOR IN
     addPolygons(
       data = ourMap,
       weight = 1,
       fillOpacity = .35,
       opacity = .375,
       color = ourClr, 
-      # ignore this yucky line
-      label = ~paste( columnFullName ,": ", displayPrefix, 
-                      format(round(ourMap[[colName]])
-                             , big.mark = ",", scientific = FALSE),
-                      displaySuffix
+      label = ~paste(columnFullName, ": ", displayPrefix, 
+                     format(round(ourMap[[colName]])
+                            , big.mark = ",", scientific = FALSE),
+                     displaySuffix
       ),
       layerId = ~ourMap$PRECINCT
     ) %>% 
-    # TITLE
     addControl(
       html = paste0(
         "<div style='
@@ -102,11 +134,10 @@ shiny.map <- function(shpFile = "CIT",colType = "age"){
             background:rgba(255,255,255,0.9);
             padding:4px 10px;
             border-radius:6px;'>
-          ", mapFullName , " | ", columnFullName ,"
+          ", mapFullName, " | ", columnFullName, "
          </div>"),
       position = "topright"
     ) %>% 
-    # LEGEND
     addLegend(
       position = "bottomright",
       pal = palette,
@@ -114,6 +145,7 @@ shiny.map <- function(shpFile = "CIT",colType = "age"){
       title = "Legend",
       opacity = 1
     )
+  }
 }
 
 
@@ -282,7 +314,6 @@ make_histogram_dist <- function(district="MUN", data="age"){
       )
     
   }
-  
   return(plot)
   
 }
@@ -555,20 +586,6 @@ return_median_pre <- function(district="MUN",code="0101 CIN 1-A", data="age"){
 
 return_median_pre("CPS","2203 CIN 22-C","race")
 ####Shiny code ####
-test = function(map) {
-  if (map == "CPS") {
-  hist(starwars$mass, breaks = 100)
-  }
-else if (map == "MUN") {
-  hist(starwars$birth_year)
-}
-else {
-  hist(starwars$height)
-}
-  
-}
-
-
 ui <- fluidPage(
   
   titlePanel("Demographic Map"),
@@ -587,10 +604,22 @@ ui <- fluidPage(
     column(
       width = 3,
       selectInput(inputId = "data_dropdown", 
-                  label = "Choose a Demographic", 
+                  label = "Choose a Map Pramater", 
                   choices = c("Age" = "age",
                               "Income" = "income",
-                              "race" = "race"),
+                              "Race" = "race",
+                              "Turn Out" = "turnout",
+                              "Base and Swing" = "base"),
+                  selected = "age") 
+    ),
+    column(
+      width = 3,
+      selectInput(inputId = "hist_dropdown", 
+                  label = "Choose a Graph Pramater", 
+                  choices = c("Age" = "age",
+                              "Income" = "income",
+                              "Race" = "race"
+                              ),
                   selected = "age") 
     )
   ),
@@ -656,7 +685,7 @@ server <- function(input, output, session) {
   
   # district-level plot
   output$test1 <- renderPlot({
-    make_histogram_dist(input$map_dropdown, input$data_dropdown)
+    make_histogram_dist(input$map_dropdown, input$hist_dropdown)
   })
   
   # precinct-level plot (uses clicked precinct if valid; otherwise uses a sensible default)
@@ -689,7 +718,7 @@ server <- function(input, output, session) {
     }
     
     # Now draw the precinct histogram
-    make_histogram_pre(input$map_dropdown, Pre, input$data_dropdown)
+    make_histogram_pre(input$map_dropdown, Pre, input$hist_dropdown)
   })
 }
 

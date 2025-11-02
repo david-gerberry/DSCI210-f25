@@ -40,6 +40,7 @@ simulate_election <- function(candidates, six_votes_on_ballot, seven_votes_on_ba
   return(as.numeric(vote_counts))
 }
 
+
 # Store results
 results <- replicate(100, simulate_election(candidates, six_votes_on_ballot, seven_votes_on_ballot))
 
