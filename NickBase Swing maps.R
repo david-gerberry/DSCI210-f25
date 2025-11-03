@@ -106,6 +106,9 @@ AvgMap %>%
                        labels = c("0%", "24%", "44%", "56%"),
                        name = "Support Level",
                        limits=c(0,1)) +
+  labs(
+    title = "Base Swing Map for the School Board Race"
+  ) +
   theme(
     legend.text = element_text(size = 14),   # bigger legend labels
     legend.title = element_text(size = 16)   # bigger legend title

@@ -107,7 +107,7 @@ turnout.df <- function(turnout.data){
 
 ```{r -import, echo=FALSE, results='hide', message=FALSE, warning=FALSE}
 
-namexml <- "current election/detail06.xml"
+namexml <- "current election/detail03.xml"
 
 # Load the XML file and parse into a dataframe
 election_data <- parse_contest_results(read_xml(namexml))
