@@ -93,7 +93,7 @@ shiny.map <- function(shpFile = "CIT", colType = "age"){
     "age" = "Median Age", 
     "income" = "Median Income", 
     "race" = "Precent White",
-    "turnout" = "Turn Out"
+    "turnout" = "Turn Out in 2021 and 2019"
   )[colType]
   
   displayPrefix = c(
