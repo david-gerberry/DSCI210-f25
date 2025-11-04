@@ -4,9 +4,9 @@ library(tidyverse)
 
 #### Data #### 
 
-hamilton_df <- read_csv("data/AbsenteeListExport-6907a9ce71cd0.csv")
+hamilton_df <- read_csv("data/AbsenteeListExport-6908fd6184a9c.csv")
 
-hamilton_df_2021 <- read_csv("data/AbsenteeListExport-68f77d75ec2da.csv")
+hamilton_df_2021 <- read_csv("data/AbsenteeListExport-6908f8972a157.csv")
 
 hamilton_df_2023 <- read_csv("data/AbsenteeListExport-68f96ba1604c8.csv")
 
@@ -17,13 +17,14 @@ hamilton_df <- hamilton_df %>%
   filter(!(`Return Ballot Date` %in% c("2025-10-02", "2025-10-03")))
 
 hamilton_df_2021 <- hamilton_df_2021 %>%
-  filter(is.na(`Return Ballot Date`) | !(`Return Ballot Date` > as.Date("2021-11-2")))
+  filter(is.na(`Return Ballot Date`) | !(`Return Ballot Date` > as.Date("2021-11-4"))) %>% 
+  filter(`Return Ballot Date` > as.Date("2021-10-01"))
 
 hamilton_df <- hamilton_df %>%
   mutate(days_before = as.numeric(as.Date("2025-11-04") - `Return Ballot Date`))
 
 hamilton_df_2021 <- hamilton_df_2021 %>%
-  mutate(days_before = as.numeric(as.Date("2021-11-02") - `Return Ballot Date`))
+  mutate(days_before = as.numeric(as.Date("2021-11-04") - `Return Ballot Date`))
 
 hamilton_df_2023 <- hamilton_df_2023 %>%
   filter(is.na(`Return Ballot Date`) | !(`Return Ballot Date` > as.Date("2023-11-7")))
@@ -55,6 +56,7 @@ real_votes <- hamilton_df %>%
 real_votes_2023 <- hamilton_df_2023 %>% 
   filter(!(is.na(`Return Ballot Date`)))
 
+hamilton_df <- hamilton_df[-13038, ] 
 
 real_votes <- real_votes %>% 
   mutate(age = 2025 - BirthYear)
@@ -321,16 +323,16 @@ total_votes_2021_early <- function(date,party = NULL){
 
 #### Making Data Frame ####
 
-days_2025 <- c(6:28)
+days_2025 <- c(2:28)
 
-days_2021 <- c(15:0)
+days_2021 <- c(30:0)
 
 days_2023 <- c(33:0)
 
 dates <- c(
-  seq(as.Date("2025-10-07"), as.Date("2025-10-31"), by = "day"),
+  seq(as.Date("2025-10-07"), as.Date("2025-11-02"), by = "day"),
   seq(as.Date("2023-10-05"), as.Date("2023-11-07"), by = "day"),
-  seq(as.Date("2021-10-18"), as.Date("2021-11-02"), by = "day"))
+  seq(as.Date("2021-10-05"), as.Date("2021-11-04"), by = "day"))
 
 df <- data.frame(
   date = dates,
@@ -345,16 +347,16 @@ df <- data.frame(
 
 rm(dates)
 
-days_2025 <- c(6:28)
+days_2025 <- c(2:28)
 
-days_2021 <- c(15:0)
+days_2021 <- c(30:0)
 
 days_2023 <- c(33:0)
 
 dates <- c(
-  seq(as.Date("2025-10-07"), as.Date("2025-10-31"), by = "day"),
+  seq(as.Date("2025-10-07"), as.Date("2025-11-02"), by = "day"),
   seq(as.Date("2023-10-05"), as.Date("2023-11-07"), by = "day"),
-  seq(as.Date("2021-10-18"), as.Date("2021-11-02"), by = "day"))
+  seq(as.Date("2021-10-05"), as.Date("2021-11-04"), by = "day"))
 
 df_early <- data.frame(
   date = dates,
@@ -371,7 +373,7 @@ rm(dates)
 
 #### Turnout Creator ####
 
-  i <- 25
+  i <- 27
   for (date in days_2025) {
     df$turnout[i]    <- turnout_by_date_2025(date)
     df$turnout_R[i]  <- turnout_by_date_2025(date, "R")
@@ -383,7 +385,7 @@ rm(dates)
     i <- i - 1
   }
   
-  i <- 26
+  i <- 28
   for (date in days_2023) {
     df$turnout[i]    <- turnout_by_date_2023(date)
     df$turnout_R[i]  <- turnout_by_date_2023(date, "R")
@@ -395,7 +397,7 @@ rm(dates)
     i <- i + 1
   }
   
-  i <- 60
+  i <- 62
   for (date in days_2021) {
     df$turnout[i]    <- turnout_by_date_2021(date)
     df$turnout_R[i]  <- turnout_by_date_2021(date, "R")
@@ -412,7 +414,7 @@ rm(dates)
   
   
   
-  i <- 25
+  i <- 27
   for (date in days_2025) {
     df_early$turnout[i]    <- turnout_by_date_2025_early(date)
     df_early$turnout_R[i]  <- turnout_by_date_2025_early(date, "R")
@@ -424,7 +426,7 @@ rm(dates)
     i <- i - 1
   }
   
-  i <- 26
+  i <- 28
   for (date in days_2023) {
     df_early$turnout[i]    <- turnout_by_date_2023_early(date)
     df_early$turnout_R[i]  <- turnout_by_date_2023_early(date, "R")
@@ -436,7 +438,7 @@ rm(dates)
     i <- i + 1
   }
   
-  i <- 60
+  i <- 62
   for (date in days_2021) {
     df_early$turnout[i]    <- turnout_by_date_2021_early(date)
     df_early$turnout_R[i]  <- turnout_by_date_2021_early(date, "R")
@@ -472,7 +474,7 @@ df <- df %>%
   mutate(days_before = case_when(
     format(date, "%Y") == "2025" ~ as.numeric(as.Date("2025-11-04") - date),
     format(date, "%Y") == "2023" ~ as.numeric(as.Date("2023-11-07") - date),
-    format(date, "%Y") == "2021" ~ as.numeric(as.Date("2021-11-02") - date),
+    format(date, "%Y") == "2021" ~ as.numeric(as.Date("2021-11-04") - date),
     TRUE ~ NA_real_  # for any other years
   ))
 
@@ -496,7 +498,7 @@ df_early <- df_early %>%
   mutate(days_before = case_when(
     format(date, "%Y") == "2025" ~ as.numeric(as.Date("2025-11-04") - date),
     format(date, "%Y") == "2023" ~ as.numeric(as.Date("2023-11-07") - date),
-    format(date, "%Y") == "2021" ~ as.numeric(as.Date("2021-11-02") - date),
+    format(date, "%Y") == "2021" ~ as.numeric(as.Date("2021-11-04") - date),
     TRUE ~ NA_real_  # for any other years
   ))
 
@@ -917,6 +919,10 @@ ggplot() +
             aes(x = days_before, y = total_R, color = "Republican", linetype = "2023"), size = 1.2) +
   geom_line(data = subset(df_early, election_year == 1),
             aes(x = days_before, y = total_D, color = "Democrat", linetype = "2023"), size = 1.2) +
+  geom_line(data = subset(df_early, election_year == 2),
+            aes(x = days_before, y = total_R, color = "Republican", linetype = "2021"), size = 1.2) +
+  geom_line(data = subset(df_early, election_year == 2),
+            aes(x = days_before, y = total_D, color = "Democrat", linetype = "2021"), size = 1.2) +
   
   # Reverse x-axis (Election Day on the right)
   scale_x_reverse(
@@ -941,7 +947,7 @@ ggplot() +
     x = "Days Before Election",
     y = "Early In-Person Votes Cast",
     title = "Early In-Person Votes Cast by Party and Election Year",
-    subtitle = "Comparison of 2023 and 2025 elections"
+    subtitle = "Comparison of 2021, 2023, and 2025 elections"
   ) +
   theme_minimal(base_family = "Helvetica", base_size = 15) +
   theme(
@@ -1250,6 +1256,11 @@ ggplot() +
     aes(x = days_before, y = total, linetype = "2023"),
     color = "black", size = 1.2
   ) +
+  geom_line(
+    data = subset(df_early, election_year == 2),
+    aes(x = days_before, y = total, linetype = "2021"),
+    color = "black", size = 1.2
+  ) +
   
   # Reverse x-axis (Election Day on the right)
   scale_x_reverse(
@@ -1268,7 +1279,7 @@ ggplot() +
     x = "Days Before Election",
     y = "Votes Cast Early In-Person",
     title = "Early In-Person Votes by Election Year",
-    subtitle = "Comparison of 2023 and 2025 elections"
+    subtitle = "Comparison of 2021, 2023, and 2025 elections"
   ) +
   theme_minimal(base_family = "Helvetica", base_size = 15) +
   theme(

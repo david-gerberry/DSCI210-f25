@@ -1,0 +1,124 @@
+---
+title: "Election Night Prep"
+format: html
+editor: visual
+---
+
+```{r}
+knitr::opts_chunk$set(
+  echo = TRUE,
+  message = FALSE,
+  warning = FALSE
+)
+library(tidyverse)
+library(sf)
+library(readxl)
+library(RColorBrewer)
+
+
+
+```
+
+Maps
+
+```{r}
+results2018 <- read_excel("C:/Users/sklay/OneDrive/Xavier/Data Science/DSCI210-f24/data/election results/G18_Official_Amended_Canvass.xlsx", skip = 2)
+
+map2018 <- st_zm(st_read("C:/Users/sklay/OneDrive/Xavier/Data Science/DSCI210-f24/data/maps/precincts_2018.shp"))
+
+mapANDresults2018 <- left_join(map2018, results2018, by = c("PRECINCT" = "PRECINCT"))
+
+
+map2020 <- st_zm(st_read("C:\\Users\\sklay\\OneDrive\\Xavier\\Data Science\\DSCI210-f24\\data\\maps\\precincts_2020.shp"))
+
+
+results2020 <- read_excel("C:/Users/sklay/OneDrive/Xavier/Data Science/DSCI210-f24/data/election results/G20_Official_Canvass.xlsx", skip = 1)
+
+
+mapANDresults2020 <- left_join(map2020, results2020, by = c("PRECINCT" = "PRECINCT"))
+
+
+results2022 <- read_excel("C:/Users/sklay/OneDrive/Xavier/Data Science/DSCI210-f24/data/election results/G22_Official_Canvass.xlsx", skip = 1)
+
+map2022 <- st_zm(st_read("C:/Users/sklay/OneDrive/Xavier/Data Science/DSCI210-f24/data/maps/precincts_2022.shp"))
+
+mapANDresults2022 <- left_join(map2022, results2022, by = c("NAME" = "PRECINCT"))
+```
+
+Results
+
+```{r}
+137116 / (137116 + 200405 + 193)
+200405 / (137116 + 200405 + 193)
+
+246266 / (246266 + 1389 + 5211 + 177886 + 150 + 5 + 1 + 19 + 2)
+177886 / (246266 + 1389 + 5211 + 177886 + 150 + 5 + 1 + 19 + 2)
+
+221298 / (221298 + 200738)
+
+127792 / (127792 + 23 + 174511 + 116 + 1 + 7 + 36)
+174511 / (127792 + 23 + 174511 + 116 + 1 + 7 + 36)
+```
+
+Brown vs. Renacci (2018) - Brown won
+
+```{r}
+mapANDresults2018 %>% 
+  mutate(Brown.prop = `Sherrod Brown`/( `Sherrod Brown`+ `Jim Renacci`)) %>%
+  ggplot(aes(fill=Brown.prop)) +
+  geom_sf()+
+  labs(title = "2018 Senator Election in Hamilton County", 
+       subtitle = "Sherrod Brown (D) 59.3% vs Jim Renacci (R) 40.6%",
+       fill = "", 
+       caption = "")+
+  scale_fill_gradientn(colours=brewer.pal(n=6,name="RdBu"),na.value = "transparent",                        breaks=c(0,.25,0.5,.75,1),labels=c("100% Renacci","","50% / 50%","","100% Brown"),
+                           limits=c(0,1))
+```
+
+Trump vs. Biden (2020) - Biden won
+
+```{r}
+mapANDresults2020 %>% 
+  mutate(Biden.prop = `Biden & Harris  (Dem)`/( `Biden & Harris  (Dem)`+ `Trump & Pence       (Rep)`)) %>%
+  ggplot(aes(fill=Biden.prop)) +
+  geom_sf()+
+  labs(title = "2020 Presidential Election in Hamilton County", 
+       subtitle = "Joe Biden (D) 57.1% vs Donald Trump (R) 41.3%",
+       fill = "", 
+       caption = "")+
+  scale_fill_gradientn(colours=brewer.pal(n=6,name="RdBu"),na.value = "transparent",                        breaks=c(0,.25,0.5,.75,1),labels=c("100% Trump", "", "50% / 50%","", "100% Biden"), 
+                           limits=c(0,1))
+```
+
+Deters vs. Rucker (2020) - Deters won
+
+```{r}
+mapANDresults2020 %>% 
+  mutate(Rucker.prop = `Fanon A. Rucker      (Dem)`/( `Fanon A. Rucker      (Dem)`+ `Joseph T. Deters      (Rep)`)) %>%
+  ggplot(aes(fill=Rucker.prop)) +
+  geom_sf()+
+  labs(title = "2020 Hamilton County Prosecutor Attorney", 
+       subtitle = "Joe Deters (R) 52.4% vs Fanon Rucker (D) 47.6%",
+       fill = "", 
+       caption = "")+
+  scale_fill_gradientn(colours=brewer.pal(n=6,name="RdBu"),na.value = "transparent",                        breaks=c(0,.25,0.5,.75,1),
+                       labels=c("100% Deters","","50% / 50%","","100% Rucker"),
+                       limits=c(0,1))
+```
+
+![](http://127.0.0.1:13349/chunk_output/s/783EECC9/cpeejvl40e7pm/000028.png)
+
+Vance vs. Tim Ryan (2022) - Vance won
+
+```{r}
+mapANDresults2022 %>% 
+  mutate(Ryan.prop = `Tim            Ryan          (Dem)`/( `Tim            Ryan          (Dem)`+ `JD           Vance         (Rep)`)) %>%
+  ggplot(aes(fill=Ryan.prop)) +
+  geom_sf()+
+  labs(title = "2022 Senator Election in Hamilton County", 
+       subtitle = "Tim Ryan (D) 57.7% vs J.D. Vance (R) 42.2%",
+       fill = "", 
+       caption = "")+
+  scale_fill_gradientn(colours=brewer.pal(n=6,name="RdBu"),na.value = "transparent",                        breaks=c(0,.25,0.5,.75,1),labels=c("100% Vance","","50% / 50%","","100% Ryan"),
+                       limits=c(0,1))
+```

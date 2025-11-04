@@ -118,24 +118,29 @@ precincts_swing <- precincts %>%
 
 png("Abigail_swing_silverstein.png", width = 700, height = 500)
 ggplot(precincts_swing) +
-  geom_sf(aes(fill = category), color = "black", size = 0.2) +
+  geom_sf(aes(fill = pct_rep), color = "black", size = 0.2) +
   geom_sf(data = boundary, fill = NA, color = "black", size = 0.5) +
-  scale_fill_manual(values = c(
-    "Base (Red)" = "red",
-    "Swing (Yellow)" = "yellow",
-    "Residual (Blue)" = "blue"
-  )) +
-  theme_void() +
+  scale_fill_gradientn(
+    colours = rev(RColorBrewer::brewer.pal(n = 10, name = "RdBu")),
+    na.value = "transparent",
+    values = c(0, 0.5, 1),
+    breaks = c(0, 0.5, 1),
+    labels = c("100% Silvertein", "50%", "100% Kissinger"),
+    limits = c(0, 1)
+  ) +
   labs(
     title = "2023 Judicial Election District 4",
     subtitle = "Curt Kissinger vs Samantha Silverstein",
-    fill = "Category"
+    fill = "Support Level"
   ) +
   theme(
     axis.text = element_blank(),
     axis.ticks = element_blank()
   )
 dev.off()
+
+precincts_swing$pct_rep <- precincts_swing$pct_rep / 100
+
 
 
 #base/swing map #2019 
@@ -168,6 +173,31 @@ mapANDresults2019 %>%
   ) +
   theme_void()
 dev.off()
+
+
+
+ggplot(precincts_berk_votes) +
+  geom_sf(aes(fill = pct_berkowitz), color = "black", size = 0.2) +
+  geom_sf(data = boundary, fill = NA, color = "black", size = 0.5) +
+  scale_fill_gradientn(
+    colours = rev(RColorBrewer::brewer.pal(n = 10, name = "RdBu")),
+    na.value = "transparent",
+    values = c(0, 0.5, 1),
+    breaks = c(0, 0.5, 1),
+    labels = c("100% Kennedy", "50%", "100% Berkowitz"),
+    limits = c(0, 1)
+  ) +
+  labs(
+    title = "2019 Judicial Election District 4",
+    subtitle = "Josh Berkowitz vs John Kennedy",
+    fill = "Support Level"
+  ) +
+  theme(
+    axis.text = element_blank(),
+    axis.ticks = element_blank()
+  )
+
+precincts_berk_votes$pct_berkowitz <- precincts_berk_votes$pct_berkowitz / 100
 
 
 #combined
@@ -203,6 +233,13 @@ combined_w <- precincts %>%
       TRUE ~ "Missing"
     )
   )
+combined_w$weighted_rep <- combined_w$weighted_rep / 100
+
+combined_w$weighted_rep[is.na(combined_w$weighted_rep)] <- 
+  silverstein_2023$PERCENT[is.na(combined_w$weighted_rep)]
+
+combined_w$weighted_rep <- as.numeric(as.character(combined_w$weighted_rep))
+
 
 # Map
 cincy.neighborhoods <- st_zm(st_read("data/maps/snabnd_2010.shp"))
@@ -235,4 +272,40 @@ ggplot(combined_w) +
   geom_sf_label(data=linwood,aes(label = 'Linwood'), cex=2.5, position = position_nudge(x=.005, y=-.008))
 dev.off()
 
-
+ggplot(combined_w) +
+  geom_sf(aes(fill = weighted_rep), color = "black", size = 0.2) +
+  geom_sf(data = boundary, fill = NA, color = "black", size = 0.5) +
+  scale_fill_gradientn(
+    colours = rev(RColorBrewer::brewer.pal(n = 10, name = "RdBu")),
+    na.value = "transparent",
+    values = c(0, 0.5, 1),
+    breaks = c(0, 0.5, 1),
+    labels = c("0%", "50%", "100%"),
+    limits = c(0, 1)
+  ) +
+  labs(
+    title = "Weighted Base/Swing Map Judicial Election District 4",
+    subtitle = "50% weight to Berkowitz 2019, 50% to Kissinger 2023",
+    fill = "Support Level"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text = element_blank(),
+    axis.ticks = element_blank(),
+    legend.text = element_text(size = 14),
+    legend.title = element_text(size = 16)
+  ) +
+  geom_sf(data = oakley, col = 'pink', fill = NA, lwd = 1.5) +
+  geom_sf_label(
+    data = oakley,
+    aes(label = 'Oakley'),
+    cex = 2.5,
+    position = position_nudge(x = .03, y = -0.005)
+  ) +
+  geom_sf(data = linwood, col = 'orange', fill = NA, lwd = 1.5) +
+  geom_sf_label(
+    data = linwood,
+    aes(label = 'Linwood'),
+    cex = 2.5,
+    position = position_nudge(x = .005, y = -0.008)
+  )

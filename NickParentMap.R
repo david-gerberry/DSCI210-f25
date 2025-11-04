@@ -50,7 +50,7 @@ schoolPrecincts <- st_set_crs(schoolPrecincts, 4269)
 
 ##make the data wide
 the_wiiide_school = demographicData %>% 
-  select(GEOID, NAME, variable, estimate) %>% 
+  select(GEOID, NAME, variable, estimate, prec) %>% 
   pivot_wider(names_from = variable, values_from = estimate) 
 
 the_wiiide_school <- demographicData %>%
@@ -114,14 +114,21 @@ mx4_parent <- function(){
     )
 }
 
-precinct_interpolated_demographic_data %>% 
+smalldata %>% 
   ggplot(aes(fill = parent_porp)) +
   geom_sf()+
   scale_fill_viridis_c(option = "turbo") +
   labs(title = "Percent of Population who are Parents Living with Kids") +
-  labs(fill = "Percent of Parents") 
+  labs(fill = "Percent of Parents")
+  
 
 smalldata <- precinct_interpolated_demographic_data %>% 
-  select(parent_porp, geometry) %>% 
-  sf::st_join(schoolPrecincts)
+  mutate(PRECINCT = schoolPrecincts$PRECINCT)
 write_csv(smalldata, "PrecentOfParents.csv")
+
+smalldf <- smalldata  %>% 
+  filter(parent_porp > 35) 
+PRE_LIST <- smalldf$PRECINCT
+
+smalldata %>% 
+ggplot(aes(fill = paren))
