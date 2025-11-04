@@ -4,7 +4,7 @@ library(tidyverse)
 
 #### Data #### 
 
-hamilton_df <- read_csv("data/AbsenteeListExport-6908fd6184a9c.csv")
+hamilton_df <- read_csv("data/AbsenteeListExport-690a853bece4f.csv")
 
 hamilton_df_2021 <- read_csv("data/AbsenteeListExport-6908f8972a157.csv")
 
@@ -57,6 +57,8 @@ real_votes_2023 <- hamilton_df_2023 %>%
   filter(!(is.na(`Return Ballot Date`)))
 
 hamilton_df <- hamilton_df[-13038, ] 
+
+hamilton_df <- hamilton_df[-13036, ] 
 
 real_votes <- real_votes %>% 
   mutate(age = 2025 - BirthYear)
@@ -323,14 +325,14 @@ total_votes_2021_early <- function(date,party = NULL){
 
 #### Making Data Frame ####
 
-days_2025 <- c(2:28)
+days_2025 <- c(1:28)
 
 days_2021 <- c(30:0)
 
 days_2023 <- c(33:0)
 
 dates <- c(
-  seq(as.Date("2025-10-07"), as.Date("2025-11-02"), by = "day"),
+  seq(as.Date("2025-10-07"), as.Date("2025-11-03"), by = "day"),
   seq(as.Date("2023-10-05"), as.Date("2023-11-07"), by = "day"),
   seq(as.Date("2021-10-05"), as.Date("2021-11-04"), by = "day"))
 
@@ -347,14 +349,14 @@ df <- data.frame(
 
 rm(dates)
 
-days_2025 <- c(2:28)
+days_2025 <- c(1:28)
 
 days_2021 <- c(30:0)
 
 days_2023 <- c(33:0)
 
 dates <- c(
-  seq(as.Date("2025-10-07"), as.Date("2025-11-02"), by = "day"),
+  seq(as.Date("2025-10-07"), as.Date("2025-11-03"), by = "day"),
   seq(as.Date("2023-10-05"), as.Date("2023-11-07"), by = "day"),
   seq(as.Date("2021-10-05"), as.Date("2021-11-04"), by = "day"))
 
@@ -373,7 +375,7 @@ rm(dates)
 
 #### Turnout Creator ####
 
-  i <- 27
+  i <- 28
   for (date in days_2025) {
     df$turnout[i]    <- turnout_by_date_2025(date)
     df$turnout_R[i]  <- turnout_by_date_2025(date, "R")
@@ -385,7 +387,7 @@ rm(dates)
     i <- i - 1
   }
   
-  i <- 28
+  i <- 29
   for (date in days_2023) {
     df$turnout[i]    <- turnout_by_date_2023(date)
     df$turnout_R[i]  <- turnout_by_date_2023(date, "R")
@@ -397,7 +399,7 @@ rm(dates)
     i <- i + 1
   }
   
-  i <- 62
+  i <- 63
   for (date in days_2021) {
     df$turnout[i]    <- turnout_by_date_2021(date)
     df$turnout_R[i]  <- turnout_by_date_2021(date, "R")
@@ -414,7 +416,7 @@ rm(dates)
   
   
   
-  i <- 27
+  i <- 28
   for (date in days_2025) {
     df_early$turnout[i]    <- turnout_by_date_2025_early(date)
     df_early$turnout_R[i]  <- turnout_by_date_2025_early(date, "R")
@@ -426,7 +428,7 @@ rm(dates)
     i <- i - 1
   }
   
-  i <- 28
+  i <- 29
   for (date in days_2023) {
     df_early$turnout[i]    <- turnout_by_date_2023_early(date)
     df_early$turnout_R[i]  <- turnout_by_date_2023_early(date, "R")
@@ -438,7 +440,7 @@ rm(dates)
     i <- i + 1
   }
   
-  i <- 62
+  i <- 63
   for (date in days_2021) {
     df_early$turnout[i]    <- turnout_by_date_2021_early(date)
     df_early$turnout_R[i]  <- turnout_by_date_2021_early(date, "R")
