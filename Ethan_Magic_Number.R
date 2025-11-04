@@ -246,7 +246,7 @@ turn_13 <- turnout(13)
 
 
 # Our Prediction
-turn_25 <- .38
+turn_25 <- .41
 
 #### Turnout Plot ####
 
@@ -276,59 +276,85 @@ turnout_df$election_type <- c(
 )
 
 ggplot(turnout_df, aes(x = year, y = turnout, color = election_type, group = election_type)) +
-  geom_line(size = 1.2, na.rm = TRUE) +
-  geom_point(size = 3, na.rm = TRUE) +
+  # Lines for each election type
+  geom_line(size = 1.3, na.rm = TRUE) +
+  geom_point(size = 3.5, stroke = 1, na.rm = TRUE) +
   
-  # Add percentage labels above each dot
+  # Add percentage labels above each point
   geom_text(
     aes(label = scales::percent(turnout, accuracy = 1)),
-    vjust = -1,                # put label above the dot
-    color = "black",           # keep labels black
-    size = 4,                  # adjust font size
-    show.legend = FALSE,       # don’t add extra legend item
+    vjust = -1.2,
+    color = "gray20",
+    size = 4,
+    show.legend = FALSE,
     na.rm = TRUE
   ) +
   
-  # Special orange dot for 2025
+  # Highlight 2025 prediction
   geom_point(
     data = subset(turnout_df, year == 2025),
     aes(x = year, y = turnout),
-    color = "orange", size = 4,
+    color = "#F28E2B", fill = "#F28E2B",
+    shape = 21, size = 5, stroke = 1.2,
     inherit.aes = FALSE
   ) +
   
-  # Label for prediction
+  # Move "Our Prediction" label to left of dot
   geom_text(
     data = subset(turnout_df, year == 2025),
     aes(x = year, y = turnout, label = "Our Prediction"),
-    hjust = 1.2, vjust = 0.5,
-    fontface = "bold", color = "black",
+    hjust = 1.3, vjust = 0.4,  # left side
+    fontface = "bold", color = "gray20",
     inherit.aes = FALSE
   ) +
   
-  # Regression line for Off-cycle elections extended to 2025
+  # Regression line for Off-cycle elections
   geom_smooth(
     data = subset(turnout_df, election_type == "Off-cycle"),
-    method = "lm", se = FALSE, color = "black", linetype = "dashed",
+    method = "lm", se = FALSE, color = "gray30", linetype = "dashed",
     fullrange = TRUE
   ) +
   
   scale_x_continuous(
     breaks = turnout_df$year,
-    labels = turnout_df$year
+    labels = turnout_df$year,
+    expand = expansion(mult = c(0.01, 0.05))
   ) +
   scale_y_continuous(
     labels = scales::percent_format(accuracy = 1),
     limits = c(.25, .9)
   ) +
-  scale_color_discrete(na.translate = FALSE) +
+  
+  # Clean color palette (no NA)
+  scale_color_manual(
+    values = c(
+      "Presidential" = "#1F77B4",
+      "Sen/Gov" = "#59A14F",
+      "Off-cycle" = "#B07AA1"
+    ),
+    na.translate = FALSE  # removes NA legend
+  ) +
+  
   labs(
-    title = "Voter Turnout by Election Type",
+    title = "Voter Turnout by Election Type (2013–2025)",
+    subtitle = "Presidential, Senate/Governor, and Off-cycle elections with 2025 prediction",
     x = "Year",
     y = "Turnout (%)",
     color = "Election Type"
   ) +
-  theme_minimal(base_size = 14)
+  
+  theme_minimal(base_size = 15, base_family = "Helvetica") +
+  theme(
+    plot.title = element_text(face = "bold", size = 18, hjust = 0.5),
+    plot.subtitle = element_text(size = 13, color = "gray40", hjust = 0.5),
+    axis.title = element_text(face = "bold", size = 13),
+    axis.text = element_text(color = "gray25"),
+    panel.grid.major = element_line(color = "gray90"),
+    panel.grid.minor = element_blank(),
+    legend.position = "bottom",
+    legend.title = element_text(face = "bold"),
+    plot.margin = margin(10, 20, 10, 10)
+  )
 
 #### Drop-Off ####
 
@@ -391,59 +417,75 @@ prediction_df <- data.frame(
 )
 
 ggplot(observed_df, aes(x = year, y = turnout)) +
-  # Line + observed points
-  geom_line(size = 1.2, color = "steelblue") +
-  geom_point(size = 3, color = "steelblue") +
+  # Shaded prediction background
+  annotate("rect", xmin = max(observed_df$year) + 0.2, xmax = prediction_df$year + 0.8,
+           ymin = -Inf, ymax = Inf, alpha = 0.08, fill = "#d1e6fa") +
   
-  # Labels for observed points
+  # Trend line and observed data
+  geom_line(size = 1.3, color = "#2c6eaa", alpha = 0.9) +
+  geom_point(size = 4, color = "#2c6eaa", stroke = 1.2, fill = "white", shape = 21) +
+  
+  # Labels for observed data
   geom_text(
     data = observed_df,
-    aes(label = scales::percent(turnout, accuracy = 1)),
-    vjust = -1,
-    color = "black",
-    size = 4
+    aes(label = percent(turnout, accuracy = 1)),
+    vjust = -1, size = 4.2, color = "#2c2c2c"
   ) +
   
-  # Prediction point (same color as line)
+  # Prediction point and label
   geom_point(
     data = prediction_df,
     aes(x = year, y = turnout),
-    color = "steelblue", size = 4
+    size = 5, shape = 21, fill = "#f0a500", color = "#a97400", stroke = 1.3
   ) +
-  
-  # Label for prediction percentage
   geom_text(
     data = prediction_df,
-    aes(x = year, y = turnout, label = scales::percent(turnout, accuracy = 1)),
-    vjust = -1,
-    color = "black",
-    size = 4
+    aes(x = year, y = turnout, label = percent(turnout, accuracy = 1)),
+    vjust = -1, size = 4.2, color = "#2c2c2c"
   ) +
-  
-  # Label for prediction text
   geom_text(
     data = prediction_df,
-    aes(x = year, y = turnout, label = "Our Prediction"),
-    hjust = 1.2, vjust = 0.5,
-    fontface = "bold", color = "black"
+    aes(x = year, y = turnout, label = "Predicted"),
+    hjust = 1.2, vjust = 0.5, fontface = "bold",
+    color = "#a97400", size = 4.2
   ) +
   
-  geom_smooth(method = "lm", se = FALSE, color = "black", linetype = "dashed") +
+  # Fitted regression line (dashed)
+  geom_smooth(method = "lm", se = FALSE, color = "#4b4b4b", linetype = "longdash", linewidth = 0.9) +
   
+  # Axis scaling and labels
   scale_x_continuous(
     breaks = c(observed_df$year, prediction_df$year),
     labels = c(observed_df$year, prediction_df$year)
   ) +
   scale_y_continuous(
     limits = c(0.05, 0.3),
-    labels = scales::percent_format(accuracy = 1)
+    labels = percent_format(accuracy = 1)
   ) +
+  
+  # Titles and labels
   labs(
     title = "Drop-Off by Year",
+    subtitle = "Observed and Predicted Voter Turnout Drop-Off Rates",
     x = "Year",
-    y = "Drop-Off (%)"
+    y = "Drop-Off (%)",
+    caption = "Shaded region indicates projected year"
   ) +
-  theme_minimal(base_size = 14)
+  
+  # Custom theme
+  theme_minimal(base_size = 14) +
+  theme(
+    plot.title = element_text(face = "bold", size = 18, color = "#1a1a1a", hjust = 0.5),
+    plot.subtitle = element_text(color = "#555555", hjust = 0.5, size = 13),
+    plot.caption = element_text(color = "#666666", size = 10, hjust = 1),
+    axis.title = element_text(face = "bold"),
+    axis.text = element_text(color = "#333333"),
+    panel.grid.minor = element_blank(),
+    panel.grid.major.x = element_blank(),
+    panel.grid.major.y = element_line(color = "grey85", linewidth = 0.3),
+    plot.background = element_rect(fill = "#f9f9f9", color = NA),
+    panel.background = element_rect(fill = "#f9f9f9", color = NA)
+  )
 
 
 

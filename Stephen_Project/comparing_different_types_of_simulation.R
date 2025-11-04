@@ -65,13 +65,20 @@ create_race_slate <- function(){
   return(candidates_df)
 }
 
-slate_2021 <- create_race_slate()
+slate_2025 <- create_race_slate()
+slate_2025[20, 3] <- "D"
 
-write.csv(slate_2021, "slate_2021.csv")
+write.csv(slate_2025, "data/slate_2025.csv", row.names = FALSE)
+
+slate_2021 <- create_race_slate()
+slate_2021[26,2] <- "NI"
+write.csv(slate_2021, "data/slate_2021.csv", row.names = FALSE)
 
 slate_2017 <- create_race_slate()
+slate_2017[23, 2] <- "NI"
+slate_2017 <- slate_2017[-nrow(slate_2017), ]
 
-write.csv(slate_2017, "slate_2017.csv")
+write.csv(slate_2017, "data/slate_2017.csv", row.names = FALSE)
 
 
 slate_2013 <- create_race_slate()
@@ -80,12 +87,13 @@ slate_2013 <- create_race_slate()
 
 write.csv(slate_2013, "data/slate_2013.csv", row.names = FALSE)
 
+slate_2013 <- read_csv("data/slate_2013.csv")
 
 #### Election Simulation Without bias ####
 
 #changed the City council section to more closely match reality of the 2013 election
 
-simulate_election <- function(candidates_df = candidates_df, race = "City Council") {
+simulate_election_without_bias <- function(candidates_df = candidates_df, race = "City Council") {
   
   if (race == "City Council"){
     
@@ -293,7 +301,10 @@ simulate_election <- function(candidates_df = candidates_df, race = "City Counci
 
 
 
-election_with_no_bias <- simulate_election(candidates_df = slate_2013, race = "City Council")
+simulated_election_without_bias_2013<- simulate_election_without_bias(candidates_df = slate_2013, race = "City Council")
+simulated_election_without_bias_2017<- simulate_election_without_bias(candidates_df = slate_2017, race = "City Council")
+simulated_election_without_bias_2021<- simulate_election_without_bias(candidates_df = slate_2021, race = "City Council")
+simulated_election_without_bias_2025<- simulate_election_without_bias(candidates_df = slate_2025, race = "City Council")
 
 write.csv(election_with_no_bias, "data/election_with_no_bias.csv")
 
@@ -507,7 +518,11 @@ simulate_election_with_bias <- function(candidates_df = candidates_df, race = "C
 }
 
 
-simulated_election_with_bias <- simulate_election_with_bias(candidates_df = slate_2013, race = "City Council")
+simulated_election_with_bias_2013 <- simulate_election_with_bias(candidates_df = slate_2013, race = "City Council")
+simulated_election_with_bias_2017 <- simulate_election_with_bias(candidates_df = slate_2017, race = "City Council")
+simulated_election_with_bias_2021 <- simulate_election_with_bias(candidates_df = slate_2021, race = "City Council")
+simulated_election_with_bias_2025 <- simulate_election_with_bias(candidates_df = slate_2025, race = "City Council")
+
 
 write.csv(simulated_election_with_bias, "data/simulated_election_with_bias.csv")
 

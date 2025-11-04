@@ -25,19 +25,19 @@ wanted <- c(
   "TOWNSHIP",
   "VILLAGE",
   "WARD",
-  "GENERAL.11.06.2001", "GENERAL.11.04.2003", "PRIMARY.05.03.2005",
-  "PRIMARY.09.13.2005", "GENERAL.11.08.2005", "PRIMARY.05.08.2007",
-  "PRIMARY.09.11.2007", "GENERAL.11.06.2007", "PRIMARY.05.05.2009",
+  "GENERAL.11.06.2001", "GENERAL.11.05.2002", "GENERAL.11.04.2003", "GENERAL.11.02.2004", "PRIMARY.05.03.2005",
+  "PRIMARY.09.13.2005", "GENERAL.11.08.2005", "GENERAL.11.07.2006", "PRIMARY.05.08.2007",
+  "PRIMARY.09.11.2007", "GENERAL.11.06.2007", "GENERAL.11.04.2008", "PRIMARY.05.05.2009",
   "PRIMARY.09.08.2009", "PRIMARY.09.15.2009", "PRIMARY.09.29.2009",
-  "GENERAL.11.03.2009", "PRIMARY.05.03.2011", "PRIMARY.09.13.2011",
-  "GENERAL.11.08.2011", "PRIMARY.05.07.2013", "PRIMARY.09.10.2013",
-  "PRIMARY.10.01.2013", "GENERAL.11.05.2013", "PRIMARY.05.05.2015",
-  "PRIMARY.09.15.2015", "GENERAL.11.03.2015",
-  "PRIMARY.05.02.2017", "PRIMARY.09.12.2017", "GENERAL.11.07.2017",
-  "PRIMARY.05.07.2019", "PRIMARY.09.10.2019", "GENERAL.11.05.2019",
-  "PRIMARY.05.04.2021", "PRIMARY.08.03.2021", "GENERAL.11.02.2021",
-  "PRIMARY.05.02.2023", "PRIMARY.10.03.2023", "GENERAL.11.07.2023",
-  "PRIMARY.05.06.2025", "PRIMARY.09.09.2025" # example name for this year's primary — replace with your exact column name
+  "GENERAL.11.03.2009", "GENERAL.11.02.2010", "PRIMARY.05.03.2011", "PRIMARY.09.13.2011",
+  "GENERAL.11.08.2011", "GENERAL.11.06.2012", "PRIMARY.05.07.2013", "PRIMARY.09.10.2013",
+  "PRIMARY.10.01.2013", "GENERAL.11.05.2013", "GENERAL.11.04.2014", "PRIMARY.05.05.2015",
+  "PRIMARY.09.15.2015", "GENERAL.11.03.2015", "GENERAL.11.08.2016", "PRIMARY.05.02.2017",
+  "PRIMARY.09.12.2017", "GENERAL.11.07.2017", "GENERAL.08.07.2018", "PRIMARY.05.07.2019",
+  "PRIMARY.09.10.2019", "GENERAL.11.05.2019", "GENERAL.11.03.2020", "PRIMARY.05.04.2021",
+  "PRIMARY.08.03.2021", "GENERAL.11.02.2021", "PRIMARY.05.02.2023",
+  "PRIMARY.10.03.2023", "GENERAL.11.07.2023", "PRIMARY.05.06.2025",
+  "PRIMARY.09.09.2025" # example name for this year's primary — replace with your exact column name
 )
 
 predict_data <- data %>%
@@ -64,12 +64,18 @@ predict_data <- predict_data %>%
 predict_data$DATE_OF_BIRTH <- as.numeric(floor((Sys.Date() - as.Date(predict_data$DATE_OF_BIRTH)) / 365.25))
 colnames(predict_data)[colnames(predict_data) == "DATE_OF_BIRTH"] <- "AGE"
 
-predict_data$LOCATION <- paste(
-  predict_data$PRECINCT_NAME,
+predict_data$LOCATION <- ifelse(
+  predict_data$TOWNSHIP != "",
   predict_data$TOWNSHIP,
-  predict_data$VILLAGE,
-  predict_data$WARD,
-  sep = ", "
+  ifelse(
+    predict_data$VILLAGE != "",
+    predict_data$VILLAGE,
+    ifelse(
+      predict_data$WARD != "",
+      predict_data$WARD,
+      NA
+    )
+  )
 )
 
 predict_data <- predict_data[, !names(predict_data) %in% c("PRECINCT_NAME", "TOWNSHIP", "VILLAGE", "WARD")]
@@ -81,16 +87,16 @@ predict_data <- predict_data[, c(
 )]
 
 offcycle_cols <- c(
-  "GENERAL.11.06.2001", "GENERAL.11.04.2003", "PRIMARY.05.03.2005",
-  "PRIMARY.09.13.2005", "GENERAL.11.08.2005", "PRIMARY.05.08.2007",
-  "PRIMARY.09.11.2007", "GENERAL.11.06.2007", "PRIMARY.05.05.2009",
+  "GENERAL.11.06.2001", "GENERAL.11.05.2002", "GENERAL.11.04.2003", "GENERAL.11.02.2004", "PRIMARY.05.03.2005",
+  "PRIMARY.09.13.2005", "GENERAL.11.08.2005", "GENERAL.11.07.2006", "PRIMARY.05.08.2007",
+  "PRIMARY.09.11.2007", "GENERAL.11.06.2007", "GENERAL.11.04.2008", "PRIMARY.05.05.2009",
   "PRIMARY.09.08.2009", "PRIMARY.09.15.2009", "PRIMARY.09.29.2009",
-  "GENERAL.11.03.2009", "PRIMARY.05.03.2011", "PRIMARY.09.13.2011",
-  "GENERAL.11.08.2011", "PRIMARY.05.07.2013", "PRIMARY.09.10.2013",
-  "PRIMARY.10.01.2013", "GENERAL.11.05.2013", "PRIMARY.05.05.2015",
-  "PRIMARY.09.15.2015", "GENERAL.11.03.2015", "PRIMARY.05.02.2017",
-  "PRIMARY.09.12.2017", "GENERAL.11.07.2017", "PRIMARY.05.07.2019",
-  "PRIMARY.09.10.2019", "GENERAL.11.05.2019", "PRIMARY.05.04.2021",
+  "GENERAL.11.03.2009", "GENERAL.11.02.2010", "PRIMARY.05.03.2011", "PRIMARY.09.13.2011",
+  "GENERAL.11.08.2011", "GENERAL.11.06.2012", "PRIMARY.05.07.2013", "PRIMARY.09.10.2013",
+  "PRIMARY.10.01.2013", "GENERAL.11.05.2013", "GENERAL.11.04.2014", "PRIMARY.05.05.2015",
+  "PRIMARY.09.15.2015", "GENERAL.11.03.2015", "GENERAL.11.08.2016", "PRIMARY.05.02.2017",
+  "PRIMARY.09.12.2017", "GENERAL.11.07.2017", "GENERAL.08.07.2018", "PRIMARY.05.07.2019",
+  "PRIMARY.09.10.2019", "GENERAL.11.05.2019", "GENERAL.11.03.2020", "PRIMARY.05.04.2021",
   "PRIMARY.08.03.2021", "GENERAL.11.02.2021", "PRIMARY.05.02.2023",
   "PRIMARY.10.03.2023", "GENERAL.11.07.2023", "PRIMARY.05.06.2025",
   "PRIMARY.09.09.2025"
@@ -114,25 +120,21 @@ write.csv(predict_data, "data/predict_data.csv", row.names = FALSE)
 
 
 # 1️⃣ Split data into training and testing sets (80/20)
-set.seed(42)  # for reproducibility
+set.seed(50)  # for reproducibility
 train_index <- sample(1:nrow(predict_data), 0.8 * nrow(predict_data))
 train_data <- predict_data[train_index, ]
 test_data <- predict_data[-train_index, ]
+train_data$REG_YEAR <- as.numeric(format(as.Date(train_data$REGISTRATION_DATE), "%Y"))
+test_data$REG_YEAR <- as.numeric(format(as.Date(test_data$REGISTRATION_DATE), "%Y"))
 
 # 2️⃣ Fit a decision tree model
 tree_model <- rpart(
-  GENERAL.11.02.2021 ~ gender + AGE + PARTY_AFFILIATION + LOCATION + REGISTRATION_DATE
-  + GENERAL.11.06.2001 + GENERAL.11.04.2003 + PRIMARY.05.03.2005 +
-  PRIMARY.09.13.2005 + GENERAL.11.08.2005 + PRIMARY.05.08.2007 + 
-  PRIMARY.09.11.2007 + GENERAL.11.06.2007 + PRIMARY.05.05.2009 +
-  PRIMARY.09.08.2009 + PRIMARY.09.15.2009 + PRIMARY.09.29.2009 +
-  GENERAL.11.03.2009 + PRIMARY.05.03.2011 + PRIMARY.09.13.2011 +
-  GENERAL.11.08.2011 + PRIMARY.05.07.2013 + PRIMARY.09.10.2013 +
-  PRIMARY.10.01.2013 + GENERAL.11.05.2013 + PRIMARY.05.05.2015 +
-  PRIMARY.09.15.2015 + GENERAL.11.03.2015 +
-  PRIMARY.05.02.2017 + PRIMARY.09.12.2017 + GENERAL.11.07.2017 +
-  PRIMARY.05.07.2019 + PRIMARY.09.10.2019 + GENERAL.11.05.2019 +
-  PRIMARY.05.04.2021 + PRIMARY.08.03.2021, 
+  GENERAL.11.02.2021 ~ PARTY_AFFILIATION + REGISTRATION_DATE +
+  GENERAL.11.08.2005 + 
+  GENERAL.11.06.2007 +
+  GENERAL.11.05.2013 + 
+  GENERAL.11.07.2017 +
+  GENERAL.11.05.2019, 
   data = train_data,
   method = "class",   # classification tree
   control = rpart.control(cp = 0.01, minsplit = 20)  # basic anti-overfitting parameters
@@ -157,7 +159,7 @@ test_data$REGISTRATION_DATE <- factor(test_data$REGISTRATION_DATE,
 
 # 7️⃣ Evaluate accuracy on test data
 pred <- predict(pruned_tree, test_data, type = "class")
-accuracy <- mean(pred == test_data$offcycle_turnout)
+accuracy <- mean(pred == test_data$GENERAL.11.02.2021)
 cat("Test Accuracy:", round(accuracy, 3), "\n")
 
 summary(pruned_tree)
@@ -169,9 +171,56 @@ actual <- train_data$offcycle_turnout
 
 # Pseudo R-squared (squared correlation)
 R2_train <- cor(pred_prob, actual)^2
+
 R2_train
 
 pred_prob_test <- predict(pruned_tree, test_data, type = "prob")[,2]
 actual_test <- test_data$offcycle_turnout
 R2_test <- cor(pred_prob_test, actual_test)^2
 R2_test
+
+#### RANDOM FOREST MODEL ####
+library(randomForest)
+set.seed(50)  # for reproducibility
+train_index <- sample(1:nrow(predict_data), 0.8 * nrow(predict_data))
+train_data <- predict_data[train_index, ]
+test_data <- predict_data[-train_index, ]
+train_data$REG_YEAR <- as.numeric(format(as.Date(train_data$REGISTRATION_DATE), "%Y"))
+test_data$REG_YEAR <- as.numeric(format(as.Date(test_data$REGISTRATION_DATE), "%Y"))
+
+rf_model <- randomForest(
+  GENERAL.11.02.2021 ~ PARTY_AFFILIATION + REG_YEAR + 
+    GENERAL.11.08.2005 + GENERAL.11.06.2007 + 
+    GENERAL.11.05.2013 + GENERAL.11.07.2017 + 
+    GENERAL.11.05.2019,
+  data = train_data,
+  ntree = 150,          # number of trees (default 500)
+  mtry = 4,             # number of variables tried per split
+  importance = TRUE     # calculate variable importance
+)
+
+# 3️⃣ Check model summary
+print(rf_model)
+
+# 4️⃣ Evaluate accuracy on test set
+pred_rf <- predict(rf_model, test_data)
+accuracy_rf <- mean(pred_rf == test_data$GENERAL.11.02.2021)
+cat("Test Accuracy:", round(accuracy_rf, 3), "\n")
+
+# 5️⃣ Variable importance plot
+varImpPlot(rf_model)
+
+# Predictions
+pred_train <- predict(rf_model, train_data)
+pred_test  <- predict(rf_model, test_data)
+
+# Actual values
+actual_train <- train_data$GENERAL.11.02.2021
+actual_test  <- test_data$GENERAL.11.02.2021
+
+# R-squared for train and test
+R2_train <- cor(pred_train, actual_train)^2
+R2_test  <- cor(pred_test, actual_test)^2
+
+cat("Train R²:", round(R2_train, 3), "\n")
+cat("Test R²:", round(R2_test, 3), "\n")
