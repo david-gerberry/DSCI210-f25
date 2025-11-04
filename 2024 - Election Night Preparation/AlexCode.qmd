@@ -1,0 +1,303 @@
+---
+title: "Turnout by City/Township"
+format: html
+editor: visual
+---
+
+Turnout by City/Township in the 2016, 2020, 2022, and 2023 General Elections
+
+```{r}
+library(ggplot2)
+library(dplyr)
+library(readxl)
+```
+
+2016 Graph
+
+```{r}
+data1 <- read_excel("turnoutbyprecinct2016.xlsx", skip = 1)
+hamilton_data <- data1 %>%
+  filter(`County Name` == "Hamilton")
+hamilton_data <- hamilton_data %>%
+  mutate(
+    Precinct.Category = case_when(
+      grepl("BLUE ASH", `Precinct Name`) ~ "Blue Ash",
+      grepl("CHEVIOT", `Precinct Name`) ~ "Cheviot",
+      grepl("CINCINNATI", `Precinct Name`) ~ "Cincinnati",
+      grepl("DEER PARK", `Precinct Name`) ~ "Deer Park",
+      grepl("FOREST PARK", `Precinct Name`) ~ "Forest Park",
+      grepl("INDIAN HILL", `Precinct Name`) ~ "Indian Hill",
+      grepl("LOVELAND", `Precinct Name`) ~ "Loveland",
+      grepl("MADEIRA", `Precinct Name`) ~ "Madeira",
+      grepl("MONTGOMERY", `Precinct Name`) ~ "Montgomery",
+      grepl("MT HEALTHY", `Precinct Name`) ~ "Mt Healthy",
+      grepl("NO COLL HILL", `Precinct Name`) ~ "North College Hill",
+      grepl("NORWOOD", `Precinct Name`) ~ "Norwood",
+      grepl("READING", `Precinct Name`) ~ "Reading",
+      grepl("ST BERNARD", `Precinct Name`) ~ "St Bernard",
+      grepl("SHARONVILLE", `Precinct Name`) ~ "Sharonville",
+      grepl("SILVERTON", `Precinct Name`) ~ "Silverton",
+      grepl("SPRINGDALE", `Precinct Name`) ~ "Springdale",
+      grepl("WYOMING", `Precinct Name`) ~ "Wyoming",
+      grepl("AMBERLEY", `Precinct Name`) ~ "Amberley",
+      grepl("ANDERSON", `Precinct Name`) ~ "Anderson",
+      grepl("ARLINGTON HGTS", `Precinct Name`) ~ "Arlington Heights",
+      grepl("COLERAIN", `Precinct Name`) ~ "Colerain",
+      grepl("COLUMBIA", `Precinct Name`) ~ "Columbia",
+      grepl("FAIRFAX", `Precinct Name`) ~ "Fairfax",
+      grepl("CROSBY", `Precinct Name`) ~ "Crosby",
+      grepl("DELHI", `Precinct Name`) ~ "Delhi",
+      grepl("ELMWOOD", `Precinct Name`) ~ "Elmwood",
+      grepl("EVENDALE", `Precinct Name`) ~ "Evendale",
+      grepl("GLENDALE", `Precinct Name`) ~ "Glendale",
+      grepl("GOLF MANOR", `Precinct Name`) ~ "Golf Manor",
+      grepl("GREENHILLS", `Precinct Name`) ~ "Greenhills",
+      grepl("GREEN", `Precinct Name`) ~ "Green",
+      grepl("HARR TWP", `Precinct Name`) ~ "Harrison Township",
+      grepl("HARRISON", `Precinct Name`) ~ "Harrison",
+      grepl("LOCKLAND", `Precinct Name`) ~ "Lockland",
+      grepl("MARIEMONT", `Precinct Name`) ~ "Mariemont",
+      grepl("MIAMI TWP", `Precinct Name`) ~ "Miami Township",
+      grepl("NORTH BEND", `Precinct Name`) ~ "North Bend",
+      grepl("ADDYSTON", `Precinct Name`) ~ "Addyston",
+      grepl("CLEVES", `Precinct Name`) ~ "Cleves",
+      grepl("NEWTOWN", `Precinct Name`) ~ "Newtown",
+      grepl("SPRINGFIELD", `Precinct Name`) ~ "Springfield",
+      grepl("SYCAMORE", `Precinct Name`) ~ "Sycamore",
+      grepl("SYMMES", `Precinct Name`) ~ "Symmes",
+      grepl("TERRACE PARK", `Precinct Name`) ~ "Terrace Park",
+      grepl("WHITEWATER", `Precinct Name`) ~ "Whitewater",
+      grepl("WOODLAWN", `Precinct Name`) ~ "Woodlawn",
+      grepl("LINCOLN HGTS", `Precinct Name`) ~ "Lincoln Heights",
+      TRUE ~ `Precinct Name`  # Keep other precinct names as they are
+    )
+  ) %>%
+  group_by(Precinct.Category) %>%
+  summarize(Average_Turnout_Percentage = mean(`Turnout Percentage`, na.rm = TRUE))
+
+ggplot(hamilton_data, aes(x = reorder(Precinct.Category, -Average_Turnout_Percentage), y = Average_Turnout_Percentage)) +
+  geom_bar(stat = "identity", fill = "skyblue") +
+  labs(title = "Turnout by City/Township in Hamilton County 2016",
+       x = "City/Township",
+       y = "Average Turnout Percentage") +
+  coord_flip() +
+  theme_minimal()
+```
+
+The `echo: false` option disables the printing of code (only output is displayed).
+
+2020
+
+```{r}
+data2 <- read_excel("turnoutbyprecinct2020.xlsx", skip = 1)
+hamilton_data2 <- data2 %>%
+  filter(`County Name` == "Hamilton")
+hamilton_data2 <- hamilton_data2 %>%
+  mutate(
+    Precinct.Category = case_when(
+      grepl("BLUE ASH", `Precinct Name`) ~ "Blue Ash",
+      grepl("CHEVIOT", `Precinct Name`) ~ "Cheviot",
+      grepl("CINCINNATI", `Precinct Name`) ~ "Cincinnati",
+      grepl("DEER PARK", `Precinct Name`) ~ "Deer Park",
+      grepl("FOREST PARK", `Precinct Name`) ~ "Forest Park",
+      grepl("INDIAN HILL", `Precinct Name`) ~ "Indian Hill",
+      grepl("LOVELAND", `Precinct Name`) ~ "Loveland",
+      grepl("MADEIRA", `Precinct Name`) ~ "Madeira",
+      grepl("MONTGOMERY", `Precinct Name`) ~ "Montgomery",
+      grepl("MT HEALTHY", `Precinct Name`) ~ "Mt Healthy",
+      grepl("NO COLL HILL", `Precinct Name`) ~ "North College Hill",
+      grepl("NORWOOD", `Precinct Name`) ~ "Norwood",
+      grepl("READING", `Precinct Name`) ~ "Reading",
+      grepl("ST BERNARD", `Precinct Name`) ~ "St Bernard",
+      grepl("SHARONVILLE", `Precinct Name`) ~ "Sharonville",
+      grepl("SILVERTON", `Precinct Name`) ~ "Silverton",
+      grepl("SPRINGDALE", `Precinct Name`) ~ "Springdale",
+      grepl("WYOMING", `Precinct Name`) ~ "Wyoming",
+      grepl("AMBERLEY", `Precinct Name`) ~ "Amberley",
+      grepl("ANDERSON", `Precinct Name`) ~ "Anderson",
+      grepl("ARLINGTON HGTS", `Precinct Name`) ~ "Arlington Heights",
+      grepl("COLERAIN", `Precinct Name`) ~ "Colerain",
+      grepl("COLUMBIA", `Precinct Name`) ~ "Columbia",
+      grepl("FAIRFAX", `Precinct Name`) ~ "Fairfax",
+      grepl("CROSBY", `Precinct Name`) ~ "Crosby",
+      grepl("DELHI", `Precinct Name`) ~ "Delhi",
+      grepl("ELMWOOD", `Precinct Name`) ~ "Elmwood",
+      grepl("EVENDALE", `Precinct Name`) ~ "Evendale",
+      grepl("GLENDALE", `Precinct Name`) ~ "Glendale",
+      grepl("GOLF MANOR", `Precinct Name`) ~ "Golf Manor",
+      grepl("GREENHILLS", `Precinct Name`) ~ "Greenhills",
+      grepl("GREEN", `Precinct Name`) ~ "Green",
+      grepl("HARR TWP", `Precinct Name`) ~ "Harrison Township",
+      grepl("HARRISON", `Precinct Name`) ~ "Harrison",
+      grepl("LOCKLAND", `Precinct Name`) ~ "Lockland",
+      grepl("MARIEMONT", `Precinct Name`) ~ "Mariemont",
+      grepl("MIAMI TWP", `Precinct Name`) ~ "Miami Township",
+      grepl("NORTH BEND", `Precinct Name`) ~ "North Bend",
+      grepl("ADDYSTON", `Precinct Name`) ~ "Addyston",
+      grepl("CLEVES", `Precinct Name`) ~ "Cleves",
+      grepl("NEWTOWN", `Precinct Name`) ~ "Newtown",
+      grepl("SPRINGFIELD", `Precinct Name`) ~ "Springfield",
+      grepl("SYCAMORE", `Precinct Name`) ~ "Sycamore",
+      grepl("SYMMES", `Precinct Name`) ~ "Symmes",
+      grepl("TERRACE PARK", `Precinct Name`) ~ "Terrace Park",
+      grepl("WHITEWATER", `Precinct Name`) ~ "Whitewater",
+      grepl("WOODLAWN", `Precinct Name`) ~ "Woodlawn",
+      grepl("LINCOLN HGTS", `Precinct Name`) ~ "Lincoln Heights",
+      TRUE ~ `Precinct Name`  # Keep other precinct names as they are
+    )
+  ) %>%
+  group_by(Precinct.Category) %>%
+  summarize(Average_Turnout_Percentage = mean(`Official Voter Turnout`, na.rm = TRUE))
+
+ggplot(hamilton_data, aes(x = reorder(Precinct.Category, -Average_Turnout_Percentage), y = Average_Turnout_Percentage)) +
+  geom_bar(stat = "identity", fill = "skyblue") +
+  labs(title = "Turnout by City/Township in Hamilton County 2020",
+       x = "City/Township",
+       y = "Average Turnout Percentage") +
+  coord_flip() +
+  theme_minimal()
+```
+
+2022
+
+```{r}
+data3 <- read_excel("turnoutbyprecinct2022.xlsx", skip = 1)
+hamilton_data3 <- data3 %>%
+  filter(`County Name` == "Hamilton")
+hamilton_data3 <- hamilton_data3 %>%
+  mutate(
+    Precinct.Category = case_when(
+      grepl("BLUE ASH", `Precinct Name`) ~ "Blue Ash",
+      grepl("CHEVIOT", `Precinct Name`) ~ "Cheviot",
+      grepl("CINCINNATI", `Precinct Name`) ~ "Cincinnati",
+      grepl("DEER PARK", `Precinct Name`) ~ "Deer Park",
+      grepl("FOREST PARK", `Precinct Name`) ~ "Forest Park",
+      grepl("INDIAN HILL", `Precinct Name`) ~ "Indian Hill",
+      grepl("LOVELAND", `Precinct Name`) ~ "Loveland",
+      grepl("MADEIRA", `Precinct Name`) ~ "Madeira",
+      grepl("MONTGOMERY", `Precinct Name`) ~ "Montgomery",
+      grepl("MT HEALTHY", `Precinct Name`) ~ "Mt Healthy",
+      grepl("NO COLL HILL", `Precinct Name`) ~ "North College Hill",
+      grepl("NORWOOD", `Precinct Name`) ~ "Norwood",
+      grepl("READING", `Precinct Name`) ~ "Reading",
+      grepl("ST BERNARD", `Precinct Name`) ~ "St Bernard",
+      grepl("SHARONVILLE", `Precinct Name`) ~ "Sharonville",
+      grepl("SILVERTON", `Precinct Name`) ~ "Silverton",
+      grepl("SPRINGDALE", `Precinct Name`) ~ "Springdale",
+      grepl("WYOMING", `Precinct Name`) ~ "Wyoming",
+      grepl("AMBERLEY", `Precinct Name`) ~ "Amberley",
+      grepl("ANDERSON", `Precinct Name`) ~ "Anderson",
+      grepl("ARLINGTON HGTS", `Precinct Name`) ~ "Arlington Heights",
+      grepl("COLERAIN", `Precinct Name`) ~ "Colerain",
+      grepl("COLUMBIA", `Precinct Name`) ~ "Columbia",
+      grepl("FAIRFAX", `Precinct Name`) ~ "Fairfax",
+      grepl("CROSBY", `Precinct Name`) ~ "Crosby",
+      grepl("DELHI", `Precinct Name`) ~ "Delhi",
+      grepl("ELMWOOD", `Precinct Name`) ~ "Elmwood",
+      grepl("EVENDALE", `Precinct Name`) ~ "Evendale",
+      grepl("GLENDALE", `Precinct Name`) ~ "Glendale",
+      grepl("GOLF MANOR", `Precinct Name`) ~ "Golf Manor",
+      grepl("GREENHILLS", `Precinct Name`) ~ "Greenhills",
+      grepl("GREEN", `Precinct Name`) ~ "Green",
+      grepl("HARR TWP", `Precinct Name`) ~ "Harrison Township",
+      grepl("HARRISON", `Precinct Name`) ~ "Harrison",
+      grepl("LOCKLAND", `Precinct Name`) ~ "Lockland",
+      grepl("MARIEMONT", `Precinct Name`) ~ "Mariemont",
+      grepl("MIAMI TWP", `Precinct Name`) ~ "Miami Township",
+      grepl("NORTH BEND", `Precinct Name`) ~ "North Bend",
+      grepl("ADDYSTON", `Precinct Name`) ~ "Addyston",
+      grepl("CLEVES", `Precinct Name`) ~ "Cleves",
+      grepl("NEWTOWN", `Precinct Name`) ~ "Newtown",
+      grepl("SPRINGFIELD", `Precinct Name`) ~ "Springfield",
+      grepl("SYCAMORE", `Precinct Name`) ~ "Sycamore",
+      grepl("SYMMES", `Precinct Name`) ~ "Symmes",
+      grepl("TERRACE PARK", `Precinct Name`) ~ "Terrace Park",
+      grepl("WHITEWATER", `Precinct Name`) ~ "Whitewater",
+      grepl("WOODLAWN", `Precinct Name`) ~ "Woodlawn",
+      grepl("LINCOLN HGTS", `Precinct Name`) ~ "Lincoln Heights",
+      TRUE ~ `Precinct Name`  # Keep other precinct names as they are
+    )
+  ) %>%
+  group_by(Precinct.Category) %>%
+  summarize(Average_Turnout_Percentage = mean(`Official Voter Turnout`, na.rm = TRUE))
+
+ggplot(hamilton_data, aes(x = reorder(Precinct.Category, -Average_Turnout_Percentage), y = Average_Turnout_Percentage)) +
+  geom_bar(stat = "identity", fill = "skyblue") +
+  labs(title = "Turnout by City/Township in Hamilton County 2022",
+       x = "City/Township",
+       y = "Average Turnout Percentage") +
+  coord_flip() +
+  theme_minimal()
+```
+
+2023
+
+```{r}
+data4 <- read_excel("turnoutbyprecinct2023.xlsx", skip = 1)
+hamilton_data4 <- data4 %>%
+  filter(`County Name` == "Hamilton")
+hamilton_data4 <- hamilton_data4 %>%
+  mutate(
+    Precinct.Category = case_when(
+      grepl("BLUE ASH", `Precinct Name`) ~ "Blue Ash",
+      grepl("CHEVIOT", `Precinct Name`) ~ "Cheviot",
+      grepl("CINCINNATI", `Precinct Name`) ~ "Cincinnati",
+      grepl("DEER PARK", `Precinct Name`) ~ "Deer Park",
+      grepl("FOREST PARK", `Precinct Name`) ~ "Forest Park",
+      grepl("INDIAN HILL", `Precinct Name`) ~ "Indian Hill",
+      grepl("LOVELAND", `Precinct Name`) ~ "Loveland",
+      grepl("MADEIRA", `Precinct Name`) ~ "Madeira",
+      grepl("MONTGOMERY", `Precinct Name`) ~ "Montgomery",
+      grepl("MT HEALTHY", `Precinct Name`) ~ "Mt Healthy",
+      grepl("NO COLL HILL", `Precinct Name`) ~ "North College Hill",
+      grepl("NORWOOD", `Precinct Name`) ~ "Norwood",
+      grepl("READING", `Precinct Name`) ~ "Reading",
+      grepl("ST BERNARD", `Precinct Name`) ~ "St Bernard",
+      grepl("SHARONVILLE", `Precinct Name`) ~ "Sharonville",
+      grepl("SILVERTON", `Precinct Name`) ~ "Silverton",
+      grepl("SPRINGDALE", `Precinct Name`) ~ "Springdale",
+      grepl("WYOMING", `Precinct Name`) ~ "Wyoming",
+      grepl("AMBERLEY", `Precinct Name`) ~ "Amberley",
+      grepl("ANDERSON", `Precinct Name`) ~ "Anderson",
+      grepl("ARLINGTON HGTS", `Precinct Name`) ~ "Arlington Heights",
+      grepl("COLERAIN", `Precinct Name`) ~ "Colerain",
+      grepl("COLUMBIA", `Precinct Name`) ~ "Columbia",
+      grepl("FAIRFAX", `Precinct Name`) ~ "Fairfax",
+      grepl("CROSBY", `Precinct Name`) ~ "Crosby",
+      grepl("DELHI", `Precinct Name`) ~ "Delhi",
+      grepl("ELMWOOD", `Precinct Name`) ~ "Elmwood",
+      grepl("EVENDALE", `Precinct Name`) ~ "Evendale",
+      grepl("GLENDALE", `Precinct Name`) ~ "Glendale",
+      grepl("GOLF MANOR", `Precinct Name`) ~ "Golf Manor",
+      grepl("GREENHILLS", `Precinct Name`) ~ "Greenhills",
+      grepl("GREEN", `Precinct Name`) ~ "Green",
+      grepl("HARR TWP", `Precinct Name`) ~ "Harrison Township",
+      grepl("HARRISON", `Precinct Name`) ~ "Harrison",
+      grepl("LOCKLAND", `Precinct Name`) ~ "Lockland",
+      grepl("MARIEMONT", `Precinct Name`) ~ "Mariemont",
+      grepl("MIAMI TWP", `Precinct Name`) ~ "Miami Township",
+      grepl("NORTH BEND", `Precinct Name`) ~ "North Bend",
+      grepl("ADDYSTON", `Precinct Name`) ~ "Addyston",
+      grepl("CLEVES", `Precinct Name`) ~ "Cleves",
+      grepl("NEWTOWN", `Precinct Name`) ~ "Newtown",
+      grepl("SPRINGFIELD", `Precinct Name`) ~ "Springfield",
+      grepl("SYCAMORE", `Precinct Name`) ~ "Sycamore",
+      grepl("SYMMES", `Precinct Name`) ~ "Symmes",
+      grepl("TERRACE PARK", `Precinct Name`) ~ "Terrace Park",
+      grepl("WHITEWATER", `Precinct Name`) ~ "Whitewater",
+      grepl("WOODLAWN", `Precinct Name`) ~ "Woodlawn",
+      grepl("LINCOLN HGTS", `Precinct Name`) ~ "Lincoln Heights",
+      TRUE ~ `Precinct Name`  # Keep other precinct names as they are
+    )
+  ) %>%
+  group_by(Precinct.Category) %>%
+  summarize(Average_Turnout_Percentage = mean(`Official Voter Turnout`, na.rm = TRUE))
+
+ggplot(hamilton_data, aes(x = reorder(Precinct.Category, -Average_Turnout_Percentage), y = Average_Turnout_Percentage)) +
+  geom_bar(stat = "identity", fill = "skyblue") +
+  labs(title = "Turnout by City/Township in Hamilton County 2023",
+       x = "City/Township",
+       y = "Average Turnout Percentage") +
+  coord_flip() +
+  theme_minimal()
+```

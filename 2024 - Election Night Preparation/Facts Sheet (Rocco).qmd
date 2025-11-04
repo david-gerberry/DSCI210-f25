@@ -1,0 +1,77 @@
+---
+title: "Fact Sheet (Rocco)"
+format: html
+editor: visual
+---
+
+## Quarto
+
+Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
+
+## Running Code
+
+When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
+
+```{r}
+library(tidyverse)
+library(ggplot2)
+
+# Input data
+year <- c(2016, 2024)
+absentee_ballots <- c(111844, 77738) 
+
+# Create a dataframe
+election_data <- data.frame(year, absentee_ballots)
+
+# Create a bar plot comparing absentee ballots in 2016 and 2024
+ggplot(election_data, aes(x = factor(year), y = absentee_ballots, fill = factor(year))) +
+  geom_bar(stat = "identity") +
+  labs(title = "Comparison of Absentee Voter Ballots Cast in the 2016 and 2024 General Elections",
+       x = "Year",
+       y = "Absentee Ballots Cast") +
+  scale_fill_manual(values = c("2016" = "orange", "2024" = "purple")) +
+  theme_minimal()
+
+```
+
+```{r}
+# Input data for registered voters
+year <- c(2016, 2020, 2024)
+registered_voters <- c(580354, 600401, 603980) 
+
+# Create a dataframe
+election_data <- data.frame(year, registered_voters)
+
+# Create a bar plot comparing registered voters in 2016, 2020, and 2024
+ggplot(election_data, aes(x = factor(year), y = registered_voters, fill = factor(year))) +
+  geom_bar(stat = "identity") +
+  labs(title = "Comparison of Registered Voters in Hamilton County (10/25/2024)",
+       x = "Year",
+       y = "Registered Voters") +
+  scale_fill_manual(values = c("2016" = "orange", "2020" = "green", "2024" = "purple")) +
+  theme_minimal()
+
+```
+
+```{r}
+# Input data for absentee ballots and registered voters
+election_year <- c(2016, 2024)
+absentee_voters <- c(111844, 77738)  
+registered_voters <- c(580354, 603980)  
+
+# Calculate the percentage of absentee voters
+absentee_percentage <- (absentee_voters / registered_voters) * 100
+
+# Create a data frame
+election_data <- data.frame(election_year, absentee_percentage)
+
+# Create a bar plot comparing absentee voter percentages in 2016 and 2024
+ggplot(election_data, aes(x = factor(election_year), y = absentee_percentage, fill = factor(election_year))) +
+  geom_bar(stat = "identity") +
+  labs(title = "Percentage of Absentee Voters Compared to Registered Voters (10/25/2024)",
+       x = "Election Year",
+       y = "Absentee Voter Percentage (%)") +
+  scale_fill_manual(values = c("2016" = "orange", "2024" = "purple")) +
+  theme_minimal()
+
+```

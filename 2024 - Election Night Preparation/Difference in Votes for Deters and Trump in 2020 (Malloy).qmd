@@ -1,0 +1,101 @@
+---
+title: "Difference in Votes for Deters and Trump in 2020"
+author: Colleen Malloy
+format: html
+editor: visual
+---
+
+## Looking at 2020 Election Results: Republican Votes in Presidential and Prosecutor Race (Hamilton County, Ohio)
+
+```{r}
+#| echo: false
+#| results: hide
+#| warning: false
+#| message: false
+library(readr)
+library(tidyverse)
+library(ggplot2)
+library(dplyr)
+library(sf)
+library(RColorBrewer)
+library(readxl)
+```
+
+Combine 2020 precincts and 2020 election results.
+
+Make a copy with only the columns we need, (Trump, Biden, Deters, Rucker).
+
+Find the differences in proportion of votes and of number of votes between Republican and Democratic opponents per race.
+
+Use these columns to create maps to visualize these results by precinct.
+
+```{r}
+#| result: hide
+#| warning: false
+#| message: false
+results2020 <- read_excel("../data/election results/G20_Official_Canvass.xlsx", sheet = "Candidates",skip=1)
+map <- st_zm(st_read("../data/maps/PRECINCT_052219.shp"))
+```
+
+```{r}
+
+mapANDresults2020 <-
+  left_join(map, results2020, by = c("PRECINCT" = "PRECINCT"))
+
+
+columns <- mapANDresults2020 %>%
+  select(`PRC #`, `PRECINCT`, `REGISTERED VOTERS TOTAL`, `PERCENT`,  `Biden & Harris  (Dem)`, `Trump & Pence       (Rep)`,`Joseph T. Deters      (Rep)`, `Fanon A. Rucker      (Dem)`) %>% 
+  mutate(Trump.prop = `Trump & Pence       (Rep)`/( `Biden & Harris  (Dem)`+ `Trump & Pence       (Rep)`)) %>% 
+  mutate(Deters.prop = `Joseph T. Deters      (Rep)`/(`Joseph T. Deters      (Rep)` + `Fanon A. Rucker      (Dem)`)) %>% 
+  mutate(prop.difference.Rep = Deters.prop - Trump.prop) %>% 
+  mutate(vote.difference.Rep = (`Joseph T. Deters      (Rep)`) - (`Trump & Pence       (Rep)`))
+
+```
+
+```{r}
+library(dplyr)
+library(ggplot2)
+library(sf)
+library(RColorBrewer)
+
+# Coordinates for the line (adjust as needed)
+start_coords <- c(-84.48, 39.02) # Example starting point
+end_coords <- c(-84.515, 39.13)   # Example ending point
+
+# Plot the map with the highlighted precinct, line, and label
+columns %>%
+  ggplot(aes(fill = prop.difference.Rep)) + 
+  geom_sf() + 
+  labs(title = "Difference in Votes for Deters and Trump in 2020 (Hamilton County, OH)",
+       subtitle = "Deters won with 52.44% of votes, Trump lost with 41.28% of votes",
+       fill = "Vote for Deters - Trump (%)",
+       caption = "") + 
+  geom_segment(aes(x = start_coords[1], y = start_coords[2], 
+                   xend = end_coords[1], yend = end_coords[2]),
+               arrow = arrow(length = unit(0.3, "cm")), color = "black") + 
+  geom_label(aes(x = start_coords[1], y = start_coords[2], label = "University of Cincinnati"), 
+             nudge_y = 0.02, color = "black", fill = "white") + 
+  scale_fill_gradient2(low = "darkgreen", mid = "white", high = "purple", 
+                       midpoint = 0,
+                       na.value = "transparent",
+                       breaks = c(-.05, 0, .05, .1, .15, .2, .22),
+                       labels = c("-5", "0", "5", "10", "15", "", "22"),
+                       limits = c(-.05, .22)) + 
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = 20),
+    plot.subtitle = element_text(size = 16),
+    plot.caption = element_text(size = 12),
+    axis.title = element_blank(), # Removes axis titles
+    axis.text = element_blank(),  # Removes axis text
+    legend.title = element_text(size = 14),
+    legend.text = element_text(size = 12)
+  )
+
+```
+
+Are there any precincts that stand out?
+
+Do the precincts with high percentages and vote counts of difference lie within our swing voters precincts?
+
+Should these be our swing voters that we target?

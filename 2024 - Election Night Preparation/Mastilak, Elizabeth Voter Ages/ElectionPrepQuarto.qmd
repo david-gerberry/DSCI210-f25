@@ -1,0 +1,353 @@
+---
+title: "Election Prep"
+author: "Elizabeth Mastilak"
+format: 
+  html:
+    embed-resources: TRUE
+execute: 
+  warning: FALSE
+  message: FALSE
+editor: visual
+---
+
+## Set Up
+
+Start by loading packages and data:
+
+```{r}
+#| label: load packages and data
+library(tidyverse)
+voters_sos <- 
+  read_csv("data/registered voters/voters_SOS/voters_SOS.csv")
+```
+
+I don't love the way the Secretary of State classifies party affiliation. So I will be making two graphs for each type of graph: one with the SoS party affiliations and one with my own definitions.
+
+My definition: To be affiliated with a political party, you must have voted in that party's primary in the past three elections and not in any other party's primary within that time period.
+
+Is it perfect? No.
+
+That's why I will be making every graph with the SoS definition too. This will provide a sense of standardization.
+
+```{r}
+#| label: defining "party"
+# Defines "party" as a separate column that provides an alternate definition for party affiliation.
+# Definition: To be affiliated with a political party, you must have voted in that party's primary 
+# in the past three elections and not in any other party's primary within that time period.
+voters_sos <- voters_sos %>%
+  # create an empty vector called party
+  mutate(party = NA) %>% 
+  mutate(
+    party = ifelse(!is.na(PARTY_AFFILIATION), # set NA to U
+                   "Unaffiliated",
+                   case_when(
+                     (`PRIMARY.03/19/2024` == "R") |   # voted R in 2024
+                       (`PRIMARY.03/19/2024` == "o" & `PRIMARY.03/17/2020` == "R") | #voted R in 2020
+                       (`PRIMARY.03/19/2024` == "o" & `PRIMARY.03/17/2020` == "o" &
+                          `PRIMARY.03/15/2016` == "R") ~ "Republican",  # voted R in 2016
+                     
+                     (`PRIMARY.03/19/2024` == "D") | # voted D in 2024
+                       (`PRIMARY.03/19/2024` == "o" & `PRIMARY.03/17/2020` == "D") | #voted D in 2020
+                       (`PRIMARY.03/19/2024` == "o" & `PRIMARY.03/17/2020` == "o" &
+                          `PRIMARY.03/15/2016` == "D") ~ "Democrat",  # voted D in 2016
+                     
+                     TRUE ~ party  # retain U values
+                   )
+    ) 
+  )
+```
+
+```{r}
+#| label: Replace with full names
+voters_sos <- voters_sos %>%
+  mutate(PARTY_AFFILIATION = case_when(
+    PARTY_AFFILIATION == "R" ~ "Republican",
+    PARTY_AFFILIATION == "D" ~ "Democrat",
+    is.na(PARTY_AFFILIATION) ~ "Unaffiliated"
+  ))
+```
+
+A little bit of comparison between my definition and the SoS definition:
+
+```{r}
+#| label: party vs PARTY_AFFILIATION
+table(voters_sos$party)
+table(voters_sos$PARTY_AFFILIATION)
+```
+
+Averages of Ages:
+
+```{r}
+DemAgeMean <- voters_sos %>% 
+  filter(PARTY_AFFILIATION == "Democrat") %>% 
+  pull(AGE) %>% 
+  mean()
+
+RepAgeMean <- voters_sos %>% 
+  filter(PARTY_AFFILIATION == "Republican") %>% 
+  pull(AGE) %>% 
+  mean()
+
+UnaffAgeMean <- voters_sos %>% 
+  filter(PARTY_AFFILIATION == "Unaffiliated") %>% 
+  pull(AGE) %>% 
+  mean()
+```
+
+## Graphs with SoS Definition
+
+Let's prepare the data to examine the ages of voters for each political party.
+
+```{r}
+#| label: groupings SoS
+ages_summary <- voters_sos %>%
+  filter(AGE < 111) %>% 
+  group_by(AGE, PARTY_AFFILIATION) %>%
+  summarise(count = n()) %>%
+  ungroup()
+```
+
+Now let's look at the age distribution for all registered voters by political party.
+
+```{r}
+#| label: DRU ages, SoS
+ages_summary %>% 
+  ggplot(aes(x = AGE, y = count, color = PARTY_AFFILIATION)) +
+  geom_line(size = 1) +
+  scale_color_manual(values = c("Democrat" = "blue", 
+                                "Republican" = "red", 
+                                "Unaffiliated" = "green")) +
+  labs(title = "Ages of Registered Voters by Party Affiliation",
+       x = "Age (Years)",
+       y = "Number of People",
+       color = "Party Affiliation") +
+  theme_minimal()
+```
+
+Now each one separate:
+
+```{r}
+#| label: D ages, SoS
+ages_summary %>% 
+  filter(PARTY_AFFILIATION == "Democrat") %>% 
+  ggplot(aes(x = AGE, y = count, color = PARTY_AFFILIATION)) +
+  geom_line(size = 1) +
+  scale_color_manual(values = c("Democrat" = "blue", 
+                                "Republican" = "red", 
+                                "Unaffiliated" = "green")) +
+  labs(title = "Ages of Registered Democrat Voters",
+       x = "Age (Years)",
+       y = "Number of People",
+       color = "Party Affiliation") +
+  theme_minimal()
+```
+
+```{r}
+#| label: R ages, SoS
+ages_summary %>% 
+  filter(PARTY_AFFILIATION == "Republican") %>% 
+  ggplot(aes(x = AGE, y = count, color = PARTY_AFFILIATION)) +
+  geom_line(size = 1) +
+  scale_color_manual(values = c("Democrat" = "blue", 
+                                "Republican" = "red", 
+                                "Unaffiliated" = "green")) +
+  labs(title = "Ages of Registered Republican Voters",
+       x = "Age (Years)",
+       y = "Number of People",
+       color = "Party Affiliation") +
+  theme_minimal()
+```
+
+```{r}
+#| label: U ages, SoS
+ages_summary %>% 
+  filter(PARTY_AFFILIATION == "Unaffiliated") %>% 
+  ggplot(aes(x = AGE, y = count, color = PARTY_AFFILIATION)) +
+  geom_line(size = 1) +
+  scale_color_manual(values = c("Democrat" = "blue", 
+                                "Republican" = "red", 
+                                "Unaffiliated" = "green")) +
+  labs(title = "Ages of Unaffiliated Voters",
+       x = "Age (Years)",
+       y = "Number of People",
+       color = "Party Affiliation") +
+  theme_minimal()
+```
+
+Now some combinations:
+
+-   D vs R
+
+-   D vs U
+
+-   R vs U
+
+```{r}
+#| label: D vs R ages, SoS
+ages_summary %>% 
+  filter(PARTY_AFFILIATION != "Unaffiliated") %>% 
+  ggplot(aes(x = AGE, y = count, color = PARTY_AFFILIATION)) +
+  geom_line(size = 1) +
+  scale_color_manual(values = c("Democrat" = "blue", 
+                                "Republican" = "red", 
+                                "Unaffiliated" = "green")) +
+  labs(title = "Ages of Registered Voters by Party Affiliation",
+       x = "Age (Years)",
+       y = "Number of People",
+       color = "Party Affiliation") +
+  theme_minimal()
+```
+
+```{r}
+#| label: D vs U ages, SoS
+ages_summary %>% 
+  filter(PARTY_AFFILIATION != "Republican") %>% 
+  ggplot(aes(x = AGE, y = count, color = PARTY_AFFILIATION)) +
+  geom_line(size = 1) +
+  scale_color_manual(values = c("Democrat" = "blue", 
+                                "Republican" = "red", 
+                                "Unaffiliated" = "green")) +
+  labs(title = "Ages of Registered Voters by Party Affiliation",
+       x = "Age (Years)",
+       y = "Number of People",
+       color = "Party Affiliation") +
+  theme_minimal()
+```
+
+```{r}
+#| label: U vs R ages, SoS
+ages_summary %>% 
+  filter(PARTY_AFFILIATION != "Democrat") %>% 
+  ggplot(aes(x = AGE, y = count, color = PARTY_AFFILIATION)) +
+  geom_line(size = 1) +
+  scale_color_manual(values = c("Democrat" = "blue", 
+                                "Republican" = "red", 
+                                "Unaffiliated" = "green")) +
+  labs(title = "Ages of Registered Voters by Party Affiliation",
+       x = "Age (Years)",
+       y = "Number of People",
+       color = "Party Affiliation") +
+  theme_minimal()
+```
+
+## Graphs with My Definition
+
+Now let's examine the distributions with a bit of a different definition.
+
+```{r}
+#| label: groupings Mine
+age_summary <- voters_sos %>%
+  filter(AGE < 111) %>% 
+  group_by(AGE, party) %>%
+  summarise(count = n()) %>%
+  ungroup()
+```
+
+The complete graph:
+
+```{r}
+#| label: DRU ages, Mine
+age_summary %>% 
+  ggplot(aes(x = AGE, y = count, color = party)) +
+  geom_line() +
+  scale_color_manual(values = c("D" = "blue", "R" = "red", "U" = "green")) +
+  labs(title = "Number of People by Age and Party",
+       x = "Age (Years)",
+       y = "Number of People",
+       color = "Party Affiliation") +
+  theme_minimal()
+```
+
+By each group:
+
+```{r}
+#| label: D ages, Mine
+age_summary %>% 
+  filter(party == "D") %>% 
+  ggplot(aes(x = AGE, y = count, color = party)) +
+  geom_line() +
+  scale_color_manual(values = c("D" = "blue", "R" = "red", "U" = "green")) +
+  labs(title = "Number of People by Age and Party",
+       x = "Age (Years)",
+       y = "Number of People",
+       color = "Party Affiliation") +
+  theme_minimal()
+```
+
+```{r}
+#| label: R ages, Mine
+age_summary %>% 
+  filter(party == "R") %>% 
+  ggplot(aes(x = AGE, y = count, color = party)) +
+  geom_line() +
+  scale_color_manual(values = c("D" = "blue", "R" = "red", "U" = "green")) +
+  labs(title = "Number of People by Age and Party",
+       x = "Age (Years)",
+       y = "Number of People",
+       color = "Party Affiliation") +
+  theme_minimal()
+```
+
+```{r}
+#| label: U ages, Mine
+age_summary %>% 
+  filter(party == "U") %>% 
+  ggplot(aes(x = AGE, y = count, color = party)) +
+  geom_line() +
+  scale_color_manual(values = c("D" = "blue", "R" = "red", "U" = "green")) +
+  labs(title = "Number of People by Age and Party",
+       x = "Age (Years)",
+       y = "Number of People",
+       color = "Party Affiliation") +
+  theme_minimal()
+```
+
+Now some combinations:
+
+-   D vs R
+
+-   D vs U
+
+-   R vs U
+
+```{r}
+#| label: DR ages, Mine
+age_summary %>% 
+  filter(party != "U") %>% 
+  ggplot(aes(x = AGE, y = count, color = party)) +
+  geom_line() +
+  scale_color_manual(values = c("D" = "blue", "R" = "red", "U" = "green")) +
+  labs(title = "Number of People by Age and Party",
+       x = "Age (Years)",
+       y = "Number of People",
+       color = "Party Affiliation") +
+  theme_minimal()
+```
+
+```{r}
+#| label: DU ages, Mine
+age_summary %>% 
+  filter(party != "R") %>% 
+  ggplot(aes(x = AGE, y = count, color = party)) +
+  geom_line() +
+  scale_color_manual(values = c("D" = "blue", "R" = "red", "U" = "green")) +
+  labs(title = "Number of People by Age and Party",
+       x = "Age (Years)",
+       y = "Number of People",
+       color = "Party Affiliation") +
+  theme_minimal()
+```
+
+```{r}
+#| label: RU ages, Mine
+age_summary %>% 
+  filter(party != "D") %>% 
+  ggplot(aes(x = AGE, y = count, color = party)) +
+  geom_line() +
+  scale_color_manual(values = c("D" = "blue", "R" = "red", "U" = "green")) +
+  labs(title = "Number of People by Age and Party",
+       x = "Age (Years)",
+       y = "Number of People",
+       color = "Party Affiliation") +
+  theme_minimal()
+```

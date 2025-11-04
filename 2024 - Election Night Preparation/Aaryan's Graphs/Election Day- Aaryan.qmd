@@ -1,0 +1,151 @@
+---
+title: "Election Day -Aaryan"
+format: html
+editor: Aaryan Bhatta
+---
+
+## Libraries
+
+```{r}
+library(tidyverse)
+library(sf)
+library(readxl)
+library(RColorBrewer)
+library(parallel)
+```
+
+# Data Sets
+
+I utilized data sets, that helped me to visualize a map of political affiliations and the prediction turnout of registered voters. The turnout data set, I later used for calculating the turnout prediction for 2024's presidential election.
+
+```{r}
+map2024 <- st_zm(st_read("C:\\Users\\Aaryan D B\\Documents\\GitHub\\DSCI210-f24\\data\\maps\\precincts_2024.shp"))
+voters.sos <-read_csv("voters_SOS.csv")
+turnout <- read_excel("Turnout 2012-2023.xlsx")
+```
+
+# Map of Political Affiliations of Registered Voters
+
+When creating this map, I combined the data of registered voters and the map data of Hamilton county. I managed to determine voters who were democrat, republican and unaffiliated. Based on that, I was able to calculate the proportion of the different affiliations. I this case, I wanted to look at the democrats proportion against the republican and I produced a map of it.
+
+```{r}
+voter.summary <- 
+  voters.sos %>%
+  mutate(PARTY_AFFILIATION = replace_na(PARTY_AFFILIATION, 'U')) %>% 
+  group_by(PRECINCT_NAME) %>%
+  summarize(total_voters = n(),
+            un_voters = sum(PARTY_AFFILIATION == "U"), 
+            rep_voters = sum(PARTY_AFFILIATION == "R"), 
+            dem_voters = sum(PARTY_AFFILIATION == "D")) %>%
+  mutate(dem.prop.of.reg = dem_voters / (dem_voters+rep_voters)) %>% 
+  mutate(rep.prop.of.reg = rep_voters / (dem_voters+rep_voters)) %>% 
+  mutate(unaffiliated.prop = un_voters / total_voters)
+
+voters<-voters.sos %>%
+  mutate(area = coalesce(TOWNSHIP,VILLAGE,WARD,CITY)) %>% 
+  group_by(area) %>% 
+  mutate(PARTY_AFFILIATION = replace_na(PARTY_AFFILIATION, 'U')) %>% 
+  summarize(total_voters = n(),
+            un_voters = sum(PARTY_AFFILIATION == "U"), 
+            rep_voters = sum(PARTY_AFFILIATION == "R"), 
+            dem_voters = sum(PARTY_AFFILIATION == "D")) %>%
+  mutate(dem.prop.of.aff = dem_voters / (dem_voters+rep_voters)) %>% 
+  mutate(rep.prop.of.aff = rep_voters / (dem_voters+rep_voters)) %>% 
+  mutate(unaffiliated.prop = un_voters / total_voters)
+
+mapANDvoters2024 <-
+  left_join(map2024, voter.summary, by = c("PRC_NAME" = "PRECINCT_NAME"))
+
+top_dem <- voters %>%
+  arrange(desc(dem.prop.of.aff)) %>%
+  slice_head(n = 5)
+
+top_rep <- voters %>%
+  arrange(desc(rep.prop.of.aff)) %>%
+  slice_head(n = 6)
+
+mapANDvoters2024 %>% 
+  ggplot(aes(fill=dem.prop.of.reg)) +
+  geom_sf()+
+  labs(title = "2024's Party Affiliation(Democrats and Republicans)", 
+       subtitle = "",
+       fill = "", 
+       caption = "Top Democratic/Republican Areas:\n\n Democratic        |        Republican\n
+       LINCOLN HEIGHTS VILLAGE:97.8%         \tHARRISON TWP:88.4%\n
+       CINTI WARD 18: 93.8%          \tCROSBY TWP87.9%:    \n
+       CINTI WARD 7: 93.1%       \tMIAMI TWP:87.7%   \n
+       CINTI WARD 17:88.8%         \tWHITEWATER TWP:87.3%\n
+       CINTI WARD 13:88.4%        \tTHE VILLAGE OF INDIAN HILL CITY:81.5%\n
+       ")+
+  scale_fill_gradientn(colours=brewer.pal(n=10,name="Spectral"),na.value = "transparent",
+                       breaks=c(0,.25,0.5,.75,1),labels=c("100%","75%","50%","75%","100%"),
+                       limits=c(0,1))
+```
+
+# Turnout Prediction
+
+First, I looked at the historical data of the percentage of turnout in Hamilton County. I compared different elections like the Government/Senator, Off-Cycle and Presidential Elections.
+
+```{r}
+turnout %>% 
+  ggplot(aes(x = Year, y = Turnout, color = Type)) +
+  geom_line(size = 1.2) +          # Line plot with thicker lines
+  geom_point(size = 3) +           # Add points to the plot
+  labs(
+    title = "Voter Turnout in Hamilton County",
+    x = "Year",
+    y = "Turnout",
+    color = "Election Type"
+  ) +
+  theme_minimal() +                # A clean theme
+  scale_y_continuous(labels = scales::percent_format()) +  # Turnout as percentage
+  scale_x_continuous(breaks = seq(2012, 2023, by = 1))    # Year ticks
+
+```
+
+In order to predict the voter turnout for 2024, I computed a linear regression of the presidential elections. I then combined my results with the turnout data I had to create a regression line on the graph to determine the predicted turnout for 2024's elections.
+
+```{r}
+presidential_turnout <- turnout %>%
+  filter(Type == "Presidential")
+model1 <- lm(Turnout ~ Year, data = presidential_turnout)
+
+registered_2024 <- 604049
+
+# Create a new data frame for prediction
+year_2024 <- data.frame(Year = 2024)
+
+# Predict turnout for 2024
+predicted_turnout <- predict(model1, newdata = year_2024)
+
+# The predicted number of voters
+predicted_number_of_voters <- (predicted_turnout / 100) * registered_2024
+
+# Calculated predicted turnout percentage
+predicted_turnout_percentage <- (predicted_number_of_voters / registered_2024) * 100
+
+# Create a new row for the predicted turnout
+new_row <- data.frame(Year = 2024, Registered = registered_2024, Turnout = predicted_turnout_percentage, Type = "Presidential")
+
+# Combine the historical data with the prediction
+predictions <- bind_rows(turnout, new_row)
+
+# Create the plot
+final= ggplot(predictions, aes(x = Year, y = Turnout, color = Type)) +
+  geom_point(size = 3) +           
+  geom_line(data = filter(predictions, Year < 2024), aes(x = Year, y = Turnout, color = Type), size = 1.2)+
+  geom_smooth(data = filter(predictions, Type == "Presidential"), method = "lm", aes(color = "Regression Line"), se = FALSE) +
+  geom_text(data = new_row, aes(x = Year, y = Turnout, label = paste0(round(Turnout,2 ), "%")), 
+            vjust = 1.3, hjust = 0.8) +
+  labs(
+    title = "Voter Turnout in Hamilton County",
+    x = "Year",
+    y = "Turnout Rate (%)",
+    color = "Election Type"
+  ) +
+  theme_minimal() +                
+  scale_y_continuous(labels = scales::percent_format()) +  # Turnout as percentage
+  scale_x_continuous(breaks = seq(2012, 2024, by = 1))  
+
+print(final)
+```
