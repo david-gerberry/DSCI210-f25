@@ -1,0 +1,164 @@
+---
+title: "Statistics_project"
+author: "Stephen Lynch & Abigail Sandquist"
+format: pdf
+---
+
+Read in the Data to begin assessment.
+
+
+```{r}
+library(tidyverse)
+
+df <- read_csv("Salary_Data.csv")
+
+
+df <- df %>% 
+  mutate(
+    `Education Level` = `Education Level` %>%
+      str_remove(" Degree")) %>% 
+  subset(`Education Level` != "NA")
+
+df[5876,3] <- "PhD"    
+
+```
+
+
+
+
+
+
+
+
+``` {r}
+
+df %>% 
+  ggplot(aes(y = Salary, x = Age))+
+  geom_point()+
+  facet_wrap(~`Education Level`)
+
+
+```
+
+
+``` {r}
+
+df %>% 
+  ggplot(aes(y = Salary, x = `Years of Experience`))+
+  geom_point()+
+  facet_wrap(~`Education Level`)
+
+
+```
+
+
+
+
+``` {r}
+
+df %>% 
+  ggplot(aes(y = Salary, x = Gender))+
+  geom_boxplot()+
+  facet_wrap(~`Education Level`)
+
+
+```
+
+
+``` {r}
+
+df %>% 
+  ggplot(aes(y = Salary, x = `Job Title`))+
+  geom_point()+
+  facet_wrap(~`Education Level`)
+
+
+```
+
+
+
+Make a starting LM for the data with Salary as our Dependent Variable and years
+of experience and age as Independant
+
+
+``` {r}
+
+model1 <- lm(Salary ~ `Years of Experience` + log(Age) + Gender + `Years of Experience` + `Education Level` + `Job Title`, data = df)
+model2 <- lm(Salary ~ `Years of Experience` + log(Age) + Gender + `Years of Experience` + `Education Level` , data = df)
+summary(model2)
+summary(model1)
+
+coefs2 <- summary(model2)$coefficients
+sig_coefs2 <- coefs2[coefs2[, "Pr(>|t|)"] < 0.05, ]
+sig_coefs2
+
+coefs1 <- summary(model1)$coefficients
+sig_coefs1 <- coefs1[coefs1[, "Pr(>|t|)"] < 0.05, ]
+sig_coefs1
+
+final_model <- step(model1, direction = "backward")
+summary(final_model)
+anova(final_model)
+```
+
+
+```{r}
+
+plot(model2, which = 1)
+
+plot(model1, which = 1)
+
+plot(final_model, which = 1)
+
+```
+
+
+
+
+```{r}
+df$`Years of Experience2` = log(df$`Years of Experience`)
+
+df$Age2 = log(df$Age)
+
+
+df$salary2 = log(df$Salary, base = exp(1))
+
+
+
+loged_model1 <- lm(salary2 ~ `Years of Experience` + Age + Gender + `Years of Experience` + `Education Level` + `Job Title`, data = df)
+loged_model2 <- lm(salary2 ~ `Years of Experience` + Age + Gender + `Years of Experience` + `Education Level` , data = df)
+summary(loged_model2)
+summary(loged_model1)
+
+coefs2 <- summary(loged_model2)$coefficients
+sig_coefs2 <- coefs2[coefs2[, "Pr(>|t|)"] < 0.05, ]
+sig_coefs2
+
+coefs1 <- summary(loged_model1)$coefficients
+sig_coefs1 <- coefs1[coefs1[, "Pr(>|t|)"] < 0.05, ]
+sig_coefs1
+
+loged_final_model <- step(loged_model1, direction = "backward")
+summary(loged_final_model)
+anova(loged_final_model)
+
+
+
+
+
+
+```
+
+
+```{r}
+
+plot(loged_model2)
+
+plot(loged_model1)
+
+plot(loged_final_model)
+
+
+```
+
+

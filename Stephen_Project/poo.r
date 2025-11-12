@@ -1,21 +1,37 @@
+library(tidyverse)
 
 
-
-simulate_election_DG <- function(candidates, winners, j, total_voters) {
+simulate_election_DG <- function(candidates, j, total_voters) {
   # Create a ballot list
   ballots <- vector("list", total_voters)
   
+  vote_prob <- c(0.00, 0.00, 0.01, 0.02, 0.03, 0.09, 0.13, 0.25, 0.27, 0.20)
+  
+  
+  
+  
   for (i in 1:total_voters) {
+    
+    cat("Voter number", i, "of", total_voters, "\n")
+    
+    # Figure out how many votes are happening for the voter "i"
+    num_votes <- sample(0:9, size = 1, replace = TRUE, prob = vote_prob)
+    
     # Count votes for each candidate so far
     vote_counts <- table(factor(unlist(ballots), levels = candidates))
     p <- as.numeric(vote_counts)
-    
+    if (num_votes > 0){
     # Sample with reinforcement
     ballots[[i]] <- sample(
       x = candidates,
-      size = winners,
+      size = num_votes,
+      replace = FALSE,
       prob = (p + j) / sum(p + j)
     )
+    }
+    else{
+      ballots[[i]] <- character(0)
+    }
   }
   
   # Final vote tally
@@ -27,13 +43,13 @@ simulate_election_DG <- function(candidates, winners, j, total_voters) {
 
 
 # Dave Gerberry - Function to simulate the election with candidates bias
-total_voters <- 100
-C = 12   ## number of candidates
-winners=9
-j=2
+total_voters <- 10000
+C = 26   ## number of candidates
+winners <- 9
+j= .25
 
 # Store results
-results <- replicate(500, simulate_election_DG(candidates = LETTERS[1:C],winners=winners,j=j,total_voters = total_voters ))
+results <- replicate(100, simulate_election_DG(candidates = LETTERS[1:C], j = j ,total_voters = total_voters))
 
 # Convert results to a data frame
 results_df <- as.data.frame(t(results))
@@ -43,7 +59,7 @@ colnames(results_df) <- LETTERS[1:C]
 results_df$Election <- 1:nrow(results_df)
 results_df$LastWinner <- apply(results_df[, 1:C], 1, function(x) names(sort(x, decreasing = TRUE)[winners]))
 results_df$FirstLoser <- apply(results_df[, 1:C], 1, function(x) names(sort(x, decreasing = TRUE)[winners+1]))
-results_df$MagicNumber <- apply(results_df[, 1:C], 1, function(x) (sort(x, decreasing = TRUE)[winners]+sort(x, decreasing = TRUE)[winners+1])/(2*total_voters))
+results_df$MagicNumber <- apply(results_df[, 1:C], 1, function(x) (((sort(x, decreasing = TRUE)[winners]+sort(x, decreasing = TRUE)[winners+1])/2)/ (sum(x[1:C]))) * 100)
 
 # Display results
 head(results_df)
@@ -53,7 +69,7 @@ winner_summary <- table(results_df$Winner1, results_df$Winner2)
 winner_summary
 
 magic_number_average <- mean(results_df$MagicNumber)
-needed_votes <- magic_number_average*448859
+needed_votes <- magic_number_average * total_voters
 needed_votes
 
 # Basic boxplot without notches and jitter points
@@ -79,7 +95,7 @@ text(magic_number_average, 1.3, labels = paste("Mean:", round(magic_number_avera
 # Create the histogram
 hist(
   results_df$MagicNumber, 
-  main = "Percentage of Votes Needed to Win Field Race", 
+  main = "Percent of Votes Needed to Win Field Race", 
   xlab = "Magic Number Percentage",
   ylab = "Number of Simulations",
   col = "grey", 
