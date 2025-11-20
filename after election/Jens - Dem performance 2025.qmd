@@ -1,0 +1,178 @@
+---
+title: "Jens Sutmoller Request"
+author: "David Gerberry"
+output: html
+---
+
+
+```{r setup, message=FALSE,warning=FALSE}
+knitr::opts_chunk$set(
+	echo = TRUE,
+	message = FALSE,
+	warning = FALSE
+)
+library(tidyverse)
+library(sf)
+library(readxl)
+library(RColorBrewer)
+library(dplyr)
+library(stringr)
+```
+
+# Map from last time
+
+Standard Election Results map to work from.
+
+```{r}
+map2020 <- st_zm(st_read("../data/maps/PRECINCT_052219.shp"))
+
+results2020 <- read_excel("../data/election results/G20_Official_Canvass.xlsx", 
+                       sheet = "Candidates",skip=1)
+
+mapANDresults2020 <-
+  left_join(map2020, results2020, by = c("PRECINCT" = "PRECINCT"))
+
+mapANDresults2020 %>% 
+  mutate(Biden.prop = `Biden & Harris  (Dem)`/( `Biden & Harris  (Dem)`+ `Trump & Pence       (Rep)`)) %>%
+  ggplot(aes(fill=Biden.prop)) +
+  geom_sf()+
+  labs(title = "2020 Presidential Election", 
+       subtitle = "Joe Biden vs Donald Trump",
+       fill = "Vote for \nBiden (%)", 
+       caption = "")+
+  scale_fill_gradientn(colours=brewer.pal(n=10,name="RdBu"),na.value = "transparent",
+                           breaks=c(0,.25,0.5,.75,1),labels=c("0%","25%","50%","75%","100%"),
+                           limits=c(0,1))
+
+```
+
+
+Now, let's make a map to illustrate performance of Cincinnati City Council Democratic slate in 2025.
+
+```{r}
+map2025 <- st_zm(st_read("../data/maps/2025 Shape Files.shp"))
+
+jens_council <- read_excel("City Council Elections 2025.xlsx", 
+                       sheet = "Cincy City Council",skip=2)%>%
+  mutate(PrecinctCode = substr(Precinct, 1, 4))
+
+
+mapANDresults2025 <-
+  inner_join(map2025, jens_council, by = c("PRECINCT" = "PrecinctCode")) %>% 
+  mutate(
+    `DEM AVG RANK` = pmax(`DEM AVG RANK`,5),
+  )
+
+
+map1 <- mapANDresults2025 %>% 
+  ggplot(aes(fill=`DEM AVG RANK`)) +
+  geom_sf(color = "white",lwd=.05)+
+  labs(title = "Cincinnati City Council, Nov 2025", 
+       subtitle = "Average rank of Democratic slate",
+       fill = "Ave Rank", 
+       caption = "")+
+  scale_fill_gradientn(colours=rev(brewer.pal(n = 10, name = "Spectral")),na.value = "transparent",
+                           breaks=c(5,6,7,8,9,10),labels=c("5","6","7","8","9","10"),
+                           limits=c(5,10))+
+  theme_bw()
+
+print(map1)
+
+
+# Compute aspect ratio from bounding box
+bbox <- st_bbox(mapANDresults2025)  # returns xmin, ymin, xmax, ymax
+x_range <- bbox$xmax - bbox$xmin
+y_range <- bbox$ymax - bbox$ymin
+aspect_ratio <- y_range / x_range
+
+# Save PDF with width = 8 inches, height scaled to aspect ratio
+pdf("City Council - Democratic slate.pdf", width = 8, height = 8 * aspect_ratio)
+print(map1)
+dev.off()
+
+
+```
+
+
+
+Now to CPS Schools Levy results.
+
+```{r}
+jens_cps <- read_excel("City Council Elections 2025.xlsx", 
+                       sheet = "CPS",skip=2) %>%
+  mutate(PrecinctCode = substr(Precinct, 1, 4))
+
+
+mapANDresults2025 <-
+  inner_join(map2025, jens_cps, by = c("PRECINCT" = "PrecinctCode"))
+
+
+map2 <- mapANDresults2025 %>% 
+  ggplot(aes(fill=`% Difference`)) +
+  geom_sf(color = "white",lwd=.05)+
+  labs(title = "Cincinnati Schools Levy, Nov 2025", 
+       subtitle = "% Difference from overall average of 72.9%",
+       fill = "% Difference", 
+       caption = "")+
+  scale_fill_gradientn(colours=(brewer.pal(n = 10, name = "Spectral")),na.value = 0)+
+  theme_bw()
+
+
+
+# Compute aspect ratio from bounding box
+bbox <- st_bbox(mapANDresults2025)  # returns xmin, ymin, xmax, ymax
+x_range <- bbox$xmax - bbox$xmin
+y_range <- bbox$ymax - bbox$ymin
+aspect_ratio <- y_range / x_range
+
+
+print(map2)
+# Save PDF with width = 8 inches, height scaled to aspect ratio
+pdf("CPS School Levy.pdf", width = 8, height = 8 * aspect_ratio)
+print(map2)
+dev.off()
+
+
+```
+
+
+And to the Parks Levy results.
+
+```{r}
+jens_parks <- read_excel("City Council Elections 2025.xlsx", 
+                       sheet = "Great Parks",skip=2)%>%
+  mutate(PrecinctCode = substr(Precinct, 1, 4))
+
+mapANDresults2025 <-
+  inner_join(map2025, jens_parks, by = c("PRECINCT" = "PrecinctCode"))
+
+
+map3<-mapANDresults2025 %>% 
+  ggplot(aes(fill=`% Difference`)) +
+  geom_sf(color = "white",lwd=.05)+
+  labs(title = "Cincinnati Great Parks Levy, Nov 2025", 
+       subtitle = "% Difference from overall average of 74.1%",
+       fill = "% Difference", 
+       caption = "")+
+  scale_fill_gradientn(colours=(brewer.pal(n = 10, name = "Spectral")),na.value = 0)+
+  theme_bw()
+
+
+
+# Compute aspect ratio from bounding box
+bbox <- st_bbox(mapANDresults2025)  # returns xmin, ymin, xmax, ymax
+x_range <- bbox$xmax - bbox$xmin
+y_range <- bbox$ymax - bbox$ymin
+aspect_ratio <- y_range / x_range
+
+# Save PDF with width = 8 inches, height scaled to aspect ratio
+pdf("Cincinnati Great Parks Levy.pdf", width = 8, height = 8 * aspect_ratio)
+print(map3)
+dev.off()
+
+print(map3)
+
+```
+
+
+
