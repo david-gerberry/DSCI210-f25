@@ -4,9 +4,12 @@ library(magrittr)  # Extracting items from list objects using piping grammar
 library(httr)      # Interacting with HTTP verbs
 library(xml2)
 library(sf)
+library(RColorBrewer)
+library(tidycensus)
 
 
-zip_file = "https://results.votehamiltoncountyohio.gov//OH/Hamilton/123661/358351/reports/detailxml.zip"
+#zip_file = "https://results.votehamiltoncountyohio.gov//OH/Hamilton/124347/361897/reports/detailxml.zip"
+zip_file = "https://results.votehamiltoncountyohio.gov//OH/Hamilton/124347/366417/reports/detailxml.zip"
 #unzip(zipfile = zip_file, exdir = getwd())
 temp <- tempfile()
 
@@ -86,9 +89,9 @@ GetTurnoutFromXML <- function(turnout.data){
 }
 
 # all we need to do to get updated data
-
-data = prepXML( getXMLFile() )
-
+election.2025.xml = getXMLFile()
+election.data.2025 = prepXML( getXMLFile() )
+GetTurnoutFromXML(election.2025.xml)
 
 #yaa4ayay codee
 
@@ -111,15 +114,27 @@ GetElectionInfo = function(data,election) {
         names_from = candidate,
         values_from = votes
       ) %>% 
-      mutate(TOTAL = rowSums(across(where(is.numeric)), na.rm=TRUE)) %>% 
-      mutate(REGISTERED.VOTERS = floor( acs_interp_cincy$pop_totalE ))
+      mutate(TOTAL = rowSums(across(where(is.numeric)), na.rm=TRUE)) #%>% 
+      #mutate(REGISTERED.VOTERS = floor( acs_interp_cincy$pop_totalE ))
     
   )
   
 }
 
+a = election.data.2025 %>% 
+  filter(contest == "For Judge of Hamilton County Municipal Court (District 4)") %>% 
+  group_by(candidate,precinct) %>% 
+  summarise(across( votes ,sum)) %>% 
+  pivot_wider(
+    names_from = candidate,
+    values_from = votes
+  ) %>% 
+  mutate(TOTAL = rowSums(across(where(is.numeric)), na.rm=TRUE))
+
+colData = GetElectionInfo(election.data.2025,"Judge of Hamilton County Municipal Court (District 4)")
+
 issue2Data = GetElectionInfo(data,"IsSuE 2")
-mayorData = GetElectionInfo(data,"mayor")
+curData = GetElectionInfo(election.data.2025,"Mayor")
 
 # map example
 # ISSUE 2 Proposed Constitutional Amendment TO FUND PUBLIC INFRASTRUCTURE CAPITAL
@@ -127,7 +142,7 @@ mayorData = GetElectionInfo(data,"mayor")
 
 map2020 <- st_zm(st_read("data/maps/PRECINCT_052219.shp"))
 
-combinedData = map2020 %>% 
+combinedData = map2024 %>% 
   left_join(issue2Data,c("PRECINCT" = "precinct"))
   
 combinedData %>%
@@ -198,6 +213,8 @@ results.df <- function(my.race, my.dem, my.rep, election_data) {
     mutate(Overall = rowSums(across(everything()))) %>% 
     ungroup()
   
+  print(head(vote_sums))
+  
   column_sums <- vote_sums %>%
     select(where(is.numeric)) %>%
     summarize(across(everything(), ~ sum(.x, na.rm = TRUE)))
@@ -214,7 +231,7 @@ results.df <- function(my.race, my.dem, my.rep, election_data) {
   
   return(output)
 }
-precinct.results.df <- function(my.race, my.dem, my.rep, election.data) {
+precinct.results.df <- function(my.race, my.dem, my.rep, election_data) {
   ## Get the precinct-by-precinct election results for Democrat and Republican in head-to-head race
   early <- election_data  %>%
     filter(contest == my.race,vote_type=='Early') %>% 
@@ -279,6 +296,7 @@ precinct.results.df <- function(my.race, my.dem, my.rep, election.data) {
 election.data.2018 <- prepXML(readXMLFile("09 - xml stuff/old elections/detail2018.xml"))
 election.data.2019 <- prepXML(readXMLFile("09 - xml stuff/old elections/detail2019.xml"))
 election.data.2020 <- prepXML(readXMLFile("09 - xml stuff/old elections/detail2020.xml"))
+election.data.2021 <- prepXML(readXMLFile("09 - xml stuff/old elections/detail2021.xml"))
 election.data.2022 <- prepXML(readXMLFile("09 - xml stuff/old elections/detail2022.xml"))
 election.data.2023 <- prepXML(readXMLFile("09 - xml stuff/old elections/detail2023.xml"))
 
@@ -293,8 +311,22 @@ map2019 <- st_make_valid(st_zm(st_read("data/maps/precincts_2019.shp"))) %>%
   st_transform(., crs = st_crs(map))
 map2020 <- st_make_valid(st_zm(st_read("data/maps/precincts_2020.shp"))) %>% 
   st_transform(., crs = st_crs(map))
+map2021 <- st_make_valid(st_zm(st_read("data/maps/precincts_2021.shp"))) %>% 
+  st_transform(., crs = st_crs(map))
 map2023 <- st_make_valid(st_zm(st_read("data/maps/precincts_2023.shp"))) %>% 
   st_transform(., crs = st_crs(map))
+map2025 <- st_make_valid(st_zm(st_read("data/maps/2025 Shape Files.shp"))) %>% 
+  st_transform(., crs = st_crs(map))
+
+block.total <- get_decennial(geography = "block", 
+                             state = "Ohio",
+                             county = "Hamilton",
+                             variables = "P1_001N", 
+                             year = 2020,
+                             sumfile = "dhc",
+                             geometry = TRUE) %>% 
+  select(total.pop = value) %>% 
+  st_transform(crs = st_crs(map))
 
 ##### example: 2020 presidential #####
 my.year = "2020"
@@ -406,6 +438,54 @@ interpolated.results %>%
 
 ##### but we can make this a function :D #####
 
+standardizePrecinctCol = function(my.map) {
+  # standarize so we can also use this in the future!
+  print("STR")
+  if ("PRC_NAME" %in% names(my.map)) {
+    # STUPID STUPID STUPID LONG FORM make it GOOD
+    print("FIX IT FUCK")
+    my.map <-  map2025 %>% 
+      mutate(
+        AbbrevName = ifelse( str_sub(PRC_NAME, 4, 4) %in% c("A","E","I","O","U"),
+                             str_to_upper(str_sub(PRC_NAME, 1, 4)), # 4 letta
+                             str_to_upper(str_sub(PRC_NAME, 1, 3)) # 3 letta
+        ),
+        Suffix = str_trim(str_remove(PRC_NAME, "^[A-Za-z]+\\s+")),
+        precinct = str_trim(paste(PRECINCT, AbbrevName, Suffix))
+      ) %>% 
+      select(-PRECINCT)
+    
+    view(my.map)
+    
+  } else if ("NAME" %in% names(my.map)) {
+    # easy fix :)
+    my.map <- my.map %>% rename(precinct = NAME)
+  } else if ("PRECINCT" %in% names(my.map)) {
+    # easier fix :)
+    my.map <- my.map %>% rename(precinct = PRECINCT)
+  }
+  
+  print("STR2")
+  
+  return(my.map)
+}
+
+getInterpolatedResults = function(my.map,prec.results) {
+  print("INT")
+  mapANDresults <- left_join(my.map,prec.results,by="precinct")
+  print("INT2")
+  return(interpolated.results <- interpolate_pw(
+    from = st_make_valid(mapANDresults),
+    to = st_make_valid(my.map),
+    to_id = "precinct",
+    extensive = TRUE,
+    weights = st_make_valid(block.total),
+    weight_column = "total.pop",
+    crs = st_crs(my.map)
+  ) %>% 
+    filter(overall != 0))
+}
+
 generateRaceMap = function(my.year,
                            my.race,
                            my.dem,
@@ -414,41 +494,31 @@ generateRaceMap = function(my.year,
                            my.map,
                            my.name) {
   
+    print("A")
   overall.results <- results.df(my.race,my.dem,my.rep,election_data)
+  print(head(overall.results))
+  print("B")
   prec.results <- precinct.results.df(my.race,my.dem,my.rep,election_data)
-  
-  print( names(my.map) )
-  if ("NAME" %in% names(my.map)) {
-    my.map <- my.map %>% rename(precinct = NAME)
-  } else if ("PRECINCT" %in% names(my.map)) {
-    my.map <- my.map %>% rename(precinct = PRECINCT)
-    
-  }
-  
-  mapANDresults <- left_join(my.map,prec.results,by="precinct")
-  
-  
-  # why wasn't this working? interpolate_pw doesn't exist! its st_interpolate_aw
-  interpolated.results <- st_interpolate_aw(
-    x = st_make_valid(select(mapANDresults,where(is.numeric), geometry)),
-    to = st_make_valid(map),
-    extensive = TRUE
-  ) #%>% 
-    #filter(if_any(where(is.numeric), ~ !is.na(.)))
-  
-  
-  interpolated.results %>% 
+  print(head(prec.results))
+  print("C")
+  my.map = standardizePrecinctCol(my.map)
+  print(head(my.map))
+  interpolated.results <- getInterpolatedResults(my.map,prec.results)
+  print("D")
+  view(interpolated.results)
+  return( 
+    interpolated.results %>% 
     mutate(dem.prop = dem.overall/overall) %>%
     ggplot(aes(fill=dem.prop)) +
     geom_sf()+
     labs(title = paste(my.race,my.year,sep = ", "),
-         subtitle = paste(my.dem,' (', overall.results$Overall[1],'%) vs ',my.rep,' (',overall.results$Overall[2],'%)',sep=''),
          fill = "", 
          caption = "")+
     scale_fill_gradientn(colours=brewer.pal(n=10,name="RdBu"),na.value = "transparent",
                          breaks=c(0,.25,0.5,.75,1),labels=c("100% Rep","","50%/50%","","100% Dem"),
                          limits=c(0,1))+
     theme_void()
+  )
 }
 
 # let's try it!
@@ -481,4 +551,178 @@ generateRaceMap(
   election_data = election.data.2019,
   my.map = map2019,
   my.name = "Kennedy.v.Berkowitz.2019"
+)
+
+# mayor!
+generateRaceMap(
+  my.year = "2021",
+  my.race = "CITY OF CINCINNATI For Mayor",
+  my.dem = "Aftab Pureval",
+  my.rep = "David Mann",
+  election_data = election.data.2021,
+  my.map = map2021,
+  my.name = "Pureval.v.Mann.2021"
+)
+
+# mayor! 2025
+election.data.2025 = prepXML( getXMLFile() )
+
+election.data.2025 = election.data.2025 %>% mutate(vote_type = 
+                                ifelse(vote_type=="Absentee",
+                                       "Early",
+                                       vote_type))
+goodMap2025 = standardizePrecinctCol(map2025) %>% 
+  select(precinct,geometry)
+
+generateRaceMap(
+  my.year = "2025",
+  my.race = "CITY OF CINCINNATI For Mayor",
+  my.dem = "Aftab Pureval",
+  my.rep = "Cory Bowman",
+  election_data = election.data.2025,
+  my.map = goodMap2025,
+  my.name = "EVIL GRAPH"
+)
+
+generateRaceMap(
+  my.year = "2025",
+  my.race = "For Judge of Hamilton County Municipal Court (District 4)",
+  my.dem = "Danielle Cary Colliver",
+  my.rep = "Josh Berkowitz",
+  election_data = election.data.2025,
+  my.map = goodMap2025,
+  my.name = "MAYORAL RACE: Remaining Precincts"
+)
+
+
+precinct.results.df(
+  my.race = "City of Cincinnati - For Mayor - Nonpartisan Party",
+  my.dem = "Aftab Pureval",
+  my.rep = "Cory Bowman",
+  election_data = election.data.2025
+)
+
+view(precinct.results.df(election.data.2025))
+
+#### cool stuff ####
+
+getElectionCompletionData = function(xml){
+  precinct_nodes <- xml_find_all(xml, "//VoterTurnout//Precinct")
+  votingNumberData <- map_dfr(precinct_nodes, ~ as.list(xml_attrs(.x))) %>% 
+    rename()
+  
+  return( votingNumberData )
+}
+  
+generateTallyRaceMap = function(my.year,
+                               my.race,
+                               my.dem,
+                               my.rep,
+                               election_data,
+                               my.map,
+                               my.name,
+                               my.subname,
+                               completion_data) {
+  print("A")
+  
+  overall.results <- results.df(my.race,my.dem,my.rep,election_data)
+  prec.results <- precinct.results.df(my.race,my.dem,my.rep,election_data)
+  
+  my.map = standardizePrecinctCol(my.map)
+  interpolated.results <- getInterpolatedResults(my.map,prec.results)
+  
+  completion_data = completion_data %>% # fix the column name in completion data
+    rename(precinct = name)
+  
+  # combine completed precincts with geometry
+  mapCompletion = left_join(interpolated.results,completion_data,by="precinct") %>% 
+    filter(percentReporting == 4)
+  
+  # now lets impose all completed precincts onto the map!
+  
+  generateRaceMap(my.year, my.race, my.dem, my.rep, election_data,
+                           my.map, my.name) +
+    geom_sf(data = mapCompletion, fill = "#22B14C", color = NA, alpha = 0.95) +
+    labs(
+      title = my.name,
+      subtitle = my.subname
+    )
+    
+
+  
+  }  
+
+##### mayor! test #####
+completion_data = getElectionCompletionData( getXMLFile() )
+#completion_data2 = getElectionCompletionData( read_xml("09 - xml stuff/old elections/detail2021.xml" ))
+
+# will be NOTHING! BOOOOOOOO
+generateTallyRaceMap(
+  my.year = "2021",
+  my.race = "CITY OF CINCINNATI For Mayor",
+  my.dem = "Aftab Pureval",
+  my.rep = "David Mann",
+  election_data = election.data.2021,
+  my.map = map2021,
+  my.name = "MAYORAL RACE: Remaining Precincts",
+  my.subname = "(green = all votes tallied)",
+  completion_data = completion_data
+)
+
+generateTallyRaceMap(
+  my.year = "2025",
+  my.race = "For Judge of Hamilton County Municipal Court (District 4)",
+  my.dem = "Danielle Cary Colliver",
+  my.rep = "Josh Berkowitz",
+  election_data = election.data.2025,
+  my.map = map2025,
+  my.name = "MAYORAL RACE: Remaining Precincts",
+  my.subname = "(green = all votes tallied)",
+  completion_data = completion_data
+)
+
+generateRaceMap(
+  my.year = "2025",
+  my.race = "For Judge of Hamilton County Municipal Court (District 4)",
+  my.dem = "Danielle Cary Colliver",
+  my.rep = "Josh Berkowitz",
+  election_data = election.data.2025,
+  my.map = map2025,
+  my.name = "MAYORAL RACE: Remaining Precincts",
+)
+
+# heh. get greened
+generateTallyRaceMap(
+  my.year = "2021",
+  my.race = "CITY OF CINCINNATI For Mayor",
+  my.dem = "Aftab Pureval",
+  my.rep = "David Mann",
+  election_data = election.data.2021,
+  my.map = map2021,
+  my.name = "Pureval.v.Mann.2021",
+  completion_data = completion_data2
+)
+  
+
+
+
+#### STUFF HAPPENING RN ####
+
+##### compare berky early voting! #####
+election.data.2025 = prepXML( getXMLFile() )
+
+berkyEarly2025 = election.data.2025 %>% 
+  filter(vote_type == "Early")
+
+colSums(berkyEarly2025)
+colSums(GetElectionInfo(berkyEarly2025,"District 4"))
+
+generateRaceMap(
+  my.year = "2025",
+  my.race = "For Judge of Hamilton County Municipal Court (District 4)",
+  my.dem = "Danielle Cary Colliver",
+  my.rep = "Josh Berkowitz",
+  election_data = election.data.2025,
+  my.map = map2025,
+  my.name = "Pureval.v.Mann.2021",
 )
