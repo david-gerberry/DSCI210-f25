@@ -24,9 +24,61 @@ df[5876,3] <- "PhD"
 ```
 
 
+```{r}
+
+salary_years_exp <- lm(data = df, Salary ~ `Years of Experience`)
+
+summary(salary_years_exp)
+
+
+```
+We can see there is a substansial impact on salary caused by Years of Expirience,
+for every year increase in YoE the lm estimates about a $7046 increase in Salary. 
+The Caveat is that we only have an R^2 of about .65 meaning that we are only explaining
+about 65% of the total variance of the data. 
 
 
 
+```{r}
+
+df$Age_YoE <- df$Age * df$`Years of Experience`
+
+lm2 <- lm(data = df, Salary ~ `Years of Experience` + `Age` + Age_YoE)
+
+summary(lm2)
+
+aov_model <- aov(Salary ~ `Years of Experience` + `Age` + Age_YoE , data = df)
+summary(aov_model)
+
+```
+
+
+
+```{r}
+
+lm3 <- lm(data = df, Salary ~ `Job Title`)
+summary(lm3)
+
+lm4 <- lm(data = df, Salary ~ Gender)
+summary(lm4)
+
+
+```
+
+
+
+```{r}
+
+lm5 <- lm(data = df, Salary ~ Age + Gender + `Education Level` + `Years of Experience`)
+lm6 <- lm(data = df, Salary ~ Age + Gender + `Education Level` + `Years of Experience` + Age_YoE)
+summary(lm5)
+summary(lm6)
+```
+```{r}
+
+plot(lm6, which = 1)
+
+```
 
 
 
