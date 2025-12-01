@@ -12,6 +12,7 @@ rm(acs_interp_cincy)
 rm(acs_interp_cps)
 rm(acs_interp_ham)
 
+data_25 <- read_excel("data/detail.xlsx", sheet = 2)
 data_24 <- read_excel("data/election results/G24_Official_Canvass.xlsx")
 data_23 <- read_excel("data/election results/G23_Official_Canvass.xlsx")
 data_22 <- read_excel("data/election results/G22_Official_Canvass.xlsx")
@@ -54,6 +55,9 @@ data_13 <- name_columns(data_13)
 data_13 <- name_columns(data_13)
 
 #### Cleaning ####
+
+data_25 <- data_25 %>%
+  filter(Precinct %in% acs_interp_judicial$PRECINCT)
 
 data_18 <- data_18[ , c(2, 3, 4)]
 
@@ -244,105 +248,104 @@ turn_15 <- turnout(15)
 turn_14 <- turnout(14)
 turn_13 <- turnout(13)
 
+reg <- sum(data_25$`Registered Voters`, na.rm = TRUE)
+  
+cast <- sum(data_25$`Ballots Cast`, na.rm = TRUE)
+
+turn_25 <- cast/reg
+
 
 # Our Prediction
-turn_25 <- .41
+turn_25_pre <- .41
 
 #### Turnout Plot ####
 
 turnout_df <- data.frame(
   year = 2013:2025,
-  turnout = c(turn_13, turn_14, turn_15, turn_16, turn_17, 
-              turn_18, turn_19, turn_20, turn_21,
-              turn_22, turn_23, turn_24, turn_25)
+  turnout = c(
+    turn_13, turn_14, turn_15, turn_16, turn_17,
+    turn_18, turn_19, turn_20, turn_21,
+    turn_22, turn_23, turn_24, turn_25
+  )
 )
 
-# Election type for each year (2013–2025)
-# 👉 Update these as appropriate for your dataset
 turnout_df$election_type <- c(
-  "Off-cycle",    # 2013
-  "Sen/Gov",      # 2014
-  "Off-cycle",    # 2015
-  "Presidential", # 2016
-  "Off-cycle",    # 2017
-  "Sen/Gov",      # 2018
-  "Off-cycle",    # 2019
-  "Presidential", # 2020
-  "Off-cycle",    # 2021
-  "Sen/Gov",      # 2022
-  "Off-cycle",    # 2023
-  "Presidential", # 2024
-  NA              # 2025 → prediction
+  "Off-cycle",
+  "Sen/Gov",
+  "Off-cycle",
+  "Presidential",
+  "Off-cycle",
+  "Sen/Gov",
+  "Off-cycle",
+  "Presidential",
+  "Off-cycle",
+  "Sen/Gov",
+  "Off-cycle",
+  "Presidential",
+  "Off-cycle"
+)
+
+turnout_df$turnout_pred <- c(
+  rep(NA, 12),
+  turn_25_pre
 )
 
 ggplot(turnout_df, aes(x = year, y = turnout, color = election_type, group = election_type)) +
-  # Lines for each election type
   geom_line(size = 1.3, na.rm = TRUE) +
   geom_point(size = 3.5, stroke = 1, na.rm = TRUE) +
-  
-  # Add percentage labels above each point
   geom_text(
     aes(label = scales::percent(turnout, accuracy = 1)),
-    vjust = -1.2,
+    vjust = 2.0,
     color = "gray20",
     size = 4,
     show.legend = FALSE,
     na.rm = TRUE
   ) +
-  
-  # Highlight 2025 prediction
   geom_point(
     data = subset(turnout_df, year == 2025),
-    aes(x = year, y = turnout),
+    aes(x = year, y = turnout_pred),
     color = "#F28E2B", fill = "#F28E2B",
     shape = 21, size = 5, stroke = 1.2,
     inherit.aes = FALSE
   ) +
-  
-  # Move "Our Prediction" label to left of dot
   geom_text(
     data = subset(turnout_df, year == 2025),
-    aes(x = year, y = turnout, label = "Our Prediction"),
-    hjust = 1.3, vjust = 0.4,  # left side
-    fontface = "bold", color = "gray20",
+    aes(x = year, y = turnout_pred, label = scales::percent(turnout_pred, accuracy = 1)),
+    vjust = -1.2,
+    color = "gray20",
+    size = 4,
+    fontface = "bold",
     inherit.aes = FALSE
   ) +
-  
-  # Regression line for Off-cycle elections
   geom_smooth(
     data = subset(turnout_df, election_type == "Off-cycle"),
     method = "lm", se = FALSE, color = "gray30", linetype = "dashed",
     fullrange = TRUE
   ) +
-  
   scale_x_continuous(
     breaks = turnout_df$year,
     labels = turnout_df$year,
-    expand = expansion(mult = c(0.01, 0.05))
+    expand = expansion(mult = c(0.03, 0.12))
   ) +
   scale_y_continuous(
     labels = scales::percent_format(accuracy = 1),
     limits = c(.25, .9)
   ) +
-  
-  # Clean color palette (no NA)
   scale_color_manual(
     values = c(
       "Presidential" = "#1F77B4",
       "Sen/Gov" = "#59A14F",
       "Off-cycle" = "#B07AA1"
     ),
-    na.translate = FALSE  # removes NA legend
+    na.translate = FALSE
   ) +
-  
   labs(
     title = "Voter Turnout by Election Type (2013–2025)",
-    subtitle = "Presidential, Senate/Governor, and Off-cycle elections with 2025 prediction",
+    subtitle = "Presidential, Senate/Governor, and Off-cycle elections with 2025 prediction vs actual",
     x = "Year",
     y = "Turnout (%)",
     color = "Election Type"
   ) +
-  
   theme_minimal(base_size = 15, base_family = "Helvetica") +
   theme(
     plot.title = element_text(face = "bold", size = 18, hjust = 0.5),
@@ -405,10 +408,11 @@ drop_19 <- drop(19)
 drop_23 <- drop(23)
 
 drop_prediction <- .16
+drop_25 <- 1-(37035/39270)
 
 observed_df <- data.frame(
-  year = c(2015, 2017, 2019, 2023),
-  turnout = c(drop_15, drop_17, drop_19, drop_23)   # example values
+  year = c(2015, 2017, 2019, 2023, 2025),
+  turnout = c(drop_15, drop_17, drop_19, drop_23, drop_25)
 )
 
 prediction_df <- data.frame(
@@ -417,22 +421,14 @@ prediction_df <- data.frame(
 )
 
 ggplot(observed_df, aes(x = year, y = turnout)) +
-  # Shaded prediction background
-  annotate("rect", xmin = max(observed_df$year) + 0.2, xmax = prediction_df$year + 0.8,
+  annotate("rect", xmin = 2023.2, xmax = 2025.8,
            ymin = -Inf, ymax = Inf, alpha = 0.08, fill = "#d1e6fa") +
-  
-  # Trend line and observed data
   geom_line(size = 1.3, color = "#2c6eaa", alpha = 0.9) +
   geom_point(size = 4, color = "#2c6eaa", stroke = 1.2, fill = "white", shape = 21) +
-  
-  # Labels for observed data
   geom_text(
-    data = observed_df,
     aes(label = percent(turnout, accuracy = 1)),
     vjust = -1, size = 4.2, color = "#2c2c2c"
   ) +
-  
-  # Prediction point and label
   geom_point(
     data = prediction_df,
     aes(x = year, y = turnout),
@@ -449,21 +445,15 @@ ggplot(observed_df, aes(x = year, y = turnout)) +
     hjust = 1.2, vjust = 0.5, fontface = "bold",
     color = "#a97400", size = 4.2
   ) +
-  
-  # Fitted regression line (dashed)
   geom_smooth(method = "lm", se = FALSE, color = "#4b4b4b", linetype = "longdash", linewidth = 0.9) +
-  
-  # Axis scaling and labels
   scale_x_continuous(
-    breaks = c(observed_df$year, prediction_df$year),
-    labels = c(observed_df$year, prediction_df$year)
+    breaks = c(2015, 2017, 2019, 2023, 2025),
+    labels = c(2015, 2017, 2019, 2023, 2025)
   ) +
   scale_y_continuous(
     limits = c(0.05, 0.3),
     labels = percent_format(accuracy = 1)
   ) +
-  
-  # Titles and labels
   labs(
     title = "Drop-Off by Year",
     subtitle = "Observed and Predicted Voter Turnout Drop-Off Rates",
@@ -471,8 +461,6 @@ ggplot(observed_df, aes(x = year, y = turnout)) +
     y = "Drop-Off (%)",
     caption = "Shaded region indicates projected year"
   ) +
-  
-  # Custom theme
   theme_minimal(base_size = 14) +
   theme(
     plot.title = element_text(face = "bold", size = 18, color = "#1a1a1a", hjust = 0.5),
@@ -487,7 +475,7 @@ ggplot(observed_df, aes(x = year, y = turnout)) +
     panel.background = element_rect(fill = "#f9f9f9", color = NA)
   )
 
-
+#### Magic Number ####
 
 # So drop-off in 2019 was 12.9% and drop-off was 15.4% in 2023.
 
@@ -499,7 +487,7 @@ registered <- 100105
 
 # People that will show up
 
-vote <- registered*turn_25
+vote <- registered*turn_25_pre
 
 # People that will vote in our race
 
