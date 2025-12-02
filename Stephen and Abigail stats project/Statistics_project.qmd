@@ -12,7 +12,7 @@ format: pdf
 
   Understanding what drives differences in employee salaries is an important question in both workforce analytics and applied statistics. Salary is influenced by many factors, but two of the most commonly discussed predictors are age and years of experience. As individuals gain professional experience, they typically acquire new skills, demonstrate increased responsibility, and advance within their roles—all of which are expected to contribute to higher earnings. Age may also play a role, as it often reflects career stage, career longevity, and time spent in the labor force. However, the degree to which age and experience independently or jointly influence salary remains an empirical question and can vary across industries, job titles, and demographic groups.
   This research is significant because salary growth is closely tied to career development, economic mobility, and long-term financial stability. Employers use salary models to make compensation decisions, while individuals rely on salary expectations to make choices about education, job changes, and skill development. Understanding how much experience contributes to salary, how strongly age correlates with earnings, and whether demographic or job-related disparities exist can provide valuable insight for employees, employers, policymakers, and workforce researchers.
-  Despite the importance of these issues, salary data is often complex and influenced by multiple interacting variables. This project uses statistical methods to analyze a dataset containing age, gender, job title, years of experience, and salary to better understand the relationships among these variables. Specifically, we investigate how salary changes with increasing experience, whether age adds predictive value beyond experience, whether salary differs across genders or job titles, and whether statistical models can accurately predict salary based on these factors.
+  Despite the importance of these issues, salary data is often complex and influenced by multiple interacting variables. This project uses statistical methods to analyze a data set containing age, gender, job title, years of experience, and salary to better understand the relationships among these variables. Specifically, we investigate how salary changes with increasing experience, whether age adds predictive value beyond experience, whether salary differs across genders or job titles, and whether statistical models can accurately predict salary based on these factors.
   By examining these relationships, this research aims to deepen our understanding of the key determinants of salary and to highlight potential differences or inequalities within the workforce. The results contribute to broader discussions about compensation fairness, career progression, and the factors that most strongly influence earnings in professional environments.
 
 
@@ -31,6 +31,14 @@ df <- df %>%
 df[5876,3] <- "PhD"    
 
 ```
+The dataset is imported using read_csv(), which reads the raw salary information into R as a structured data frame. This step establishes the foundation for all subsequent analysis by loading the variables needed for the study, including age, gender, education level, job title, experience, and salary. Once imported, the data can be inspected, cleaned, and transformed to ensure accuracy and consistency before modeling.
+This section performs essential data cleaning to standardize the “Education Level” variable and remove invalid entries. The string manipulation ensures that education labels are concise and consistent, improving interpretability in later statistical models. Additionally, an incorrectly coded entry is manually corrected to “PhD” to preserve the accuracy of the dataset. These steps help maintain data quality and reduce potential bias in the analysis.
+
+ 
+ 
+## Question 1 ##
+
+How does the number of years of experience impact salary levels?
 
 
 ```{r}
@@ -41,12 +49,29 @@ summary(salary_years_exp)
 
 
 ```
-We can see there is a substansial impact on salary caused by Years of Expirience,
-for every year increase in YoE the lm estimates about a $7046 increase in Salary. 
-The Caveat is that we only have an R^2 of about .65 meaning that we are only explaining
-about 65% of the total variance of the data. 
 
 
+Model Description:
+A simple linear regression examining salary as a function of years of experience.
+
+Key Findings:
+
+Coefficient for Experience: ~$7,046 per year
+Each additional year of experience corresponds, on average, to a statistically significant and substantial increase in salary.
+
+R² ≈ 0.65
+The model explains 65% of variation in salary using experience alone—surprisingly strong for a single variable.
+
+Interpretation:
+Experience is a dominant predictor of salary. However, 35% of salary variation remains unexplained, suggesting the influence of additional factors such as education, job title, or industry.
+
+
+Conclusion:
+  Yes, Years of Experience is one of the most important factors when it comes to modeling salary. It accounts for 65% of the variation by itself without the addition of other predictor variables. 
+
+## Question 2 ##
+
+Does age have an independent effect on salary apart from years of experience?
 
 ```{r}
 
@@ -56,33 +81,168 @@ lm2 <- lm(data = df, Salary ~ `Years of Experience` + `Age` + Age_YoE)
 
 summary(lm2)
 
-aov_model <- aov(Salary ~ `Years of Experience` + `Age` + Age_YoE , data = df)
-summary(aov_model)
 
 ```
 
 
+An interaction term is created to examine whether the combined effect of age and experience contributes additional explanatory power in predicting salary. This term allows the regression model to capture how salary growth may differ not only by age or experience individually, but by the interaction of the two—reflecting how time in the workforce and life stage might jointly impact earnings.
+
+Key Findings:
+
+Experience coefficient jumps significantly (~18k), meaning that when controlling for age, experience becomes even more impactful.
+
+Age remains statistically significant, but its direct effect is relatively small (~$479 per year).
+
+Interaction term (Age × Experience) is negative, large, and significant.
+Interpretation: the value of experience declines with age, possibly because experience gained later in life may be valued differently by employers than early-career experience.
+
+R² ≈ 0.72, an improvement over the simple linear model, showing that age and the interaction help explain more of salary variation.
 
 ```{r}
-
-lm3 <- lm(data = df, Salary ~ `Job Title`)
-summary(lm3)
-
-lm4 <- lm(data = df, Salary ~ Gender)
-summary(lm4)
-
-
+aov_model <- aov(Salary ~ `Years of Experience` + `Age` + Age_YoE , data = df)
+summary(aov_model)
 ```
 
 
+An ANOVA (analysis of variance) is performed to evaluate how much each predictor—years of experience, age, and their interaction—contributes to explaining variation in salary. This provides a formal statistical comparison of effect sizes across predictors, highlighting which variables play the strongest roles in determining salary levels within the datase
+
+
+Key Findings:
+
+Experience has the largest sum of squares (dominant predictor).
+
+The interaction term also has a large effect, far bigger than age alone.
+
+Age is statistically significant but contributes minimally relative to experience.
+
+Interpretation:
+Experience overwhelmingly drives salary differences, and interactions between age and experience matter more than age itself.
+
+
+Conclusion:
+Years of Experience is more important than age but using an interaction term of the Years of Experience and Age produces the highest explanation of varience we have yet seen in terms of describing Salary.  
+
+## Question 3 ##
+
+Is using the Job title alone useful as a predictor of salary?
+
+```{r}
+lm3 <- lm(data = df, Salary ~ `Job Title`)
+summary(lm3)
+```
+
+
+A linear regression is fitted using job title as the sole predictor of salary. This model examines how salaries differ across occupational roles, providing insight into structural variation in earnings that is independent of individual-level factors such as age or experience. By estimating salary adjustments for each job category relative to a baseline title, the model highlights which professions tend to command higher or lower compensation.
+
+Key Findings:
+
+Wide variation exists across job titles.
+
+Executive and director-level roles (CEO, CTO, VP roles) have very large, significant positive effects.
+
+Most junior or administrative roles show nonsignificant or negative deviations.
+
+R² ≈ 0.66
+Job title alone explains a large portion of salary variance—nearly as much as years of experience.
+
+Interpretation:
+Structural role differences are among the strongest determinants of salary. Job title nearly rivals experience in explanatory power.
+
+Conclusion:
+Yes, depending on the job there is a very high likelyhood of our model being capable of acuratley describing salary. However this is mostly in the case of senior positions, having noted that the number of said positions is relatively low and this could be a case of our data simply being over fit. I woud hazard against using Job Title as the only descriptive factor of Salary.
+
+## Question 4 ##
+
+How does Gender affect ones salary irrespective of any other variables?
+
+```{r}
+lm4 <- lm(data = df, Salary ~ Gender)
+summary(lm4)
+```
+
+This model tests whether gender is associated with salary differences in the dataset. By including gender as a categorical predictor, the regression assesses average differences in pay across gender groups while holding no other variables constant. Although exploratory in nature, this model helps identify whether disparities emerge in the aggregate data.
+
+Key Findings:
+
+Male coefficient ≈ $13,507, statistically significant.
+
+“Other” is not significant—likely due to small sample size.
+
+R² ≈ 0.016
+Gender explains only about 1.6% of salary variation.
+
+Interpretation:
+There is a measurable difference between male and female salaries on average in this dataset, but gender alone does not meaningfully predict salary—other variables (experience, job title) matter far more.
+
+Conclusion:
+Yes, gender does play a role with abias towards Males, however it predicts only 1.6 percent of the variance in the data set meaning that other variables are much more heavily weighted than gender leading to a more even playing field than it might look while only looking at salary by gender.
+
+## Question 5 ##
+
+What is the best model that we can produce to describe salary using the available data?
 
 ```{r}
 
 lm5 <- lm(data = df, Salary ~ Age + Gender + `Education Level` + `Years of Experience`)
-lm6 <- lm(data = df, Salary ~ Age + Gender + `Education Level` + `Years of Experience` + Age_YoE)
 summary(lm5)
+```
+
+
+For LM5 a multivariate regression is performed to assess how salary is related to age, gender, education level, and years of experience simultaneously. By including all major demographic and professional predictors, this model helps determine the unique contribution of each variable while controlling for the others. This approach yields a more comprehensive understanding of how these factors jointly influence salary outcomes.
+
+Key Findings:
+
+Experience remains the strongest predictor (≈ $8,057 per year).
+
+Age has a negative coefficient—likely reflecting correlation with the interaction structure not yet modeled.
+
+Higher education levels reliably increase salary (Master’s and PhD strongly positive; high school strongly negative).
+
+Gender remains significant but is smaller (~$6,200).
+
+Model Fit:
+
+R² ≈ 0.717
+Very strong for social science data.
+
+Interpretation:
+Controlling for experience and education reveals the true independent effects of each demographic factor. Education becomes a major predictor once included.
+
+
+
+```{r}
+lm6 <- lm(data = df, Salary ~ Age + Gender + `Education Level` + `Years of Experience` + Age_YoE)
 summary(lm6)
 ```
+The enhanced model LM6 incorporates the interaction term between age and experience alongside the full set of predictors. Adding this interaction allows the model to account for the possibility that the effect of experience on salary varies depending on an individual's age. Comparing this model to the simpler version provides insight into whether interactions improve explanatory power in understanding salary dynamics.
+
+Key Findings:
+
+The experience coefficient roughly doubles (~$16,181), meaning age was suppressing its effect in the previous model.
+
+Age becomes non-significant, indicating its effect is fully captured through interaction with experience.
+
+Interaction term remains strongly negative.
+
+Higher education levels are still significant predictors.
+
+Gender remains statistically significant but small.
+
+Model Fit:
+
+R² ≈ 0.751, the strongest of all models.
+
+Interpretation:
+This is the best-performing model, suggesting salary is driven by:
+
+Years of experience
+
+Education level
+
+Gender (to a small extent)
+
+A diminishing marginal return of experience at older ages (interaction effect)
+
 ```{r}
 
 plot(lm6, which = 1)
@@ -90,137 +250,124 @@ plot(lm6, which = 1)
 ```
 
 
+A diagnostic residual plot is generated to evaluate the fit of the full regression model. By visualizing residuals against fitted values, this plot helps assess key model assumptions, including linearity, constant variance, and the presence of outliers. Ensuring that these assumptions are reasonably satisfied supports the validity of statistical inference drawn from the model.
 
-``` {r}
+Model Description:
+Residuals vs. fitted values plot to assess assumptions.
 
-df %>% 
-  ggplot(aes(y = Salary, x = Age))+
-  geom_point()+
-  facet_wrap(~`Education Level`)
+Interpretation:
 
+The plot shows a generally even spread.
 
-```
+No severe curvature or funnel shape is present, supporting the validity of the model.
 
+A few extreme outliers appear, likely corresponding to unusually high salaries (executive roles).
 
-``` {r}
+Overall, model diagnostics do not indicate major violations.
 
-df %>% 
-  ggplot(aes(y = Salary, x = `Years of Experience`))+
-  geom_point()+
-  facet_wrap(~`Education Level`)
-
-
-```
+Conclusion:
+The best model that we have been able to come up with includes all of our variables in Education, Gender, Age, Years of Expirience, and the interaction variable leading us to a variance prediction of 75%. Looking at the residual plot none of our rules are violated and the model is valid for use. If we had another similar data set it would be interesting to be able to run a test and see how well the model would perform. As it is the number of observations was limited enought that we did not feel comfortable limiting the number any further to have a test data set at the end. 
 
 
+## Artificial Intelligence ##
+I input the .qmd file into Chat GPT and asked it to assess both our code and statistics and rewrite out the qmd as it saw fit. Below is the AI's interpertation of our project based off of the five questions we had. 
 
 
-``` {r}
+Importing and cleaning:
 
-df %>% 
-  ggplot(aes(y = Salary, x = Gender))+
-  geom_boxplot()+
-  facet_wrap(~`Education Level`)
+```{r}
+library(tidyverse)
+library(janitor)
 
-
-```
-
-
-``` {r}
-
-df %>% 
-  ggplot(aes(y = Salary, x = `Job Title`))+
-  geom_point()+
-  facet_wrap(~`Education Level`)
-
-
-```
-
-
-
-Make a starting LM for the data with Salary as our Dependent Variable and years
-of experience and age as Independant
-
-
-``` {r}
-
-model1 <- lm(Salary ~ `Years of Experience` + log(Age) + Gender + `Years of Experience` + `Education Level` + `Job Title`, data = df)
-model2 <- lm(Salary ~ `Years of Experience` + log(Age) + Gender + `Years of Experience` + `Education Level` , data = df)
-summary(model2)
-summary(model1)
-
-coefs2 <- summary(model2)$coefficients
-sig_coefs2 <- coefs2[coefs2[, "Pr(>|t|)"] < 0.05, ]
-sig_coefs2
-
-coefs1 <- summary(model1)$coefficients
-sig_coefs1 <- coefs1[coefs1[, "Pr(>|t|)"] < 0.05, ]
-sig_coefs1
-
-final_model <- step(model1, direction = "backward")
-summary(final_model)
-anova(final_model)
+df <- read_csv("Salary_Data.csv") %>% 
+  clean_names() %>% 
+  mutate(
+    education_level = str_remove(education_level, " Degree"),
+    across(c(gender, education_level, job_title), as.factor)
+  ) %>% 
+  filter(!is.na(education_level))
 ```
 
 
 ```{r}
-
-plot(model2, which = 1)
-
-plot(model1, which = 1)
-
-plot(final_model, which = 1)
-
+df <- df %>%
+  mutate(
+    age_c = age - mean(age),
+    yoe_c = years_of_experience - mean(years_of_experience),
+    age_yoe = age_c * yoe_c
+  )
 ```
 
 
+Question 1:
+```{r}
+m1 <- lm(salary ~ years_of_experience, data = df)
+summary(m1)
+```
+
+Quesiton 2:
 
 
 ```{r}
-df$`Years of Experience2` = log(df$`Years of Experience`)
-
-df$Age2 = log(df$Age)
-
-
-df$salary2 = log(df$Salary, base = exp(1))
+m2 <- lm(salary ~ age_c + yoe_c + age_yoe, data = df)
+summary(m2)
+```
 
 
+Question 3:
+```{r}
+df <- df %>%
+  mutate(job_group = fct_collapse(
+    job_title,
+    Tech = c("Software Engineer","Data Scientist","Developer", ...),
+    Business = c("Business Analyst","Consultant", ...),
+    Management = c("Manager","Director","VP","CEO", ...),
+    HR = c("HR Manager","HR Coordinator", ...),
+    Sales = c("Sales Manager","Sales Representative", ...),
+    Admin = c("Administrative Assistant","Office Manager")
+  ))
 
-loged_model1 <- lm(salary2 ~ `Years of Experience` + Age + Gender + `Years of Experience` + `Education Level` + `Job Title`, data = df)
-loged_model2 <- lm(salary2 ~ `Years of Experience` + Age + Gender + `Years of Experience` + `Education Level` , data = df)
-summary(loged_model2)
-summary(loged_model1)
+m3 <- lm(salary ~ job_group, data = df)
+summary(m3)
+```
 
-coefs2 <- summary(loged_model2)$coefficients
-sig_coefs2 <- coefs2[coefs2[, "Pr(>|t|)"] < 0.05, ]
-sig_coefs2
-
-coefs1 <- summary(loged_model1)$coefficients
-sig_coefs1 <- coefs1[coefs1[, "Pr(>|t|)"] < 0.05, ]
-sig_coefs1
-
-loged_final_model <- step(loged_model1, direction = "backward")
-summary(loged_final_model)
-anova(loged_final_model)
-
-
-
+Question 4:
 
 
+```{r}
+m4 <- lm(salary ~ gender, data = df)
+summary(m4)
+
+m4_adj <- lm(salary ~ gender + age + yoe_c + education_level + job_group, data = df)
+summary(m4_adj)
 
 ```
+
+
+Question 5:
 
 
 ```{r}
 
-plot(loged_model2)
+m5 <- lm(
+  salary ~ age_c + yoe_c + age_yoe + gender + education_level + job_group,
+  data = df
+)
+summary(m5)
 
-plot(loged_model1)
-
-plot(loged_final_model)
 
 
+
+set.seed(123)
+train_idx <- sample(nrow(df), 0.8*nrow(df))
+train <- df[train_idx,]
+test <- df[-train_idx,]
+
+model <- lm(..., data=train)
+pred <- predict(model, test)
+mean((pred - test$salary)^2)
 ```
+
 
 ## Discussion ##
 
