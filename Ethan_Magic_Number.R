@@ -6,7 +6,7 @@ library(scales)
 
 #### Data ####
 
-load("data/acs_data.RData")
+#load("data/acs_data.RData")
 
 rm(acs_interp_cincy)
 rm(acs_interp_cps)
@@ -537,15 +537,57 @@ acs_data_total_pop <- acs_interp_judicial %>%
 acs_data_total_pop
 
 
+#### Early-Voting Line Graph ####
+
+early25 <- 19425/184265
+
+early24 <- 95856/416548
+  
+early23 <- 34629/288751
+  
+early22 <- 32217/307380
+
+early21 <- 10841/156674
+  
+  
+in_person_df <- data.frame(
+  year = 2025:2021,
+  turnout = c(
+    early25, early24, early23, early22, early21
+  )
+)
 
 
+ggplot(in_person_df, aes(x = year, y = turnout)) +
+  geom_line(linewidth = 1.5, color = "#2C3E50") +
+  geom_point(size = 4, color = "#E74C3C", alpha = 0.9) +
+  scale_x_continuous(breaks = in_person_df$year) +
+  labs(
+    title = "Early In-Person Voting Over Time",
+    subtitle = "Early Voting Propertion, 2021–2025",
+    x = "Year",
+    y = "Proportion of Votes Cast Early"
+  ) +
+  theme_minimal(base_size = 14) +
+  theme(
+    plot.title = element_text(size = 20, face = "bold", color = "#2C3E50"),
+    plot.subtitle = element_text(size = 14, margin = margin(b = 15)),
+    axis.title = element_text(size = 14, face = "bold"),
+    axis.text = element_text(size = 12, color = "#2C3E50"),
+    panel.grid.minor = element_blank(),
+    panel.grid.major.x = element_blank(),
+    plot.background = element_rect(fill = "white", color = NA),
+    panel.background = element_rect(fill = "white"),
+    panel.border = element_rect(color = "#bdc3c7", fill = NA)
+  )
 
 
+  
 
+  
+  
+  
+  
 
-
-
-
-
-
-
+  
+  
