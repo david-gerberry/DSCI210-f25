@@ -583,10 +583,71 @@ ggplot(in_person_df, aes(x = year, y = turnout)) +
 
 
   
+#### Republican Stuff ####
+  
+  rep_early_25 <- 2935/19425
+  rep_real_25 <- 14579/67296
+  
+  rep_early_24 <- 4175/32217
+  rep_real_24 <- 52103/408361
+
+  rep_early_23 <- 3466/34629
+  rep_real_23 <- 49443/276429
+
+  rep_early_22 <- 13521/95856
+  rep_real_22 <- 50405/286352
+  
+  rep_early_21 <- 1616/10841
+  rep_real_21 <- 17919/52460
+
+
+  cool_df <- data.frame(
+    year = 2025:2021,
+    early = c(
+      rep_early_25, rep_early_24, rep_early_23, rep_early_22, rep_early_21
+    ),
+    total = c(rep_real_25,rep_real_24,rep_real_23,rep_real_22,rep_real_21
+    )
+  )
 
   
-  
-  
+  cool_df %>%
+    pivot_longer(cols = c(early, total), names_to = "type", values_to = "value") %>%
+    ggplot(aes(x = factor(year), y = value, fill = type)) +
+    geom_col(position = position_dodge(width = 0.75), width = 0.65) +
+    scale_fill_manual(values = c("early" = "#1f77b4", "total" = "#ff7f0e"),
+                      labels = c("Early GOP %", "Total GOP %")) +
+    scale_y_continuous(expand = expansion(mult = c(0, .05))) +
+    labs(
+      x = "Year",
+      y = "Proportion",
+      fill = ""
+    ) +
+    theme_minimal(base_size = 18) +
+    theme(
+      legend.position = "top",
+      legend.text = element_text(face = "bold"),
+      axis.text = element_text(size = 14),
+      axis.title = element_text(face = "bold"),
+      panel.grid.minor = element_blank(),
+      panel.grid.major.x = element_blank(),
+      plot.title = element_text(face = "bold", size = 22, hjust = 0.5),
+      plot.subtitle = element_text(size = 16, hjust = 0.5)
+    ) +
+    labs(
+      title = "Republican Share of Early vs Total Votes",
+      subtitle = "Comparing percentages across election years"
+    )
+
+
+
+
+
+
+
+
+
+
   
 
   
