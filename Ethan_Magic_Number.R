@@ -6,7 +6,7 @@ library(scales)
 
 #### Data ####
 
-load("data/acs_data.RData")
+#load("data/acs_data.RData")
 
 rm(acs_interp_cincy)
 rm(acs_interp_cps)
@@ -537,6 +537,107 @@ acs_data_total_pop <- acs_interp_judicial %>%
 acs_data_total_pop
 
 
+#### Early-Voting Line Graph ####
+
+early25 <- 19425/184265
+
+early24 <- 95856/416548
+  
+early23 <- 34629/288751
+  
+early22 <- 32217/307380
+
+early21 <- 10841/156674
+  
+  
+in_person_df <- data.frame(
+  year = 2025:2021,
+  turnout = c(
+    early25, early24, early23, early22, early21
+  )
+)
+
+
+ggplot(in_person_df, aes(x = year, y = turnout)) +
+  geom_line(linewidth = 1.5, color = "#2C3E50") +
+  geom_point(size = 4, color = "#E74C3C", alpha = 0.9) +
+  scale_x_continuous(breaks = in_person_df$year) +
+  labs(
+    title = "Early In-Person Voting Over Time",
+    subtitle = "Early Voting Propertion, 2021–2025",
+    x = "Year",
+    y = "Proportion of Votes Cast Early"
+  ) +
+  theme_minimal(base_size = 14) +
+  theme(
+    plot.title = element_text(size = 20, face = "bold", color = "#2C3E50"),
+    plot.subtitle = element_text(size = 14, margin = margin(b = 15)),
+    axis.title = element_text(size = 14, face = "bold"),
+    axis.text = element_text(size = 12, color = "#2C3E50"),
+    panel.grid.minor = element_blank(),
+    panel.grid.major.x = element_blank(),
+    plot.background = element_rect(fill = "white", color = NA),
+    panel.background = element_rect(fill = "white"),
+    panel.border = element_rect(color = "#bdc3c7", fill = NA)
+  )
+
+
+  
+#### Republican Stuff ####
+  
+  rep_early_25 <- 2935/19425
+  rep_real_25 <- 14579/67296
+  
+  rep_early_24 <- 4175/32217
+  rep_real_24 <- 52103/408361
+
+  rep_early_23 <- 3466/34629
+  rep_real_23 <- 49443/276429
+
+  rep_early_22 <- 13521/95856
+  rep_real_22 <- 50405/286352
+  
+  rep_early_21 <- 1616/10841
+  rep_real_21 <- 17919/52460
+
+
+  cool_df <- data.frame(
+    year = 2025:2021,
+    early = c(
+      rep_early_25, rep_early_24, rep_early_23, rep_early_22, rep_early_21
+    ),
+    total = c(rep_real_25,rep_real_24,rep_real_23,rep_real_22,rep_real_21
+    )
+  )
+
+  
+  cool_df %>%
+    pivot_longer(cols = c(early, total), names_to = "type", values_to = "value") %>%
+    ggplot(aes(x = factor(year), y = value, fill = type)) +
+    geom_col(position = position_dodge(width = 0.75), width = 0.65) +
+    scale_fill_manual(values = c("early" = "#1f77b4", "total" = "#ff7f0e"),
+                      labels = c("Early GOP %", "Total GOP %")) +
+    scale_y_continuous(expand = expansion(mult = c(0, .05))) +
+    labs(
+      x = "Year",
+      y = "Proportion",
+      fill = ""
+    ) +
+    theme_minimal(base_size = 18) +
+    theme(
+      legend.position = "top",
+      legend.text = element_text(face = "bold"),
+      axis.text = element_text(size = 14),
+      axis.title = element_text(face = "bold"),
+      panel.grid.minor = element_blank(),
+      panel.grid.major.x = element_blank(),
+      plot.title = element_text(face = "bold", size = 22, hjust = 0.5),
+      plot.subtitle = element_text(size = 16, hjust = 0.5)
+    ) +
+    labs(
+      title = "Republican Share of Early vs Total Votes",
+      subtitle = "Comparing percentages across election years"
+    )
 
 
 
@@ -547,5 +648,7 @@ acs_data_total_pop
 
 
 
+  
 
-
+  
+  
