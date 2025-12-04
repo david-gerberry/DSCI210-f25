@@ -299,23 +299,28 @@ df <- df %>%
 ```
 
 
+AI decided that the methods I used to clean and simplify the data were too specific and hardcoded, it took a much more general approach because I did not provide it with the actual dataset. 
+
 Question 1:
 ```{r}
 m1 <- lm(salary ~ years_of_experience, data = df)
 summary(m1)
 ```
 
+The AI uses the same methodology for question one as our project.
+
 Quesiton 2:
 
 
-```{r}
+
 m2 <- lm(salary ~ age_c + yoe_c + age_yoe, data = df)
 summary(m2)
-```
 
+
+The AI uses the same methodology for question two as our project.
 
 Question 3:
-```{r}
+
 df <- df %>%
   mutate(job_group = fct_collapse(
     job_title,
@@ -329,25 +334,29 @@ df <- df %>%
 
 m3 <- lm(salary ~ job_group, data = df)
 summary(m3)
-```
+
+
+For question three it decides that there are too many job titles and that causes over fitting, therefore it translates things to six main categories of various job types.
 
 Question 4:
 
 
-```{r}
+
 m4 <- lm(salary ~ gender, data = df)
 summary(m4)
 
 m4_adj <- lm(salary ~ gender + age + yoe_c + education_level + job_group, data = df)
 summary(m4_adj)
 
-```
+
+
+Since gender is a poor indicator the AI decides that the best way to analyze this is by using a more complete model.
+
 
 
 Question 5:
 
 
-```{r}
 
 m5 <- lm(
   salary ~ age_c + yoe_c + age_yoe + gender + education_level + job_group,
@@ -355,6 +364,9 @@ m5 <- lm(
 )
 summary(m5)
 
+
+
+Here the AI creates the same model as in my project above. 
 
 
 
@@ -366,8 +378,14 @@ test <- df[-train_idx,]
 model <- lm(..., data=train)
 pred <- predict(model, test)
 mean((pred - test$salary)^2)
-```
 
+
+Then the AI does make a train and test subsets so that we can properly evaluate the strengths of our models. 
+
+
+## AI Conclusion ##
+
+The Generative AI decided to use mostly the same statistical tools as we did, the main draw back for the AI was that it did not have the hands on knowledge of the data as we did. Theirfore in its application of statistical techniques it used generic and non-specific methods of data cleaning and analysis. 
 
 ## Discussion ##
 
