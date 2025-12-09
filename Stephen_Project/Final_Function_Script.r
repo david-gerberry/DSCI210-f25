@@ -1,6 +1,7 @@
 library(tidyverse)
 
 
+
 simulate_election_DG <- function(candidates, j, total_voters) {
   # Create a ballot list
   ballots <- vector("list", total_voters)
@@ -45,8 +46,8 @@ simulate_election_DG <- function(candidates, j, total_voters) {
 # Dave Gerberry - Function to simulate the election with candidates bias
 total_voters <- 10000
 C = 26   ## number of candidates
-winners <- 9
-j= .25
+winners <- 9 #number of people who can win
+j= .25 # Fairy magic number that makes weighting work
 
 # Store results
 results <- replicate(100, simulate_election_DG(candidates = LETTERS[1:C], j = j ,total_voters = total_voters))
